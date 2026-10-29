@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050708">
+<title>Tone Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300;400&display=swap">
+<style>
+/* Twin Sci-Fi app. One hero word per screen. Violet marks meaning, mint marks clean. Glass over near black. */
+:root{
+  --bg:#050708; --bg-2:#0B0F10; --stage:#14181A;
+  --ink:#E9EDEE; --haze:#B7C0C3; --mist:#8A9497; --dim:#5D6669;
+  --violet:#C4B5FF; --mint:#7DE3A6;
+  --glass:rgba(233,237,238,.08); --glass-line:rgba(233,237,238,.16);
+  --chip:rgba(233,237,238,.06); --chip-line:rgba(233,237,238,.12);
+  --dock:rgba(18,22,24,.86);
+  --play:linear-gradient(90deg,#E9E4FF,#C9BCFF); --on-play:#1A1530;
+  --ui:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --han:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;-webkit-tap-highlight-color:transparent}
+input,select{font:inherit}
+:focus-visible{outline:1px solid var(--violet);outline-offset:3px;border-radius:999px}
+.app{min-height:100%;position:relative;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));max-width:1120px;margin:0 auto}
+.app::before{content:"";position:fixed;inset:0;background:radial-gradient(60% 40% at 50% 0%,rgba(196,181,255,.10),transparent 70%);pointer-events:none}
+.grain::after{content:"";position:fixed;inset:0;opacity:.07;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 14px;background:linear-gradient(var(--bg) 70%,transparent)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:var(--play);color:var(--on-play);display:grid;place-items:center;font-family:var(--han);font-size:14px}
+.chipS{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 12px;font-size:12px;background:var(--chip);border:1px solid var(--chip-line);color:var(--haze);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chipS i{width:6px;height:6px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet)}
+.chipS.ok i{background:var(--mint);box-shadow:0 0 10px var(--mint)}
+
+main{position:relative}
+section[hidden]{display:none}
+.coach{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:900px){.coach{grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}}
+
+.stage{position:relative;border-radius:28px;background:var(--bg-2);border:1px solid var(--glass-line);padding:38px 22px 26px;overflow:hidden;text-align:center;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+.stage .blob{position:absolute;width:260px;height:260px;border-radius:50%;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(196,181,255,.55),rgba(196,181,255,0) 70%);filter:blur(28px);pointer-events:none;transition:background .6s var(--ease)}
+.stage.clean .blob{background:radial-gradient(circle,rgba(125,227,166,.5),rgba(125,227,166,0) 70%)}
+.stage.listening .blob{animation:breathe 1.4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
+.stage>*{position:relative}
+.stage .word{font-family:var(--han);font-weight:300;font-size:clamp(64px,18vw,124px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.stage .word.long{font-size:clamp(44px,11vw,84px)}
+.stage .py{font-size:clamp(20px,5vw,30px);font-weight:300;color:var(--haze);display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+.stage .py span{display:inline-flex;align-items:center;gap:7px}
+.stage .py svg{width:24px;height:16px;overflow:visible}
+.stage .py svg path{fill:none;stroke:var(--haze);stroke-width:1.6;stroke-linecap:round}
+.stage .en{color:var(--mist);font-size:14px;margin-top:4px}
+.stage .shape{color:var(--dim);font-size:12.5px;font-family:var(--mono);margin-top:10px;letter-spacing:.02em}
+
+.actions{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:16px;flex-wrap:wrap}
+.icon{width:48px;height:48px;border-radius:50%;background:var(--chip);border:1px solid var(--chip-line);display:grid;place-items:center;color:var(--haze);transition:background .4s}
+.icon:hover{background:var(--glass)}
+.icon svg,.pill svg,.dock svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pill{height:52px;border-radius:999px;padding:0 24px;display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:15px;background:var(--play);color:var(--on-play);transition:transform .4s var(--ease),opacity .3s;white-space:nowrap;position:relative}
+.pill:hover{transform:translateY(-1px)}
+.pill:disabled{opacity:.5;cursor:default}
+.pill.live{background:var(--ink);color:#0B0F10}
+.pill.live::before{content:"";position:absolute;inset:-5px;border-radius:999px;border:1.5px solid var(--violet);animation:ring 1.2s ease-out infinite}
+@keyframes ring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
+.ghost{height:44px;border-radius:999px;padding:0 18px;border:1px solid var(--chip-line);color:var(--haze);font-size:14px;background:var(--chip);display:inline-flex;align-items:center;gap:8px}
+.hint{text-align:center;color:var(--dim);font-size:12.5px;margin-top:10px;font-family:var(--mono)}
+
+.glass{border-radius:22px;padding:16px 18px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);min-width:0}
+.col{display:flex;flex-direction:column;gap:14px}
+.curve svg{width:100%;height:150px;display:block;overflow:visible}
+.legend{display:flex;gap:16px;margin-top:8px;color:var(--mist);font-size:12px;font-family:var(--mono);flex-wrap:wrap}
+.legend b{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px;border-radius:1px}
+.speech{min-height:92px;display:flex;gap:12px;align-items:flex-start}
+.speech .av{width:34px;height:34px;flex:none;border-radius:50%;background:var(--play);display:grid;place-items:center;color:var(--on-play);font-family:var(--han);font-size:13px;margin-top:2px}
+.speech .av.live{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(196,181,255,.35)}50%{box-shadow:0 0 0 10px rgba(196,181,255,0)}}
+.speech p{margin:0;font-size:16px;line-height:1.5;font-weight:300;min-width:0}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.readout .cell{border-radius:16px;padding:12px 12px 10px;background:var(--chip);border:1px solid var(--chip-line);min-width:0}
+.readout .v{font-weight:300;font-size:24px;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.readout .v small{font-size:12px;color:var(--mist);margin-left:3px;letter-spacing:0}
+.readout .v.ok{color:var(--mint)}
+.readout .v.no{color:var(--violet)}
+.readout .v .h{font-family:var(--han);font-weight:400}
+
+.two{font-size:clamp(26px,6vw,40px);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:var(--mist);margin:6px 0 18px;text-wrap:balance}
+.two b{font-weight:500;color:var(--ink)}
+.rows{display:grid;grid-template-columns:1fr;gap:8px}
+@media (min-width:760px){.rows{grid-template-columns:1fr 1fr}}
+.row{display:flex;align-items:center;gap:14px;border-radius:18px;padding:12px 14px;background:var(--chip);border:1px solid var(--chip-line);min-width:0}
+.row .pat{font-variant-numeric:tabular-nums;font-weight:300;font-size:22px;letter-spacing:-.02em;min-width:58px}
+.row .pat small{color:var(--dim);font-size:14px;margin:0 2px}
+.row .glyph{width:40px;height:18px;flex:none}
+.row .glyph path{fill:none;stroke:var(--haze);stroke-width:1.6;stroke-linecap:round}
+.row .words{display:flex;gap:6px;flex-wrap:wrap;min-width:0;flex:1}
+.wchip{border-radius:999px;padding:5px 11px;font-size:13px;background:var(--glass);border:1px solid var(--glass-line);color:var(--haze);display:inline-flex;align-items:center;gap:7px}
+.wchip .h{font-family:var(--han);color:var(--ink);font-weight:400}
+.wchip.clean{border-color:rgba(125,227,166,.45)}
+.wchip.clean::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+
+/* words */
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.field{height:44px;border-radius:999px;padding:0 16px;border:1px solid var(--chip-line);background:var(--chip);color:var(--ink);min-width:0;flex:1 1 180px}
+.field:focus{outline:1px solid var(--violet)}
+select.field{flex:0 1 auto;padding-right:32px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238A9497' stroke-width='1.5'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.chip{border-radius:999px;padding:6px 12px;font-size:12.5px;background:var(--chip);border:1px solid var(--chip-line);color:var(--mist)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#0B0F10}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.catlabel{grid-column:1/-1;margin:18px 0 2px}
+.catlabel:first-child{margin-top:0}
+.w{border-radius:18px;padding:12px 12px 10px;background:var(--chip);border:1px solid var(--chip-line);min-width:0;position:relative}
+.w[data-s="2"]{border-color:rgba(125,227,166,.4)}
+.w[data-s="1"]{border-color:rgba(196,181,255,.45)}
+.w .han{font-family:var(--han);font-size:26px;line-height:1.2;display:block;font-weight:300}
+.w .py{font-size:13px;color:var(--haze);margin-top:1px;overflow-wrap:anywhere}
+.w .en{font-size:12px;color:var(--mist);margin-top:2px;overflow-wrap:anywhere}
+.w .acts{display:flex;gap:4px;margin-top:9px;flex-wrap:wrap}
+.w .acts button{border:1px solid var(--chip-line);background:transparent;border-radius:999px;font-size:11px;padding:4px 9px;color:var(--mist)}
+.w .acts button.on{background:var(--ink);border-color:var(--ink);color:#0B0F10}
+.w .acts button.go{color:var(--violet);border-color:rgba(196,181,255,.4)}
+
+/* learn */
+.learn{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:760px){.learn{grid-template-columns:1fr 1fr}}
+.learn .glass h3{margin:4px 0 6px;font-weight:400;font-size:17px;letter-spacing:-.01em}
+.learn .glass p{margin:0;color:var(--haze);font-size:14px;font-weight:300}
+.learn .glass .num{font-weight:300;font-size:34px;letter-spacing:-.03em;line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.learn .glass .num small{font-size:12px;color:var(--mist);margin-left:4px;letter-spacing:0}
+.learn ol{margin:6px 0 0;padding-left:18px;color:var(--haze);font-size:14px;font-weight:300}
+.learn li{margin:2px 0}
+.src{color:var(--dim);font-size:12px;margin-top:8px;font-family:var(--mono)}
+.src a{color:var(--mist)}
+.tones{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
+.tcard{border-radius:16px;padding:12px;background:var(--chip);border:1px solid var(--chip-line)}
+.tcard svg{display:block;width:70px;height:28px;margin:6px 0}
+.tcard svg path{fill:none;stroke:var(--violet);stroke-width:2;stroke-linecap:round}
+.tcard .ex{font-family:var(--han);font-size:20px}
+.tcard p{margin:4px 0 0;font-size:12.5px;color:var(--mist)}
+
+/* progress */
+.hero{display:flex;align-items:baseline;gap:8px;margin:4px 0 2px}
+.hero .n{font-weight:300;font-size:clamp(72px,16vw,112px);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hero .u{color:var(--mist);font-size:14px}
+.track{position:relative;height:2px;background:rgba(233,237,238,.2);border-radius:1px;margin:22px 0 6px}
+.track i{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--violet);box-shadow:0 0 14px var(--violet);transform:translate(-50%,-50%);transition:left .8s var(--ease)}
+.ticks{display:flex;justify-content:space-between;color:var(--dim);font-family:var(--mono);font-size:11px}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media (min-width:760px){.bento{grid-template-columns:repeat(4,1fr)}}
+.bento .glass .v{font-weight:300;font-size:34px;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.bento .glass .v small{font-size:12px;color:var(--mist);margin-left:4px;letter-spacing:0}
+.testlist{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+
+.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:6;display:flex;gap:2px;padding:6px;border-radius:999px;background:var(--dock);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);max-width:calc(100vw - 24px)}
+.dock button{height:46px;min-width:46px;padding:0 13px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;color:var(--mist);font-size:14px;font-weight:500;transition:background .4s var(--ease),color .4s}
+.dock button span{display:none}
+.dock button[aria-selected="true"]{background:var(--ink);color:#0B0F10}
+.dock button[aria-selected="true"] span{display:inline}
+@media (max-width:360px){.dock button{min-width:42px;padding:0 10px}}
+
+.fade{animation:rise .6s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app grain">
+<header class="bar">
+  <div class="brand"><div class="mark">声</div><div><div style="font-weight:500;font-size:15px;line-height:1.1">Tone Coach</div><div class="lbl" id="subLbl">tone pairs · week one</div></div></div>
+  <div class="chipS" id="streakChip"><i></i><span id="streakTxt">0 clean in a row</span></div>
+</header>
+
+<main>
+<section id="v-coach" class="coach">
+  <div class="col">
+    <div class="stage" id="stage">
+      <div class="blob"></div>
+      <div class="pattern lbl" id="patLbl"></div>
+      <div class="word" id="word" lang="zh-CN"></div>
+      <div class="py" id="py"></div>
+      <div class="en" id="en"></div>
+      <div class="shape" id="shape"></div>
+    </div>
+    <div class="actions">
+      <button class="icon" id="hear" aria-label="Hear it slowly" title="Hear it slowly"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+      <button class="pill" id="rec"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span id="recTxt">Record</span></button>
+      <button class="icon" id="next" aria-label="Next word" title="Next word"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+    </div>
+    <div class="hint" id="hint">Tap Hear, copy the shape, tap Record and say it. It stops by itself.</div>
+  </div>
+  <div class="col">
+    <div class="glass curve">
+      <div class="lbl">Pitch · yours against the target</div>
+      <svg id="curveSvg" viewBox="0 0 400 150" preserveAspectRatio="none" aria-label="Pitch curve"></svg>
+      <div class="legend"><span><b style="background:var(--haze)"></b>target</span><span><b style="background:var(--violet)"></b>you</span><span id="rangeLbl"></span></div>
+    </div>
+    <div class="glass speech"><div class="av" id="av">声</div><p id="say">Press Hear. I will say the word slowly, then at normal speed. Copy the shape of the pitch, not just the sounds. Then press Record.</p></div>
+    <div class="readout" id="readout">
+      <div class="cell"><div class="lbl">tones</div><div class="v" id="r1">–</div></div>
+      <div class="cell"><div class="lbl">heard as</div><div class="v" id="r2">–</div></div>
+      <div class="cell"><div class="lbl">range</div><div class="v" id="r3">–</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="v-pairs" hidden>
+  <div class="lbl">Curriculum</div>
+  <div class="two">Twenty tone pairs. <b>Three words each.</b> Clean twice in a row and it turns mint.</div>
+  <div class="rows" id="rows"></div>
+</section>
+
+<section id="v-words" hidden>
+  <div class="lbl">Vocabulary</div>
+  <div class="two"><b id="wordCount">944</b> words. Say any of them. <b>Coach</b> sends it to the recorder.</div>
+  <div class="controls">
+    <input class="field" type="search" id="q" placeholder="Search hanzi, pinyin or English" aria-label="Search words">
+    <select class="field" id="filt" aria-label="Filter by status"><option value="all">All</option><option value="new">Untouched</option><option value="1">Shaky</option><option value="2">Solid</option></select>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="cards" id="grid"></div>
+</section>
+
+<section id="v-learn" hidden>
+  <div class="lbl">Method</div>
+  <div class="two">Pronunciation first. <b>Words second.</b> What the research says works, in the order to do it.</div>
+  <div class="tones" id="tonecards"></div>
+  <div class="learn" id="learn"></div>
+</section>
+
+<section id="v-progress" hidden>
+  <div class="lbl">Tone pairs clean</div>
+  <div class="hero"><div class="n" id="heroN">0</div><div class="u">of <span id="heroT">60</span></div></div>
+  <div class="track"><i id="dot" style="left:0%"></i></div>
+  <div class="ticks"><span>0</span><span>15</span><span>30</span><span>45</span><span>60</span></div>
+  <div class="bento">
+    <div class="glass"><div class="lbl">attempts</div><div class="v" id="bAtt">0</div></div>
+    <div class="glass"><div class="lbl">first try clean</div><div class="v" id="bFirst">0<small>%</small></div></div>
+    <div class="glass"><div class="lbl">words solid</div><div class="v" id="bSolid">0<small>/ 944</small></div></div>
+    <div class="glass"><div class="lbl">weekly test</div><div class="v" id="bTest">–<small>/10</small></div></div>
+  </div>
+  <div class="glass" style="margin-top:16px">
+    <div class="lbl">Weekly test · same ten words every week</div>
+    <div class="testlist" id="testlist"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="ghost" id="startTest">Run the ten</button>
+      <button class="ghost" id="reset">Reset everything</button>
+      <span class="lbl" id="testDate"></span>
+    </div>
+  </div>
+  <div class="glass" style="margin-top:10px">
+    <div class="lbl">Claude as the coach · optional</div>
+    <p style="margin:6px 0 10px;color:var(--haze);font-size:13.5px;font-weight:300">Without a key the coach uses built in rules. With an Anthropic API key it writes each correction itself. The key stays in this browser only.</p>
+    <div class="controls" style="margin:0"><input class="field" type="password" id="key" placeholder="sk-ant-..." autocomplete="off"><button class="ghost" id="saveKey">Save</button></div>
+  </div>
+</section>
+</main>
+
+<nav class="dock" role="tablist">
+  <button role="tab" aria-selected="true" data-v="coach" aria-label="Coach"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span>Coach</span></button>
+  <button role="tab" aria-selected="false" data-v="pairs" aria-label="Pairs"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Pairs</span></button>
+  <button role="tab" aria-selected="false" data-v="words" aria-label="Words"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h13"/></svg><span>Words</span></button>
+  <button role="tab" aria-selected="false" data-v="learn" aria-label="Learn"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Learn</span></button>
+  <button role="tab" aria-selected="false" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 14 4-4 3 3 5-6"/></svg><span>Progress</span></button>
+</nav>
+</div>
+
+<script>
+/* ================= data ================= */
+var CATS=[
+["greet","Greetings & courtesy",[["你好","nǐ hǎo","hello"],["您好","nín hǎo","hello (polite)"],["大家好","dà jiā hǎo","hello everyone"],["早上好","zǎo shang hǎo","good morning"],["晚上好","wǎn shang hǎo","good evening"],["晚安","wǎn ān","good night"],["再见","zài jiàn","goodbye"],["拜拜","bái bái","bye bye"],["回头见","huí tóu jiàn","see you later"],["明天见","míng tiān jiàn","see you tomorrow"],["谢谢","xiè xie","thank you"],["多谢","duō xiè","many thanks"],["不客气","bú kè qi","you're welcome"],["不用谢","bú yòng xiè","no need to thank me"],["对不起","duì bu qǐ","sorry"],["不好意思","bù hǎo yì si","excuse me / awkward"],["没关系","méi guān xi","it's fine"],["没事","méi shì","no problem"],["请","qǐng","please"],["请问","qǐng wèn","excuse me, may I ask"],["麻烦你","má fan nǐ","sorry to trouble you"],["辛苦了","xīn kǔ le","thanks for your effort"],["欢迎","huān yíng","welcome"],["好久不见","hǎo jiǔ bú jiàn","long time no see"],["最近怎么样","zuì jìn zěn me yàng","how have you been"],["你呢","nǐ ne","and you?"],["认识你很高兴","rèn shi nǐ hěn gāo xìng","nice to meet you"],["我叫","wǒ jiào","my name is"],["请多关照","qǐng duō guān zhào","please look after me"],["加油","jiā yóu","you got this"],["恭喜","gōng xǐ","congratulations"],["生日快乐","shēng rì kuài lè","happy birthday"],["新年快乐","xīn nián kuài lè","happy new year"],["干杯","gān bēi","cheers"],["保重","bǎo zhòng","take care"],["慢走","màn zǒu","take care (to someone leaving)"],["请坐","qǐng zuò","please sit"],["请进","qǐng jìn","please come in"],["没问题","méi wèn tí","no problem"],["当然","dāng rán","of course"],["真的吗","zhēn de ma","really?"],["太好了","tài hǎo le","that's great"]]],
+["pron","People & pronouns",[["我","wǒ","I, me"],["你","nǐ","you"],["您","nín","you (polite)"],["他","tā","he, him"],["她","tā","she, her"],["它","tā","it"],["我们","wǒ men","we, us"],["你们","nǐ men","you (plural)"],["他们","tā men","they"],["大家","dà jiā","everyone"],["别人","bié rén","other people"],["自己","zì jǐ","oneself"],["人","rén","person"],["男人","nán rén","man"],["女人","nǚ rén","woman"],["男孩","nán hái","boy"],["女孩","nǚ hái","girl"],["孩子","hái zi","child"],["朋友","péng you","friend"],["好朋友","hǎo péng you","close friend"],["同学","tóng xué","classmate"],["同事","tóng shì","colleague"],["老师","lǎo shī","teacher"],["学生","xué sheng","student"],["医生","yī shēng","doctor"],["护士","hù shi","nurse"],["司机","sī jī","driver"],["老板","lǎo bǎn","boss"],["服务员","fú wù yuán","waiter"],["警察","jǐng chá","police"],["律师","lǜ shī","lawyer"],["工程师","gōng chéng shī","engineer"],["邻居","lín jū","neighbour"],["客人","kè rén","guest"],["陌生人","mò shēng rén","stranger"],["名字","míng zi","name"],["先生","xiān sheng","Mr., sir"],["小姐","xiǎo jiě","Miss"],["女士","nǚ shì","Ms., madam"],["中国人","zhōng guó rén","Chinese person"],["外国人","wài guó rén","foreigner"],["印度人","yìn dù rén","Indian person"],["美国人","měi guó rén","American"]]],
+["num","Numbers, time & dates",[["零","líng","zero"],["一","yī","one"],["二","èr","two"],["三","sān","three"],["四","sì","four"],["五","wǔ","five"],["六","liù","six"],["七","qī","seven"],["八","bā","eight"],["九","jiǔ","nine"],["十","shí","ten"],["百","bǎi","hundred"],["千","qiān","thousand"],["万","wàn","ten thousand"],["亿","yì","hundred million"],["两","liǎng","two (before measure words)"],["半","bàn","half"],["第一","dì yī","first"],["几","jǐ","how many (small number)"],["多少","duō shao","how many, how much"],["年","nián","year"],["月","yuè","month"],["日","rì","day (formal)"],["号","hào","day of the month"],["星期","xīng qī","week"],["星期一","xīng qī yī","Monday"],["星期二","xīng qī èr","Tuesday"],["星期三","xīng qī sān","Wednesday"],["星期四","xīng qī sì","Thursday"],["星期五","xīng qī wǔ","Friday"],["星期六","xīng qī liù","Saturday"],["星期天","xīng qī tiān","Sunday"],["周末","zhōu mò","weekend"],["今天","jīn tiān","today"],["明天","míng tiān","tomorrow"],["昨天","zuó tiān","yesterday"],["后天","hòu tiān","day after tomorrow"],["前天","qián tiān","day before yesterday"],["今年","jīn nián","this year"],["明年","míng nián","next year"],["去年","qù nián","last year"],["这个月","zhè ge yuè","this month"],["下个月","xià ge yuè","next month"],["上个月","shàng ge yuè","last month"],["早上","zǎo shang","early morning"],["上午","shàng wǔ","late morning"],["中午","zhōng wǔ","noon"],["下午","xià wǔ","afternoon"],["晚上","wǎn shang","evening"],["夜里","yè li","at night"],["点","diǎn","o'clock"],["分","fēn","minute"],["秒","miǎo","second"],["刻","kè","quarter hour"],["小时","xiǎo shí","hour"],["分钟","fēn zhōng","minutes (duration)"],["天","tiān","day"],["现在","xiàn zài","now"],["刚才","gāng cái","a moment ago"],["以前","yǐ qián","before"],["以后","yǐ hòu","after"],["最近","zuì jìn","recently"],["将来","jiāng lái","the future"],["时候","shí hou","moment, when"],["时间","shí jiān","time"],["每天","měi tiān","every day"],["平时","píng shí","usually"],["一会儿","yí huìr","a little while"],["马上","mǎ shàng","right away"],["生日","shēng rì","birthday"],["春天","chūn tiān","spring"],["夏天","xià tiān","summer"],["秋天","qiū tiān","autumn"],["冬天","dōng tiān","winter"]]],
+["fam","Family",[["家","jiā","home, family"],["家人","jiā rén","family members"],["爸爸","bà ba","dad"],["妈妈","mā ma","mum"],["父亲","fù qīn","father (formal)"],["母亲","mǔ qīn","mother (formal)"],["父母","fù mǔ","parents"],["儿子","ér zi","son"],["女儿","nǚ ér","daughter"],["哥哥","gē ge","older brother"],["弟弟","dì di","younger brother"],["姐姐","jiě jie","older sister"],["妹妹","mèi mei","younger sister"],["爷爷","yé ye","grandfather (father's side)"],["奶奶","nǎi nai","grandmother (father's side)"],["外公","wài gōng","grandfather (mother's side)"],["外婆","wài pó","grandmother (mother's side)"],["叔叔","shū shu","uncle"],["阿姨","ā yí","aunt"],["表哥","biǎo gē","older male cousin"],["表妹","biǎo mèi","younger female cousin"],["老公","lǎo gōng","husband (casual)"],["老婆","lǎo po","wife (casual)"],["丈夫","zhàng fu","husband"],["妻子","qī zi","wife"],["男朋友","nán péng you","boyfriend"],["女朋友","nǚ péng you","girlfriend"],["结婚","jié hūn","to marry"],["亲戚","qīn qi","relatives"],["宝宝","bǎo bao","baby"],["一家人","yì jiā rén","one family"]]],
+["verb","Core verbs",[["是","shì","to be"],["有","yǒu","to have"],["在","zài","to be at"],["去","qù","to go"],["来","lái","to come"],["回","huí","to return"],["走","zǒu","to walk, to leave"],["跑","pǎo","to run"],["坐","zuò","to sit, to take (transport)"],["站","zhàn","to stand"],["躺","tǎng","to lie down"],["睡觉","shuì jiào","to sleep"],["起床","qǐ chuáng","to get up"],["吃","chī","to eat"],["喝","hē","to drink"],["买","mǎi","to buy"],["卖","mài","to sell"],["给","gěi","to give"],["拿","ná","to take, to hold"],["放","fàng","to put"],["找","zhǎo","to look for"],["看","kàn","to look, watch, read"],["听","tīng","to listen"],["说","shuō","to speak"],["讲","jiǎng","to tell, to explain"],["告诉","gào su","to tell someone"],["问","wèn","to ask"],["回答","huí dá","to answer"],["叫","jiào","to call, to be named"],["读","dú","to read aloud"],["写","xiě","to write"],["学","xué","to learn"],["学习","xué xí","to study"],["教","jiāo","to teach"],["懂","dǒng","to understand"],["明白","míng bai","to understand clearly"],["知道","zhī dào","to know (a fact)"],["认识","rèn shi","to know (a person)"],["记得","jì de","to remember"],["忘","wàng","to forget"],["想","xiǎng","to want, to think, to miss"],["要","yào","to want, will"],["需要","xū yào","to need"],["希望","xī wàng","to hope"],["喜欢","xǐ huan","to like"],["爱","ài","to love"],["讨厌","tǎo yàn","to dislike"],["觉得","jué de","to feel, to think"],["认为","rèn wéi","to believe that"],["开始","kāi shǐ","to begin"],["结束","jié shù","to end"],["完成","wán chéng","to complete"],["做","zuò","to do, to make"],["工作","gōng zuò","to work"],["帮","bāng","to help"],["帮忙","bāng máng","to lend a hand"],["试","shì","to try"],["用","yòng","to use"],["开","kāi","to open, to drive"],["关","guān","to close"],["打开","dǎ kāi","to open up"],["进","jìn","to enter"],["出","chū","to exit"],["上","shàng","to go up, to board"],["下","xià","to go down"],["到","dào","to arrive"],["等","děng","to wait"],["见","jiàn","to see, to meet"],["见面","jiàn miàn","to meet up"],["聊天","liáo tiān","to chat"],["打电话","dǎ diàn huà","to make a call"],["发","fā","to send"],["收","shōu","to receive"],["带","dài","to bring"],["送","sòng","to give, to see off"],["借","jiè","to borrow, to lend"],["还","huán","to return something"],["付","fù","to pay"],["花","huā","to spend"],["赚","zhuàn","to earn"],["住","zhù","to live, to stay"],["搬","bān","to move house"],["洗","xǐ","to wash"],["穿","chuān","to wear"],["脱","tuō","to take off"],["玩","wán","to play"],["唱","chàng","to sing"],["跳舞","tiào wǔ","to dance"],["笑","xiào","to laugh"],["哭","kū","to cry"],["生气","shēng qì","to get angry"],["休息","xiū xi","to rest"],["锻炼","duàn liàn","to work out"],["跑步","pǎo bù","to jog"],["游泳","yóu yǒng","to swim"],["旅行","lǚ xíng","to travel"],["参加","cān jiā","to join, to attend"],["选择","xuǎn zé","to choose"],["决定","jué dìng","to decide"],["同意","tóng yì","to agree"],["反对","fǎn duì","to oppose"],["介绍","jiè shào","to introduce"],["准备","zhǔn bèi","to prepare"],["改变","gǎi biàn","to change"],["解决","jiě jué","to solve"],["发现","fā xiàn","to discover"],["相信","xiāng xìn","to believe"],["担心","dān xīn","to worry"],["注意","zhù yì","to pay attention"],["小心","xiǎo xīn","to be careful"],["继续","jì xù","to continue"],["停","tíng","to stop"],["死","sǐ","to die"],["活","huó","to live"],["出生","chū shēng","to be born"],["长大","zhǎng dà","to grow up"]]],
+["adj","Adjectives",[["好","hǎo","good"],["坏","huài","bad"],["大","dà","big"],["小","xiǎo","small"],["多","duō","many"],["少","shǎo","few"],["高","gāo","tall, high"],["矮","ǎi","short (height)"],["长","cháng","long"],["短","duǎn","short"],["胖","pàng","chubby"],["瘦","shòu","thin"],["新","xīn","new"],["旧","jiù","old (things)"],["老","lǎo","old (people)"],["年轻","nián qīng","young"],["快","kuài","fast"],["慢","màn","slow"],["早","zǎo","early"],["晚","wǎn","late"],["贵","guì","expensive"],["便宜","pián yi","cheap"],["难","nán","difficult"],["容易","róng yì","easy"],["简单","jiǎn dān","simple"],["复杂","fù zá","complicated"],["重要","zhòng yào","important"],["有意思","yǒu yì si","interesting"],["无聊","wú liáo","boring"],["累","lèi","tired"],["忙","máng","busy"],["饿","è","hungry"],["渴","kě","thirsty"],["困","kùn","sleepy"],["热","rè","hot"],["冷","lěng","cold"],["暖和","nuǎn huo","warm"],["凉快","liáng kuai","pleasantly cool"],["干净","gān jìng","clean"],["脏","zāng","dirty"],["漂亮","piào liang","pretty"],["好看","hǎo kàn","good-looking"],["帅","shuài","handsome"],["可爱","kě ài","cute"],["聪明","cōng ming","clever"],["笨","bèn","dim"],["认真","rèn zhēn","diligent, serious"],["努力","nǔ lì","hardworking"],["懒","lǎn","lazy"],["安静","ān jìng","quiet"],["吵","chǎo","noisy"],["近","jìn","near"],["远","yuǎn","far"],["对","duì","correct"],["错","cuò","wrong"],["真","zhēn","real"],["假","jiǎ","fake"],["一样","yí yàng","the same"],["不同","bù tóng","different"],["特别","tè bié","special"],["普通","pǔ tōng","ordinary"],["方便","fāng biàn","convenient"],["舒服","shū fu","comfortable"],["危险","wēi xiǎn","dangerous"],["安全","ān quán","safe"],["健康","jiàn kāng","healthy"],["奇怪","qí guài","strange"],["厉害","lì hai","impressive, formidable"],["可怕","kě pà","frightening"],["有名","yǒu míng","famous"],["富","fù","rich"],["穷","qióng","poor"],["重","zhòng","heavy"],["轻","qīng","light"],["满","mǎn","full"],["空","kōng","empty"]]],
+["gram","Questions & grammar words",[["吗","ma","yes-no question particle"],["呢","ne","and what about...?"],["吧","ba","suggestion, softener"],["了","le","completed action"],["的","de","possessive particle"],["得","de","degree particle"],["地","de","adverb particle"],["着","zhe","ongoing state"],["过","guo","have experienced"],["不","bù","not"],["没","méi","not (for having or past)"],["没有","méi yǒu","do not have"],["别","bié","don't"],["什么","shén me","what"],["谁","shéi","who"],["哪","nǎ","which"],["哪儿","nǎr","where"],["哪里","nǎ lǐ","where"],["为什么","wèi shén me","why"],["怎么","zěn me","how"],["怎么样","zěn me yàng","how about it"],["什么时候","shén me shí hou","when"],["多久","duō jiǔ","how long"],["多大","duō dà","how old, how big"],["会","huì","can (learned), will"],["能","néng","can, be able to"],["可以","kě yǐ","may, allowed to"],["应该","yīng gāi","should"],["必须","bì xū","must"],["要是","yào shi","if"],["如果","rú guǒ","if"],["因为","yīn wèi","because"],["所以","suǒ yǐ","so, therefore"],["但是","dàn shì","but"],["可是","kě shì","but"],["虽然","suī rán","although"],["而且","ér qiě","moreover"],["或者","huò zhě","or (statement)"],["还是","hái shi","or (question)"],["和","hé","and"],["跟","gēn","with"],["比","bǐ","compared to"],["把","bǎ","object-fronting marker"],["被","bèi","passive marker"],["对","duì","toward, regarding"]]],
+["food","Food & drink",[["饭","fàn","rice, a meal"],["米饭","mǐ fàn","cooked rice"],["面条","miàn tiáo","noodles"],["面包","miàn bāo","bread"],["包子","bāo zi","steamed bun"],["饺子","jiǎo zi","dumplings"],["馒头","mán tou","steamed bread"],["粥","zhōu","congee"],["汤","tāng","soup"],["菜","cài","dish, vegetable"],["蔬菜","shū cài","vegetables"],["水果","shuǐ guǒ","fruit"],["肉","ròu","meat"],["鸡肉","jī ròu","chicken"],["牛肉","niú ròu","beef"],["猪肉","zhū ròu","pork"],["羊肉","yáng ròu","lamb"],["鱼","yú","fish"],["虾","xiā","shrimp"],["鸡蛋","jī dàn","egg"],["豆腐","dòu fu","tofu"],["土豆","tǔ dòu","potato"],["番茄","fān qié","tomato"],["黄瓜","huáng guā","cucumber"],["白菜","bái cài","cabbage"],["胡萝卜","hú luó bo","carrot"],["蘑菇","mó gu","mushroom"],["洋葱","yáng cōng","onion"],["大蒜","dà suàn","garlic"],["姜","jiāng","ginger"],["辣椒","là jiāo","chilli"],["苹果","píng guǒ","apple"],["香蕉","xiāng jiāo","banana"],["橙子","chéng zi","orange"],["西瓜","xī guā","watermelon"],["葡萄","pú tao","grapes"],["草莓","cǎo méi","strawberry"],["芒果","máng guǒ","mango"],["水","shuǐ","water"],["热水","rè shuǐ","hot water"],["茶","chá","tea"],["绿茶","lǜ chá","green tea"],["咖啡","kā fēi","coffee"],["牛奶","niú nǎi","milk"],["果汁","guǒ zhī","juice"],["啤酒","pí jiǔ","beer"],["白酒","bái jiǔ","baijiu, strong liquor"],["红酒","hóng jiǔ","red wine"],["可乐","kě lè","cola"],["奶茶","nǎi chá","milk tea"],["糖","táng","sugar, sweets"],["盐","yán","salt"],["油","yóu","oil"],["酱油","jiàng yóu","soy sauce"],["醋","cù","vinegar"],["早餐","zǎo cān","breakfast"],["午餐","wǔ cān","lunch"],["晚餐","wǎn cān","dinner"],["点心","diǎn xin","snacks, dim sum"],["小吃","xiǎo chī","street food"],["饭馆","fàn guǎn","restaurant"],["餐厅","cān tīng","dining hall"],["菜单","cài dān","menu"],["筷子","kuài zi","chopsticks"],["勺子","sháo zi","spoon"],["叉子","chā zi","fork"],["碗","wǎn","bowl"],["盘子","pán zi","plate"],["杯子","bēi zi","cup"],["味道","wèi dào","taste, flavour"],["好吃","hǎo chī","tasty"],["好喝","hǎo hē","good to drink"],["辣","là","spicy"],["甜","tián","sweet"],["酸","suān","sour"],["苦","kǔ","bitter"],["咸","xián","salty"],["素食","sù shí","vegetarian food"],["打包","dǎ bāo","to take away"],["买单","mǎi dān","the bill, please"],["火锅","huǒ guō","hot pot"],["烧烤","shāo kǎo","barbecue"],["外卖","wài mài","food delivery"]]],
+["place","Places, travel & directions",[["这里","zhè lǐ","here"],["那里","nà lǐ","there"],["这儿","zhèr","here"],["那儿","nàr","there"],["上面","shàng miàn","above"],["下面","xià miàn","below"],["里面","lǐ miàn","inside"],["外面","wài miàn","outside"],["前面","qián miàn","in front"],["后面","hòu miàn","behind"],["左边","zuǒ biān","left side"],["右边","yòu biān","right side"],["旁边","páng biān","beside"],["中间","zhōng jiān","in the middle"],["对面","duì miàn","opposite"],["附近","fù jìn","nearby"],["东","dōng","east"],["南","nán","south"],["西","xī","west"],["北","běi","north"],["地方","dì fang","place"],["城市","chéng shì","city"],["国家","guó jiā","country"],["中国","zhōng guó","China"],["美国","měi guó","USA"],["印度","yìn dù","India"],["北京","běi jīng","Beijing"],["上海","shàng hǎi","Shanghai"],["房子","fáng zi","house"],["房间","fáng jiān","room"],["楼","lóu","building, floor"],["学校","xué xiào","school"],["大学","dà xué","university"],["公司","gōng sī","company"],["办公室","bàn gōng shì","office"],["医院","yī yuàn","hospital"],["商店","shāng diàn","shop"],["超市","chāo shì","supermarket"],["银行","yín háng","bank"],["邮局","yóu jú","post office"],["机场","jī chǎng","airport"],["车站","chē zhàn","stop, station"],["火车站","huǒ chē zhàn","train station"],["地铁站","dì tiě zhàn","subway station"],["公园","gōng yuán","park"],["图书馆","tú shū guǎn","library"],["博物馆","bó wù guǎn","museum"],["电影院","diàn yǐng yuàn","cinema"],["酒店","jiǔ diàn","hotel"],["厕所","cè suǒ","toilet"],["洗手间","xǐ shǒu jiān","restroom"],["街","jiē","street"],["路","lù","road"],["马路","mǎ lù","main road"],["桥","qiáo","bridge"],["车","chē","vehicle"],["汽车","qì chē","car"],["出租车","chū zū chē","taxi"],["公共汽车","gōng gòng qì chē","bus"],["地铁","dì tiě","subway"],["火车","huǒ chē","train"],["飞机","fēi jī","aeroplane"],["自行车","zì xíng chē","bicycle"],["船","chuán","boat"],["票","piào","ticket"],["护照","hù zhào","passport"],["签证","qiān zhèng","visa"],["行李","xíng li","luggage"],["地图","dì tú","map"],["旅游","lǚ yóu","tourism"],["红绿灯","hóng lǜ dēng","traffic light"],["堵车","dǔ chē","traffic jam"]]],
+["body","Body & health",[["身体","shēn tǐ","body"],["头","tóu","head"],["脸","liǎn","face"],["眼睛","yǎn jing","eye"],["鼻子","bí zi","nose"],["嘴","zuǐ","mouth"],["耳朵","ěr duo","ear"],["牙","yá","tooth"],["头发","tóu fa","hair"],["脖子","bó zi","neck"],["肩膀","jiān bǎng","shoulder"],["手","shǒu","hand"],["手指","shǒu zhǐ","finger"],["胳膊","gē bo","arm"],["腿","tuǐ","leg"],["脚","jiǎo","foot"],["背","bèi","back"],["肚子","dù zi","belly"],["心","xīn","heart"],["脑","nǎo","brain"],["血","xuè","blood"],["骨头","gǔ tou","bone"],["皮肤","pí fū","skin"],["生病","shēng bìng","to fall ill"],["感冒","gǎn mào","a cold"],["发烧","fā shāo","fever"],["咳嗽","ké sou","cough"],["头疼","tóu téng","headache"],["疼","téng","painful"],["受伤","shòu shāng","injured"],["药","yào","medicine"],["吃药","chī yào","to take medicine"],["看病","kàn bìng","to see a doctor"],["检查","jiǎn chá","to examine"],["治疗","zhì liáo","to treat"],["手术","shǒu shù","surgery"],["睡眠","shuì mián","sleep"],["运动","yùn dòng","exercise"],["营养","yíng yǎng","nutrition"],["减肥","jiǎn féi","to lose weight"],["长寿","cháng shòu","longevity"]]],
+["feel","Feelings & relationships",[["开心","kāi xīn","happy"],["高兴","gāo xìng","glad"],["快乐","kuài lè","joyful"],["难过","nán guò","sad"],["伤心","shāng xīn","heartbroken"],["害怕","hài pà","afraid"],["紧张","jǐn zhāng","nervous"],["放松","fàng sōng","relaxed"],["着急","zháo jí","anxious"],["惊讶","jīng yà","surprised"],["失望","shī wàng","disappointed"],["后悔","hòu huǐ","to regret"],["骄傲","jiāo ào","proud"],["满意","mǎn yì","satisfied"],["感动","gǎn dòng","moved, touched"],["感谢","gǎn xiè","grateful"],["孤单","gū dān","lonely"],["想念","xiǎng niàn","to miss someone"],["爱上","ài shàng","to fall in love"],["心动","xīn dòng","heart skips"],["暗恋","àn liàn","secret crush"],["表白","biǎo bái","to confess feelings"],["约会","yuē huì","a date"],["追","zhuī","to pursue someone"],["在一起","zài yì qǐ","to be together"],["分手","fēn shǒu","to break up"],["信任","xìn rèn","trust"],["误会","wù huì","misunderstanding"],["道歉","dào qiàn","to apologise"],["原谅","yuán liàng","to forgive"],["关心","guān xīn","to care about"],["照顾","zhào gù","to look after"],["陪","péi","to accompany"],["支持","zhī chí","to support"],["鼓励","gǔ lì","to encourage"],["羡慕","xiàn mù","to envy"],["尊重","zūn zhòng","to respect"],["真心","zhēn xīn","sincere"],["感情","gǎn qíng","feelings, bond"],["缘分","yuán fèn","fate that brings people together"],["性格","xìng gé","personality"],["幽默","yōu mò","humorous"],["温柔","wēn róu","gentle"],["善良","shàn liáng","kind-hearted"],["诚实","chéng shí","honest"]]],
+["work","School & work",[["上课","shàng kè","to attend class"],["下课","xià kè","class ends"],["课","kè","class, lesson"],["作业","zuò yè","homework"],["考试","kǎo shì","exam"],["成绩","chéng jì","grades"],["专业","zhuān yè","major"],["毕业","bì yè","to graduate"],["研究生","yán jiū shēng","graduate student"],["硕士","shuò shì","master's degree"],["博士","bó shì","doctorate"],["论文","lùn wén","paper, thesis"],["研究","yán jiū","research"],["实习","shí xí","internship"],["简历","jiǎn lì","resume"],["面试","miàn shì","job interview"],["应聘","yìng pìn","to apply for a job"],["招聘","zhāo pìn","to recruit"],["职位","zhí wèi","position"],["工资","gōng zī","salary"],["升职","shēng zhí","promotion"],["加班","jiā bān","to work overtime"],["出差","chū chāi","business trip"],["会议","huì yì","meeting"],["开会","kāi huì","to hold a meeting"],["报告","bào gào","report"],["项目","xiàng mù","project"],["计划","jì huà","plan"],["目标","mù biāo","goal"],["任务","rèn wu","task"],["团队","tuán duì","team"],["合作","hé zuò","to cooperate"],["客户","kè hù","client"],["市场","shì chǎng","market"],["产品","chǎn pǐn","product"],["服务","fú wù","service"],["质量","zhì liàng","quality"],["数据","shù jù","data"],["分析","fēn xī","to analyse"],["结果","jié guǒ","result"],["问题","wèn tí","problem, question"],["办法","bàn fǎ","method, way"],["经验","jīng yàn","experience"],["能力","néng lì","ability"],["机会","jī huì","opportunity"],["压力","yā lì","pressure"],["成功","chéng gōng","success"],["失败","shī bài","failure"],["创业","chuàng yè","to start a business"],["咨询","zī xún","consulting"],["投资","tóu zī","to invest"]]],
+["obj","Objects & home",[["东西","dōng xi","thing"],["手机","shǒu jī","phone"],["电脑","diàn nǎo","computer"],["电视","diàn shì","television"],["书","shū","book"],["笔","bǐ","pen"],["纸","zhǐ","paper"],["本子","běn zi","notebook"],["包","bāo","bag"],["钱包","qián bāo","wallet"],["钥匙","yào shi","key"],["眼镜","yǎn jìng","glasses"],["表","biǎo","watch"],["伞","sǎn","umbrella"],["衣服","yī fu","clothes"],["裤子","kù zi","trousers"],["裙子","qún zi","skirt"],["鞋","xié","shoes"],["袜子","wà zi","socks"],["帽子","mào zi","hat"],["外套","wài tào","coat"],["衬衫","chèn shān","shirt"],["门","mén","door"],["窗户","chuāng hu","window"],["桌子","zhuō zi","table"],["椅子","yǐ zi","chair"],["床","chuáng","bed"],["沙发","shā fā","sofa"],["灯","dēng","lamp"],["镜子","jìng zi","mirror"],["冰箱","bīng xiāng","fridge"],["空调","kōng tiáo","air conditioning"],["洗衣机","xǐ yī jī","washing machine"],["厨房","chú fáng","kitchen"],["卧室","wò shì","bedroom"],["客厅","kè tīng","living room"],["阳台","yáng tái","balcony"],["花","huā","flower"],["树","shù","tree"],["草","cǎo","grass"],["狗","gǒu","dog"],["猫","māo","cat"],["鸟","niǎo","bird"],["照片","zhào piàn","photo"],["礼物","lǐ wù","gift"],["垃圾","lā jī","rubbish"],["充电器","chōng diàn qì","charger"],["耳机","ěr jī","earphones"],["电池","diàn chí","battery"],["盒子","hé zi","box"],["袋子","dài zi","plastic bag"],["毛巾","máo jīn","towel"],["牙刷","yá shuā","toothbrush"],["肥皂","féi zào","soap"]]],
+["adv","Adverbs & connectors",[["很","hěn","very"],["太","tài","too"],["非常","fēi cháng","extremely"],["真的","zhēn de","really"],["挺","tǐng","quite"],["有点儿","yǒu diǎnr","a bit (negative)"],["一点儿","yì diǎnr","a little"],["最","zuì","most"],["更","gèng","even more"],["比较","bǐ jiào","relatively"],["都","dōu","all, both"],["也","yě","also"],["还","hái","still, additionally"],["又","yòu","again (past)"],["再","zài","again (future)"],["就","jiù","then, right away"],["才","cái","only then"],["已经","yǐ jīng","already"],["还没","hái méi","not yet"],["刚","gāng","just now"],["正在","zhèng zài","in the middle of"],["一直","yì zhí","all along"],["总是","zǒng shì","always"],["经常","jīng cháng","often"],["有时候","yǒu shí hou","sometimes"],["偶尔","ǒu ěr","occasionally"],["从来不","cóng lái bù","never"],["一定","yí dìng","definitely"],["可能","kě néng","maybe"],["也许","yě xǔ","perhaps"],["其实","qí shí","actually"],["好像","hǎo xiàng","it seems"],["差不多","chà bu duō","more or less"],["几乎","jī hū","nearly"],["只","zhǐ","only"],["只是","zhǐ shì","it's just that"],["尤其","yóu qí","especially"],["首先","shǒu xiān","first of all"],["然后","rán hòu","then"],["最后","zuì hòu","finally"],["一起","yì qǐ","together"],["互相","hù xiāng","mutually"],["一边","yì biān","while, at the same time"],["同时","tóng shí","simultaneously"],["反正","fǎn zhèng","anyway"],["居然","jū rán","unexpectedly"],["到底","dào dǐ","after all, on earth"]]],
+["weather","Weather & nature",[["天气","tiān qì","weather"],["太阳","tài yáng","sun"],["月亮","yuè liang","moon"],["星星","xīng xing","star"],["天空","tiān kōng","sky"],["云","yún","cloud"],["雨","yǔ","rain"],["下雨","xià yǔ","to rain"],["雪","xuě","snow"],["下雪","xià xuě","to snow"],["风","fēng","wind"],["刮风","guā fēng","windy"],["雷","léi","thunder"],["晴天","qíng tiān","sunny day"],["阴天","yīn tiān","overcast day"],["雾","wù","fog"],["温度","wēn dù","temperature"],["度","dù","degree"],["气候","qì hòu","climate"],["山","shān","mountain"],["海","hǎi","sea"],["河","hé","river"],["湖","hú","lake"],["森林","sēn lín","forest"],["沙漠","shā mò","desert"],["岛","dǎo","island"],["地球","dì qiú","earth"],["自然","zì rán","nature"],["环境","huán jìng","environment"],["空气","kōng qì","air"],["污染","wū rǎn","pollution"]]],
+["shop","Shopping, money & colour",[["钱","qián","money"],["块","kuài","yuan (spoken)"],["元","yuán","yuan (written)"],["毛","máo","ten cents"],["美元","měi yuán","US dollar"],["价格","jià gé","price"],["多少钱","duō shao qián","how much is it"],["打折","dǎ zhé","discount"],["便宜点","pián yi diǎn","a bit cheaper please"],["买东西","mǎi dōng xi","to go shopping"],["购物","gòu wù","shopping"],["顾客","gù kè","customer"],["收银台","shōu yín tái","checkout counter"],["发票","fā piào","receipt, invoice"],["现金","xiàn jīn","cash"],["信用卡","xìn yòng kǎ","credit card"],["支付宝","zhī fù bǎo","Alipay"],["微信支付","wēi xìn zhī fù","WeChat Pay"],["扫码","sǎo mǎ","to scan the code"],["退货","tuì huò","to return goods"],["换","huàn","to exchange"],["试穿","shì chuān","to try on"],["尺寸","chǐ cùn","size"],["颜色","yán sè","colour"],["红","hóng","red"],["蓝","lán","blue"],["绿","lǜ","green"],["黄","huáng","yellow"],["黑","hēi","black"],["白","bái","white"],["灰","huī","grey"],["粉色","fěn sè","pink"],["紫色","zǐ sè","purple"],["存钱","cún qián","to save money"],["花钱","huā qián","to spend money"],["账单","zhàng dān","bill"]]],
+["tech","Phone & internet",[["网","wǎng","net"],["网上","wǎng shàng","online"],["网络","wǎng luò","network"],["上网","shàng wǎng","to go online"],["微信","wēi xìn","WeChat"],["朋友圈","péng you quān","WeChat Moments"],["加微信","jiā wēi xìn","to add on WeChat"],["消息","xiāo xi","message"],["短信","duǎn xìn","text message"],["电话号码","diàn huà hào mǎ","phone number"],["视频","shì pín","video"],["照相","zhào xiàng","to take a photo"],["自拍","zì pāi","selfie"],["下载","xià zài","to download"],["上传","shàng chuán","to upload"],["软件","ruǎn jiàn","software"],["应用","yìng yòng","app"],["账号","zhàng hào","account"],["密码","mì mǎ","password"],["登录","dēng lù","to log in"],["搜索","sōu suǒ","to search"],["邮件","yóu jiàn","email"],["文件","wén jiàn","file"],["打字","dǎ zì","to type"],["键盘","jiàn pán","keyboard"],["屏幕","píng mù","screen"],["充电","chōng diàn","to charge"],["信号","xìn hào","signal"],["无线网","wú xiàn wǎng","wifi"],["人工智能","rén gōng zhì néng","artificial intelligence"]]],
+["mw","Measure words",[["个","gè","general purpose"],["位","wèi","people, polite"],["只","zhī","animals"],["条","tiáo","long thin things"],["张","zhāng","flat things"],["本","běn","books"],["件","jiàn","clothes, matters"],["把","bǎ","things with handles"],["杯","bēi","cups of"],["瓶","píng","bottles of"],["双","shuāng","pairs"],["辆","liàng","vehicles"],["家","jiā","businesses"],["间","jiān","rooms"],["台","tái","machines"],["块","kuài","pieces, chunks"],["片","piàn","slices"],["顿","dùn","meals"],["次","cì","times, occasions"],["遍","biàn","times through"],["下","xià","brief actions"],["些","xiē","some"],["群","qún","groups"],["份","fèn","portions"],["支","zhī","pens, sticks"],["封","fēng","letters"]]]
+];
+var PAIRS=[
+[[1,1],[["今天","jīn tiān","today"],["咖啡","kā fēi","coffee"],["医生","yī shēng","doctor"]]],
+[[1,2],[["中国","zhōng guó","China"],["欢迎","huān yíng","welcome"],["公园","gōng yuán","park"]]],
+[[1,3],[["开始","kāi shǐ","to begin"],["身体","shēn tǐ","body"],["机场","jī chǎng","airport"]]],
+[[1,4],[["工作","gōng zuò","work"],["高兴","gāo xìng","glad"],["希望","xī wàng","to hope"]]],
+[[1,0],[["妈妈","mā ma","mum"],["先生","xiān sheng","Mr."],["东西","dōng xi","thing"]]],
+[[2,1],[["明天","míng tiān","tomorrow"],["房间","fáng jiān","room"],["昨天","zuó tiān","yesterday"]]],
+[[2,2],[["学习","xué xí","to study"],["银行","yín háng","bank"],["同学","tóng xué","classmate"]]],
+[[2,3],[["没有","méi yǒu","don't have"],["牛奶","niú nǎi","milk"],["苹果","píng guǒ","apple"]]],
+[[2,4],[["学校","xué xiào","school"],["文化","wén huà","culture"],["决定","jué dìng","to decide"]]],
+[[2,0],[["朋友","péng you","friend"],["什么","shén me","what"],["便宜","pián yi","cheap"]]],
+[[3,1],[["老师","lǎo shī","teacher"],["北京","běi jīng","Beijing"],["好吃","hǎo chī","tasty"]]],
+[[3,2],[["美国","měi guó","USA"],["旅行","lǚ xíng","to travel"],["有名","yǒu míng","famous"]]],
+[[3,3],[["你好","nǐ hǎo","hello"],["水果","shuǐ guǒ","fruit"],["可以","kě yǐ","may"]]],
+[[3,4],[["考试","kǎo shì","exam"],["感谢","gǎn xiè","grateful"],["好看","hǎo kàn","good looking"]]],
+[[3,0],[["喜欢","xǐ huan","to like"],["我们","wǒ men","we"],["姐姐","jiě jie","older sister"]]],
+[[4,1],[["健康","jiàn kāng","healthy"],["上班","shàng bān","to go to work"],["唱歌","chàng gē","to sing"]]],
+[[4,2],[["问题","wèn tí","question"],["练习","liàn xí","to practise"],["地图","dì tú","map"]]],
+[[4,3],[["电影","diàn yǐng","film"],["上午","shàng wǔ","morning"],["跳舞","tiào wǔ","to dance"]]],
+[[4,4],[["再见","zài jiàn","goodbye"],["睡觉","shuì jiào","to sleep"],["现在","xiàn zài","now"]]],
+[[4,0],[["谢谢","xiè xie","thank you"],["漂亮","piào liang","pretty"],["告诉","gào su","to tell"]]]
+];
+var TEST=["你好","谢谢","明天","朋友","老师","水果","学校","再见","喜欢","没有"];
+var TONE_NAME={1:"high and level",2:"rising",3:"low",4:"falling",0:"light and short"};
+var TONE_SHORT={1:"level",2:"rise",3:"low",4:"fall",0:"light"};
+var TMAP={1:"āēīōūǖ",2:"áéíóúǘ",3:"ǎěǐǒǔǚ",4:"àèìòùǜ"};
+function toneOf(s){for(var t in TMAP){for(var i=0;i<TMAP[t].length;i++)if(s.indexOf(TMAP[t][i])>-1)return +t}return 0}
+function tonesOf(py){return py.split(" ").filter(Boolean).map(toneOf)}
+function spoken(t){var o=t.slice();for(var i=0;i<o.length-1;i++){if(o[i]===3&&o[i+1]===3)o[i]=2}return o}
+function ideal(t,final){
+  if(t===1)return [5,5,5,5,5,5,5,5];
+  if(t===2)return [3,3,3.2,3.6,4.1,4.6,5,5];
+  if(t===3)return final?[2.2,1.6,1.2,1,1.1,1.8,2.9,4]:[2.1,1.7,1.4,1.2,1.1,1.1,1.2,1.3];
+  if(t===4)return [5,4.9,4.5,3.8,3,2.2,1.5,1];
+  return [3,2.9,2.8,2.7,2.6,2.6,2.6,2.6];
+}
+function glyphPath(t,final,w,h){var c=ideal(t,final),n=c.length,d="";for(var i=0;i<n;i++){var x=(i/(n-1))*w,y=h-((c[i]-1)/4)*h;d+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1)}return d}
+
+/* ================= pitch analysis ================= */
+function downsample(x,sr,target){var r=Math.max(1,Math.round(sr/target)),n=Math.floor(x.length/r),y=new Float32Array(n);for(var i=0;i<n;i++){var s=0;for(var k=0;k<r;k++)s+=x[i*r+k];y[i]=s/r}return {x:y,sr:sr/r}}
+function extractPitch(x,sr){
+  var N=1024,H=Math.round(sr*0.01),minL=Math.floor(sr/500),maxL=Math.ceil(sr/70),out=[],maxR=0;
+  for(var s=0;s+N<=x.length;s+=H){var rms=0;for(var i=0;i<N;i++)rms+=x[s+i]*x[s+i];rms=Math.sqrt(rms/N);if(rms>maxR)maxR=rms;out.push({t:s/sr,rms:rms,f:0})}
+  var thr=Math.max(0.004,0.12*maxR),fi=0;
+  for(var s2=0;s2+N<=x.length;s2+=H,fi++){
+    var fr=out[fi];if(fr.rms<thr)continue;
+    var e0=0;for(var i2=0;i2<N;i2++)e0+=x[s2+i2]*x[s2+i2];
+    var best=0,bestL=0,rs=new Float32Array(maxL+2);
+    for(var L=minL;L<=maxL;L++){var c=0,e1=0;for(var j=0;j<N-L;j++){c+=x[s2+j]*x[s2+j+L];e1+=x[s2+j+L]*x[s2+j+L]}var r=c/Math.sqrt(e0*e1+1e-12);rs[L]=r;if(r>best){best=r;bestL=L}}
+    if(best<0.6)continue;
+    for(var L2=minL;L2<bestL;L2++){if(rs[L2]>0.92*best){bestL=L2;break}}
+    var a=rs[bestL-1]||0,b=rs[bestL],c2=rs[bestL+1]||0,den=(a-2*b+c2),sh=den?0.5*(a-c2)/den:0;
+    fr.f=sr/(bestL+sh);
+  }
+  for(var k=0;k<out.length;k++)out[k].st=out[k].f?12*Math.log2(out[k].f/100):null;
+  var sm=out.map(function(fr2,i3){if(fr2.st===null)return null;var w=[];for(var d=-2;d<=2;d++){var q=out[i3+d];if(q&&q.st!==null)w.push(q.st)}w.sort(function(a2,b2){return a2-b2});return w[Math.floor(w.length/2)]});
+  for(var k2=0;k2<out.length;k2++)out[k2].st=sm[k2];
+  return out;
+}
+function segment(frames,n){
+  var runs=[],cur=null;
+  frames.forEach(function(f,i){if(f.st!==null){if(!cur)cur={a:i,b:i};cur.b=i}else if(cur){runs.push(cur);cur=null}});
+  if(cur)runs.push(cur);
+  var m=[];runs.forEach(function(r){var last=m[m.length-1];if(last&&r.a-last.b<=8)last.b=r.b;else m.push({a:r.a,b:r.b})});
+  m=m.filter(function(r){return r.b-r.a>=6});
+  if(m.length===0)return [];
+  if(m.length>n){m.sort(function(a,b){return (b.b-b.a)-(a.b-a.a)});m=m.slice(0,n).sort(function(a,b){return a.a-b.a})}
+  var guard=0;
+  while(m.length<n&&guard++<4){
+    var li=-1,ll=0;m.forEach(function(r,i){if(r.b-r.a>ll){ll=r.b-r.a;li=i}});
+    if(li<0||ll<16)break;
+    var r=m[li],lo=r.a+Math.floor(ll*0.3),hi=r.a+Math.floor(ll*0.7),cut=lo,v=Infinity;
+    for(var i=lo;i<=hi;i++){var sc=frames[i].rms-0.02*Math.abs((frames[i].st||0)-(frames[i-1].st||0));if(sc<v){v=sc;cut=i}}
+    m.splice(li,1,{a:r.a,b:cut-1},{a:cut+1,b:r.b});
+  }
+  m=m.filter(function(r){var c=0;for(var i=r.a;i<=r.b;i++)if(frames[i]&&frames[i].st!==null)c++;return c>=3});
+  return m;
+}
+function features(frames,run,median){
+  var pts=[];for(var i=run.a;i<=run.b;i++)if(frames[i].st!==null)pts.push(frames[i].st-median);
+  if(pts.length<2)pts=[0,0];
+  var n=pts.length,res=[];for(var k=0;k<12;k++){var v=pts[Math.min(n-1,Math.floor(k*n/12))];res.push(isFinite(v)?v:0)}
+  function mean(a){return a.reduce(function(s,v){return s+v},0)/a.length}
+  var start=mean(res.slice(0,4)),end=mean(res.slice(8)),mn=Infinity,mp=0,mx=-Infinity;
+  res.forEach(function(v,i){if(v<mn){mn=v;mp=i/11}if(v>mx)mx=v});
+  return {pts:res,start:start,end:end,min:mn,minPos:mp,max:mx,mean:mean(res),dur:(run.b-run.a+1)*0.01};
+}
+function classify(f){
+  var rise=f.end-f.start;
+  if(f.end-f.min>1.5&&f.minPos>0.15&&f.minPos<0.8&&(f.start-f.min>0.9||f.mean<=-1.5))return 3;
+  if(rise>=2.5)return 2;
+  if(rise<=-3)return 4;
+  if(f.mean<=-1.0)return 3;
+  return 1;
+}
+function analyze(samples,sr,expected){
+  var n=expected.length,d=downsample(samples,sr,16000),frames=extractPitch(d.x,d.sr);
+  var voiced=frames.filter(function(f){return f.st!==null}).map(function(f){return f.st});
+  if(voiced.length<8)return {ok:false,reason:"silent"};
+  voiced.sort(function(a,b){return a-b});var median=voiced[Math.floor(voiced.length/2)];
+  var runs=segment(frames,n);if(runs.length<n)return {ok:false,reason:"few",heard:runs.length};
+  var sp=spoken(expected),fs=runs.map(function(r){return features(frames,r,median)}),got=[],match=[];
+  var ref=fs[0].dur;
+  fs.forEach(function(f,i){
+    var g;
+    if(sp[i]===0)g=(f.dur<0.7*ref&&Math.abs(f.end-f.start)<3)?0:(f.dur>=0.7*ref?"long":classify(f));
+    else g=classify(f);
+    got.push(g);match.push(g===sp[i]);
+  });
+  var mx=-Infinity,mn=Infinity;fs.forEach(function(f){if(f.max>mx)mx=f.max;if(f.min<mn)mn=f.min});
+  var range=mx-mn,allOk=match.every(Boolean);
+  return {ok:true,f:fs,got:got,want:sp,range:range,match:match,clean:allOk&&range>=(n>1?3.5:2.5)};
+}
+if(typeof module!=="undefined")module.exports={analyze:analyze,classify:classify,tonesOf:tonesOf};
+
+/* ================= app ================= */
+if(typeof document!=="undefined")(function(){
+var $=function(id){return document.getElementById(id)};
+var AC=window.AudioContext||window.webkitAudioContext;
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+/* words from the 944 list */
+var ALL=[];CATS.forEach(function(c){c[2].forEach(function(w){ALL.push({h:w[0],p:w[1],e:w[2],c:c[0],cn:c[1]})})});
+var PAIRWORDS=[];PAIRS.forEach(function(p){p[1].forEach(function(w){PAIRWORDS.push({h:w[0],p:w[1],e:w[2],pair:p[0]})})});
+$("wordCount").textContent=ALL.length;$("bSolid").innerHTML='0<small>/ '+ALL.length+'</small>';
+
+/* state */
+var store={};try{store=JSON.parse(localStorage.getItem("tonecoach")||"{}")||{}}catch(e){}
+store.clean=store.clean||{};store.att=store.att||0;store.first=store.first||0;store.firstN=store.firstN||0;store.best=store.best||0;store.words=store.words||{};
+function save(){try{localStorage.setItem("tonecoach",JSON.stringify(store))}catch(e){}}
+var key="";try{key=localStorage.getItem("tonecoach_key")||""}catch(e){}
+$("key").value=key;
+
+var mode="pairs",idx=0,custom=null,streak=0,wordStreak=0,attemptsHere=0,testing=null,busy=false;
+function cur(){
+  if(testing)return PAIRWORDS.filter(function(w){return w.h===testing.list[testing.i]})[0];
+  if(custom)return custom;
+  return PAIRWORDS[idx];
+}
+function tonesFor(w){return tonesOf(w.p)}
+
+/* speech out */
+var voices=[];function loadVoices(){try{voices=speechSynthesis.getVoices()||[]}catch(e){}}
+loadVoices();try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+function pick(lang){
+  var pref=lang==="zh"?["Tingting","Ting-Ting","Google 普通话","Xiaoxiao","Yunxi","Huihui","Meijia","Lili"]:["Samantha","Google US English","Aria","Jenny","Daniel"];
+  var pool=voices.filter(function(v){return v.lang&&v.lang.toLowerCase().replace("_","-").indexOf(lang==="zh"?"zh-cn":"en")===0});
+  if(lang==="zh"&&!pool.length)pool=voices.filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("zh")===0});
+  for(var i=0;i<pref.length;i++){var hit=pool.filter(function(v){return v.name.indexOf(pref[i])>-1})[0];if(hit)return hit}
+  return pool[0]||null;
+}
+function say(text,lang,rate){
+  return new Promise(function(res){
+    try{var u=new SpeechSynthesisUtterance(text);u.lang=lang==="zh"?"zh-CN":"en-US";u.rate=rate;var v=pick(lang);if(v)u.voice=v;u.onend=res;u.onerror=res;speechSynthesis.speak(u);setTimeout(res,12000)}catch(e){res()}
+  });
+}
+function sayWord(){var w=cur();try{speechSynthesis.cancel()}catch(e){}return say(w.h,"zh",0.55).then(function(){return say(w.h,"zh",0.85)})}
+
+/* render */
+function pySpans(w){
+  var sp=spoken(tonesFor(w)),parts=w.p.split(" ").filter(Boolean);
+  return parts.map(function(s,i){var fin=i===parts.length-1;return '<span>'+s+'<svg viewBox="0 0 26 16"><path d="'+glyphPath(sp[i],fin,26,14)+'" transform="translate(0,1)"/></svg></span>'}).join("");
+}
+function renderWord(){
+  var w=cur(),t=tonesFor(w),sp=spoken(t);
+  $("stage").classList.remove("clean");
+  $("word").textContent=w.h;$("word").classList.toggle("long",w.h.length>2);
+  $("py").innerHTML=pySpans(w);$("en").textContent=w.e;
+  var sandhi=t.join()!==sp.join();
+  $("patLbl").textContent="[ "+t.join(" + ")+(sandhi?" · said as "+sp.join(" + "):"")+" ]";
+  $("shape").textContent=sp.map(function(x){return TONE_NAME[x]}).join(", then ");
+  $("subLbl").textContent=testing?"weekly test · "+(testing.i+1)+" of 10":custom?"from your words":"tone pairs · week one";
+  drawCurve(null);
+  ["r1","r2","r3"].forEach(function(id){$(id).textContent="–";$(id).className="v"});$("rangeLbl").textContent="";
+  $("stage").classList.remove("fade");void $("stage").offsetWidth;$("stage").classList.add("fade");
+}
+function drawCurve(res){
+  var w=cur(),sp=spoken(tonesFor(w)),n=sp.length,W=400,H=150,pad=14,gap=18,out="";
+  var segW=(W-20-gap*(n-1))/n;
+  function path(arr,x0,x1,cls){var d="";arr.forEach(function(v,i){var x=x0+(i/(arr.length-1))*(x1-x0),y=pad+(1-(v-0.5)/5)*(H-2*pad);y=Math.max(pad-6,Math.min(H-pad+6,y));d+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1)});return '<path d="'+d+'" '+cls+'/>'}
+  out+='<line x1="0" y1="'+(H-pad)+'" x2="'+W+'" y2="'+(H-pad)+'" stroke="rgba(233,237,238,.12)"/>';
+  for(var i=0;i<n;i++){
+    var x0=10+i*(segW+gap),x1=x0+segW;
+    if(i)out+='<line x1="'+(x0-gap/2)+'" y1="'+pad+'" x2="'+(x0-gap/2)+'" y2="'+(H-pad)+'" stroke="rgba(233,237,238,.08)" stroke-dasharray="3 5"/>';
+    out+=path(ideal(sp[i],i===n-1),x0,x1,'fill="none" stroke="#B7C0C3" stroke-width="1.5" stroke-linecap="round" opacity=".8"');
+    if(res&&res.ok){
+      var col=res.clean?"#7DE3A6":"#C4B5FF",p=res.f[i].pts.map(function(st){return 3+st/2.5});
+      out+=path(p,x0,x1,'fill="none" stroke="'+col+'" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 0 8px '+col+'88)"');
+      if(i===n-1){var last=p[p.length-1],ly=pad+(1-(last-0.5)/5)*(H-2*pad);out+='<circle cx="'+x1+'" cy="'+Math.max(pad,Math.min(H-pad,ly)).toFixed(1)+'" r="4.5" fill="'+col+'" style="filter:drop-shadow(0 0 10px '+col+')"/>'}
+    }
+  }
+  $("curveSvg").innerHTML=out;
+}
+function setSay(txt,live){$("say").textContent=txt;$("av").classList.toggle("live",!!live)}
+function streakUI(){$("streakTxt").textContent=streak+" clean in a row";$("streakChip").classList.toggle("ok",streak>0)}
+
+/* ================= recorder ================= */
+var recCtx=null,recNode=null,stream=null,chunks=[],recording=false,voiceSeen=false,silence=0,recStart=0,noise=0.003,sr=null,heard="",srDone=true;
+function startRec(){
+  if(busy||recording)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){setSay("This browser cannot open a microphone. Use Chrome or Safari.");return}
+  try{speechSynthesis.cancel()}catch(e){}
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:true}}).then(function(s){
+    stream=s;recCtx=new AC();var src=recCtx.createMediaStreamSource(s);
+    recNode=recCtx.createScriptProcessor(4096,1,1);chunks=[];voiceSeen=false;silence=0;recStart=Date.now();noise=0.003;
+    var mute=recCtx.createGain();mute.gain.value=0;
+    recNode.onaudioprocess=function(e){
+      if(!recording)return;
+      var d=e.inputBuffer.getChannelData(0);chunks.push(new Float32Array(d));
+      var rms=0;for(var i=0;i<d.length;i+=4)rms+=d[i]*d[i];rms=Math.sqrt(rms/(d.length/4));
+      var el=Date.now()-recStart;
+      if(el<250){noise=Math.max(noise,rms)}
+      if(rms>Math.max(0.012,noise*3.5)){voiceSeen=true;silence=0}else if(voiceSeen){silence+=d.length/recCtx.sampleRate*1000}
+      if((voiceSeen&&silence>650)||el>5000)stopRec();
+    };
+    src.connect(recNode);recNode.connect(mute);mute.connect(recCtx.destination);
+    recording=true;$("rec").classList.add("live");$("recTxt").textContent="Listening";$("stage").classList.add("listening");setSay("Say it now.",true);
+    startSR();
+  }).catch(function(err){
+    setSay(err&&err.name==="NotAllowedError"?"Microphone blocked. Allow it in the address bar, then try again.":"Could not open the microphone.");
+  });
+}
+function stopRec(){
+  if(!recording)return;recording=false;
+  try{recNode.disconnect();stream.getTracks().forEach(function(t){t.stop()})}catch(e){}
+  $("rec").classList.remove("live");$("recTxt").textContent="Record";$("stage").classList.remove("listening");
+  var total=0;chunks.forEach(function(c){total+=c.length});var x=new Float32Array(total),o=0;chunks.forEach(function(c){x.set(c,o);o+=c.length});
+  var rate=recCtx.sampleRate;try{recCtx.close()}catch(e){}
+  busy=true;$("rec").disabled=true;setSay("Reading the shape...",true);
+  try{if(sr)sr.stop()}catch(e){}
+  var waited=0;(function wait(){if(srDone||waited>1500){finish(x,rate)}else{waited+=100;setTimeout(wait,100)}})();
+}
+function startSR(){
+  heard="";srDone=!SR;if(!SR)return;
+  try{
+    sr=new SR();sr.lang="zh-CN";sr.interimResults=false;sr.maxAlternatives=3;srDone=false;
+    sr.onresult=function(e){var alts=[];for(var i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript);heard=alts.join("|")};
+    sr.onerror=function(){};sr.onend=function(){srDone=true};sr.start();
+  }catch(e){srDone=true}
+}
+function finish(x,rate){
+  var w=cur(),res=analyze(x,rate,tonesFor(w));
+  if(!res.ok){
+    drawCurve(null);
+    setSay(res.reason==="silent"?"I did not hear a voice. Get closer to the mic and say it louder.":"I heard "+res.heard+" syllable"+(res.heard===1?"":"s")+" but the word has "+tonesFor(w).length+". Say each one clearly with a tiny gap. Again.");
+    done();return;
+  }
+  show(res);
+}
+function show(res){
+  var w=cur(),n=res.want.length;attemptsHere++;store.att++;
+  var first=attemptsHere===1;if(first){store.firstN++;if(res.clean)store.first++}
+  drawCurve(res);
+  $("r1").innerHTML=res.got.map(function(g,i){return '<span class="'+(res.match[i]?"ok":"no")+'">'+(g==="long"?"long":TONE_SHORT[g])+'</span>'}).join('<span style="color:var(--dim)"> · </span>');$("r1").className="v";
+  var clean=heard.replace(/[。，！？、\s]/g,"").split("|")[0]||"";
+  var hit=heard&&heard.split("|").some(function(a){return a.replace(/[。，！？、\s]/g,"")===w.h});
+  $("r2").innerHTML=clean?'<span class="h">'+clean+'</span>':"–";$("r2").className="v "+(clean?(hit?"ok":"no"):"");
+  $("r3").innerHTML=res.range.toFixed(1)+"<small>st</small>";$("r3").className="v "+(res.range>=3.5?"ok":"no");
+  $("rangeLbl").textContent=res.range<3.5?"too flat":res.range<8?"narrow":"good swing";
+  if(res.clean){streak++;wordStreak++;$("stage").classList.add("clean");if(testing&&first)testing.score++}else{streak=0;wordStreak=0}
+  if(streak>store.best)store.best=streak;
+  var finished=res.clean&&wordStreak>=2;
+  if(finished){if(custom){store.words[w.h]=2}else{store.clean[w.h]=true}}
+  save();streakUI();progressUI();
+  coach(res,clean,hit).then(function(txt){
+    setSay(txt,false);return say(txt,"en",0.95);
+  }).then(function(){return say(w.h,"zh",0.55)}).then(function(){done();if(finished)setTimeout(advance,500)});
+}
+function done(){busy=false;$("rec").disabled=false;$("av").classList.remove("live")}
+
+/* ================= coaching ================= */
+function ruleFeedback(res,w,heardTxt,hit){
+  var sp=res.want,g=res.got,parts=w.p.split(" ").filter(Boolean);
+  if(res.range<2)return "Your voice barely moved. Mandarin needs a real swing, higher on the highs and lower on the lows. Exaggerate it. Again.";
+  if(res.clean){
+    if(heardTxt&&!hit)return "Tones are right. The sounds came out as "+heardTxt+" though. Shape the consonants more carefully. "+(wordStreak>=2?"Next one.":"Again.");
+    return wordStreak>=2?"Clean twice. That one is yours. Next one.":"Clean. Once more and it is yours. Again.";
+  }
+  for(var i=0;i<sp.length;i++){
+    if(res.match[i])continue;var want=sp[i],got=g[i],s=parts[i];
+    if(got==="long")return s+" should be light and short, about half the length. Yours ran long. Clip it. Again.";
+    if(want===1)return s+" should stay high and level like holding a note. Yours "+(got===4?"fell":got===2?"rose":"sat too low")+". Keep the pitch up and flat. Again.";
+    if(want===2)return s+" should climb from the middle to the top. Yours "+(got===1?"stayed flat":got===4?"fell":"stayed low")+". Start lower and push up at the end. Again.";
+    if(want===3)return s+" should sit low and stay there. Yours "+(got===2?"rose too early":got===4?"fell from high":"stayed up high")+". Drop your voice and keep it down. Again.";
+    if(want===4)return s+" should fall hard from the top. Yours "+(got===1?"stayed flat":got===2?"rose":"stayed low")+". Start high and drop it like a command. Again.";
+    if(want===0)return s+" is a light tap, short and quiet. Again.";
+  }
+  return "The tones are right but the range is narrow. Go higher on the highs and lower on the lows. Again.";
+}
+function describe(res,w,heardTxt,hit){
+  var parts=w.p.split(" ").filter(Boolean);
+  return parts.map(function(s,i){var f=res.f[i];return s+": wanted "+TONE_NAME[res.want[i]]+", heard "+(res.got[i]==="long"?"too long":TONE_NAME[res.got[i]])+" (start "+f.start.toFixed(1)+" st, end "+f.end.toFixed(1)+" st, low point at "+Math.round(f.minPos*100)+"%, "+Math.round(f.dur*1000)+" ms)"}).join("; ")+"; pitch range "+res.range.toFixed(1)+" semitones (natives use 10 to 14)"+(heardTxt?"; speech recognizer heard \""+heardTxt+"\" which "+(hit?"matches":"does not match")+" the target":"")+".";
+}
+function coach(res,heardTxt,hit){
+  var w=cur(),rules=ruleFeedback(res,w,heardTxt,hit);
+  if(!key)return Promise.resolve(rules);
+  var prompt="You are Tone Coach, a Mandarin pronunciation tutor for an adult beginner from India who speaks Tamil, Kannada, Malayalam and Hindi. Voice: calm, warm, specific, optimistic. Short sentences. Few commas. No em dashes. No emoji. Never shame. Name what the pitch did and what it should do in physical terms (start high, fall hard, stay low). One fix per turn only. If clean, say so plainly and warmly. End with exactly 'Again.' if not finished, or 'Next one.' if the word is done. Maximum 32 words. Write pinyin with tone marks, no Chinese characters.\n\nWord: "+w.h+" ("+w.p+", "+w.e+"). Tones wanted: "+res.want.join("+")+".\nMeasured: "+describe(res,w,heardTxt,hit)+"\nClean: "+(res.clean?"yes":"no")+". Attempt "+attemptsHere+" on this word. "+(wordStreak>=2&&res.clean?"Second clean in a row, the word is done.":"")+"\nReply with the coaching line only.";
+  setSay("Thinking...",true);
+  return fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-haiku-5-5",max_tokens:120,messages:[{role:"user",content:prompt}]})})
+    .then(function(r){return r.json()}).then(function(j){var t=j&&j.content&&j.content[0]&&j.content[0].text;return t?t.trim():rules}).catch(function(){return rules});
+}
+
+/* ================= flow ================= */
+function advance(){
+  if(testing){testing.i++;if(testing.i>=testing.list.length){finishTest();return}attemptsHere=0;wordStreak=0;renderWord();return}
+  if(custom){custom=null}else{idx=(idx+1)%PAIRWORDS.length}
+  wordStreak=0;attemptsHere=0;renderWord();
+}
+function finishTest(){
+  store.test={score:testing.score,date:new Date().toISOString().slice(0,10)};save();
+  var sc=testing.score;testing=null;renderWord();progressUI();
+  setSay("Test done. "+sc+" of 10 clean on the first try. Same ten words next week.");
+}
+function goWord(w){testing=null;custom=w;wordStreak=0;attemptsHere=0;renderWord();showView("coach");window.scrollTo({top:0})}
+
+/* ================= pairs ================= */
+function renderRows(){
+  var out="";PAIRS.forEach(function(p){
+    var t=p[0],sp=spoken(t);
+    out+='<div class="row"><div class="pat">'+t[0]+'<small>+</small>'+t[1]+'</div><svg class="glyph" viewBox="0 0 40 18"><path d="'+glyphPath(sp[0],false,17,14)+'" transform="translate(0,2)"/><path d="'+glyphPath(sp[1],true,17,14)+'" transform="translate(23,2)"/></svg><div class="words">';
+    p[1].forEach(function(w){out+='<button class="wchip'+(store.clean[w[0]]?" clean":"")+'" data-h="'+w[0]+'"><span class="h">'+w[0]+'</span>'+w[1]+'</button>'});
+    out+='</div></div>';
+  });
+  $("rows").innerHTML=out;
+  $("testlist").innerHTML=TEST.map(function(h){var w=PAIRWORDS.filter(function(x){return x.h===h})[0];return '<span class="wchip'+(store.clean[h]?" clean":"")+'"><span class="h">'+h+'</span>'+w.p+'</span>'}).join("");
+}
+$("rows").addEventListener("click",function(e){
+  var b=e.target.closest(".wchip[data-h]");if(!b)return;
+  testing=null;custom=null;idx=PAIRWORDS.findIndex(function(w){return w.h===b.dataset.h});wordStreak=0;attemptsHere=0;renderWord();showView("coach");window.scrollTo({top:0});
+});
+
+/* ================= words ================= */
+var active={};
+CATS.forEach(function(c){var b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed","false");b.textContent=c[1]+" "+c[2].length;b.onclick=function(){active[c[0]]=!active[c[0]];b.setAttribute("aria-pressed",active[c[0]]?"true":"false");renderWords()};$("chips").appendChild(b)});
+function anyChip(){for(var k in active)if(active[k])return true;return false}
+function strip(p){return p.replace(/[āáǎà]/g,"a").replace(/[ēéěè]/g,"e").replace(/[īíǐì]/g,"i").replace(/[ōóǒò]/g,"o").replace(/[ūúǔù]/g,"u").replace(/[ǖǘǚǜ]/g,"v")}
+function renderWords(){
+  var q=($("q").value||"").trim().toLowerCase(),f=$("filt").value,out="",last="";
+  ALL.forEach(function(w){
+    if(anyChip()&&!active[w.c])return;
+    if(q&&(w.h+" "+w.p+" "+strip(w.p)+" "+w.e).toLowerCase().indexOf(q)<0)return;
+    var s=store.words[w.h]||0;
+    if(f==="new"&&s)return;if(f==="1"&&s!==1)return;if(f==="2"&&s!==2)return;
+    if(w.cn!==last){out+='<div class="catlabel lbl">'+w.cn+'</div>';last=w.cn}
+    out+='<div class="w" data-s="'+s+'" data-h="'+w.h+'"><span class="han">'+w.h+'</span><div class="py">'+w.p+'</div><div class="en">'+w.e+'</div><div class="acts"><button data-say="1">Say</button><button data-go="1" class="go">Coach</button><button data-mark="1" class="'+(s===1?"on":"")+'">Shaky</button><button data-mark="2" class="'+(s===2?"on":"")+'">Solid</button></div></div>';
+  });
+  $("grid").innerHTML=out||'<p style="color:var(--mist)">Nothing matches. Clear the search or the chips.</p>';
+}
+$("q").addEventListener("input",renderWords);$("filt").addEventListener("change",renderWords);
+$("grid").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;var card=b.closest(".w"),h=card.dataset.h,w=ALL.filter(function(x){return x.h===h})[0];
+  if(b.dataset.say){try{speechSynthesis.cancel()}catch(x){}say(w.h,"zh",0.7);return}
+  if(b.dataset.go){goWord(w);return}
+  if(b.dataset.mark){var v=+b.dataset.mark,s=store.words[h]===v?0:v;if(s)store.words[h]=s;else delete store.words[h];save();card.dataset.s=s;card.querySelectorAll("[data-mark]").forEach(function(x){x.className=(+x.dataset.mark===s)?"on":""});progressUI(false)}
+});
+
+/* ================= learn ================= */
+var TONES=[["First","mā 妈","Hold it high and flat like holding a note. Beginners let it drop.","M0,6 L70,6"],["Second","má 麻","Mid to high, like an English question. Push at the end.","M0,24 L70,4"],["Third","mǎ 马","Just low. It only dips and rises when the word ends.","M0,16 C20,28 45,28 70,22"],["Fourth","mà 骂","High to low, fast. Like a command.","M0,4 L70,26"],["Neutral","ma 吗","Short, light, quiet. Half the length of the one before it.","M28,16 L44,16"]];
+$("tonecards").innerHTML=TONES.map(function(t){return '<div class="tcard"><div class="lbl">'+t[0]+'</div><svg viewBox="0 0 70 30"><path d="'+t[3]+'"/></svg><div class="ex">'+t[1]+'</div><p>'+t[2]+'</p></div>'}).join("");
+var LEARN=[
+["21<small>% in 2 weeks</small>","Ear first, mouth same day","Eight short sessions raised tone identification 21% and it held for six months. But listening alone made speaking worse, and speaking alone made listening worse. Every session: hear it, say it, hear yourself."],
+["20<small>pairs</small>","Drill pairs, not single tones","Tones change next to each other. Single syllable practice is mostly wasted. The Pairs tab is the whole first week.",["Clean twice in a row before moving on","Third tone before anything is just low","3 + 3 is said as 2 + 3","一 and 不 flip to rising before a fourth tone"]],
+["1.5<small>x</small>","Use more of your voice","Natives swing about one and a half times wider than English speakers. Indian languages are flatter still. It will feel like overacting. It is not."],
+["60<small>% in noise</small>","Why people react","Flat pitch Mandarin drops to about 60% intelligibility in noise. A wrong tone is a different word, so listeners have to work to decode you. Fix tones and the friction disappears."],
+["20<small>min</small>","Shadowing, done right","Pick a 30 to 90 second clip with a clean transcript. Listen once. Read it. Shadow with the text four times. Shadow without it four times. Record the last pass and compare.",["Lag under one second or it is just repetition","Same clip all week, new clip weekly","Three or four sessions a week","Never skip the recording"]],
+["1<small>fix</small>","Recasts beat correction","A teacher saying the word back correctly helped more than explaining the mistake. Ask her to just say it back. Do not ask her to explain."],
+["10<small>words</small>","Test weekly, score separately","Keep a fixed list of ten words. Score listening and speaking separately every week. The Progress tab runs it."],
+["1.5<small>%</small>","Nobody is tone deaf","True tone deafness is about 1.5% of people, and even they learned tones in training. The first three passes are calibration, not failure."]
+];
+$("learn").innerHTML=LEARN.map(function(c){return '<div class="glass"><div class="num">'+c[0]+'</div><h3>'+c[1]+'</h3><p>'+c[2]+'</p>'+(c[3]?'<ol>'+c[3].map(function(l){return '<li>'+l+'</li>'}).join("")+'</ol>':'')+'</div>'}).join("")+'<div class="src" style="grid-column:1/-1">Sources: <a href="https://www.saymei.app/guides/how-to-learn-chinese-tones" target="_blank" rel="noopener">tone training studies summary</a> · <a href="https://migaku.com/blog/language-fun/shadowing-a-practitioners-guide-to-the-technique-in-2026" target="_blank" rel="noopener">shadowing protocol</a> · <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2018.01982/pdf" target="_blank" rel="noopener">tone production training study</a></div>';
+
+/* ================= progress ================= */
+function progressUI(rows){
+  var n=Object.keys(store.clean).length,T=PAIRWORDS.length,solid=0;for(var k in store.words)if(store.words[k]===2)solid++;
+  $("heroN").textContent=n;$("heroT").textContent=T;$("dot").style.left=(n/T*100)+"%";
+  $("bAtt").textContent=store.att;
+  $("bFirst").innerHTML=(store.firstN?Math.round(store.first/store.firstN*100):0)+"<small>%</small>";
+  $("bSolid").innerHTML=solid+"<small>/ "+ALL.length+"</small>";
+  $("bTest").innerHTML=(store.test?store.test.score:"–")+"<small>/10</small>";
+  $("testDate").textContent=store.test?"last run "+store.test.date:"not run yet";
+  if(rows!==false)renderRows();
+}
+
+/* ================= wiring ================= */
+$("hear").onclick=function(){sayWord()};
+$("rec").onclick=function(){if(recording)stopRec();else startRec()};
+$("next").onclick=function(){try{speechSynthesis.cancel()}catch(e){}if(recording)stopRec();advance()};
+$("startTest").onclick=function(){testing={list:TEST.slice(),i:0,score:0};custom=null;attemptsHere=0;wordStreak=0;renderWord();showView("coach");setSay("Ten words. One try each counts. Hear it, then Record.");window.scrollTo({top:0})};
+$("saveKey").onclick=function(){key=$("key").value.trim();try{localStorage.setItem("tonecoach_key",key)}catch(e){}this.textContent=key?"Saved":"Cleared";var self=this;setTimeout(function(){self.textContent="Save"},1500)};
+var armed=false;
+$("reset").onclick=function(){
+  if(!armed){armed=true;this.textContent="Tap again to wipe";var self=this;setTimeout(function(){armed=false;self.textContent="Reset everything"},3000);return}
+  store={clean:{},att:0,first:0,firstN:0,best:0,words:{}};save();streak=0;streakUI();progressUI();renderWords();this.textContent="Reset everything";armed=false;
+};
+var tabs=document.querySelectorAll(".dock button");
+function showView(v){tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")});["coach","pairs","words","learn","progress"].forEach(function(k){$("v-"+k).hidden=(k!==v)});if(v==="words"&&!$("grid").innerHTML)renderWords()}
+tabs.forEach(function(b){b.onclick=function(){showView(b.dataset.v)}});
+document.addEventListener("keydown",function(e){if(e.code==="Space"&&!$("v-coach").hidden&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("rec").click()}});
+if(!SR)$("hint").textContent="Tap Hear, copy the shape, tap Record and say it. (Sound check needs Chrome or Safari.)";
+
+renderWord();streakUI();progressUI();
+})();
+</script>
+</body>
+</html>
