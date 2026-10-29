@@ -8,10 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300;400&display=swap">
 <style>
-/* Twin Sci-Fi app. One hero word per screen. Violet marks meaning, mint marks clean. Glass over near black. */
+/* Twin Sci-Fi. One word per screen. See it, hear it, write it, say it. Violet marks meaning, mint marks done. */
 :root{
-  --bg:#050708; --bg-2:#0B0F10; --stage:#14181A;
-  --ink:#E9EDEE; --haze:#B7C0C3; --mist:#8A9497; --dim:#5D6669;
+  --bg:#050708; --bg-2:#0B0F10; --ink:#E9EDEE; --haze:#B7C0C3; --mist:#8A9497; --dim:#5D6669;
   --violet:#C4B5FF; --mint:#7DE3A6;
   --glass:rgba(233,237,238,.08); --glass-line:rgba(233,237,238,.16);
   --chip:rgba(233,237,238,.06); --chip-line:rgba(233,237,238,.12);
@@ -29,123 +28,86 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-s
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;-webkit-tap-highlight-color:transparent}
 input,select{font:inherit}
 :focus-visible{outline:1px solid var(--violet);outline-offset:3px;border-radius:999px}
-.app{min-height:100%;position:relative;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));max-width:1120px;margin:0 auto}
+.app{min-height:100%;position:relative;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));max-width:1040px;margin:0 auto}
 .app::before{content:"";position:fixed;inset:0;background:radial-gradient(60% 40% at 50% 0%,rgba(196,181,255,.10),transparent 70%);pointer-events:none}
 .grain::after{content:"";position:fixed;inset:0;opacity:.07;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
-
 .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
-.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 14px;background:linear-gradient(var(--bg) 70%,transparent)}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px;background:linear-gradient(var(--bg) 70%,transparent)}
 .brand{display:flex;align-items:center;gap:10px}
 .brand .mark{width:30px;height:30px;border-radius:9px;background:var(--play);color:var(--on-play);display:grid;place-items:center;font-family:var(--han);font-size:14px}
 .chipS{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 12px;font-size:12px;background:var(--chip);border:1px solid var(--chip-line);color:var(--haze);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chipS i{width:6px;height:6px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet)}
-.chipS.ok i{background:var(--mint);box-shadow:0 0 10px var(--mint)}
 
 main{position:relative}
 section[hidden]{display:none}
-.coach{display:grid;grid-template-columns:1fr;gap:16px}
-@media (min-width:900px){.coach{grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}}
+.search{position:relative;margin-bottom:12px}
+.field{height:44px;width:100%;border-radius:999px;padding:0 16px;border:1px solid var(--chip-line);background:var(--chip);color:var(--ink);min-width:0}
+.field:focus{outline:1px solid var(--violet)}
+.hits{position:absolute;left:0;right:0;top:50px;z-index:4;border-radius:18px;background:var(--dock);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden}
+.hits button{display:flex;width:100%;gap:12px;align-items:baseline;padding:10px 14px;text-align:left;border-bottom:1px solid var(--chip-line)}
+.hits button:last-child{border-bottom:0}
+.hits .h{font-family:var(--han);font-size:18px}
+.hits .p{color:var(--haze);font-size:13px}
+.hits .e{color:var(--mist);font-size:12.5px;margin-left:auto;text-align:right}
 
-.stage{position:relative;border-radius:28px;background:var(--bg-2);border:1px solid var(--glass-line);padding:38px 22px 26px;overflow:hidden;text-align:center;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
-.stage .blob{position:absolute;width:260px;height:260px;border-radius:50%;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(196,181,255,.55),rgba(196,181,255,0) 70%);filter:blur(28px);pointer-events:none;transition:background .6s var(--ease)}
+.learn{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:900px){.learn{grid-template-columns:1fr 1fr;gap:20px;align-items:start}}
+.stage{position:relative;border-radius:28px;background:var(--bg-2);border:1px solid var(--glass-line);padding:34px 20px 24px;overflow:hidden;text-align:center;min-height:280px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+.stage .blob{position:absolute;width:260px;height:260px;border-radius:50%;left:50%;top:42%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(196,181,255,.5),rgba(196,181,255,0) 70%);filter:blur(28px);pointer-events:none;transition:background .6s var(--ease)}
 .stage.clean .blob{background:radial-gradient(circle,rgba(125,227,166,.5),rgba(125,227,166,0) 70%)}
 .stage.listening .blob{animation:breathe 1.4s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
 .stage>*{position:relative}
-.stage .word{font-family:var(--han);font-weight:300;font-size:clamp(64px,18vw,124px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
-.stage .word.long{font-size:clamp(44px,11vw,84px)}
-.stage .py{font-size:clamp(20px,5vw,30px);font-weight:300;color:var(--haze);display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
-.stage .py span{display:inline-flex;align-items:center;gap:7px}
-.stage .py svg{width:24px;height:16px;overflow:visible}
+.stage .word{font-family:var(--han);font-weight:300;font-size:clamp(64px,18vw,118px);line-height:1.05;letter-spacing:-.02em}
+.stage .word.long{font-size:clamp(42px,10vw,78px)}
+.stage .py{font-size:clamp(20px,5vw,28px);font-weight:300;color:var(--haze);display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+.stage .py span{display:inline-flex;align-items:center;gap:6px}
+.stage .py svg{width:22px;height:15px;overflow:visible}
 .stage .py svg path{fill:none;stroke:var(--haze);stroke-width:1.6;stroke-linecap:round}
-.stage .en{color:var(--mist);font-size:14px;margin-top:4px}
-.stage .shape{color:var(--dim);font-size:12.5px;font-family:var(--mono);margin-top:10px;letter-spacing:.02em}
-
-.actions{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:16px;flex-wrap:wrap}
-.icon{width:48px;height:48px;border-radius:50%;background:var(--chip);border:1px solid var(--chip-line);display:grid;place-items:center;color:var(--haze);transition:background .4s}
-.icon:hover{background:var(--glass)}
-.icon svg,.pill svg,.dock svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.pill{height:52px;border-radius:999px;padding:0 24px;display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:15px;background:var(--play);color:var(--on-play);transition:transform .4s var(--ease),opacity .3s;white-space:nowrap;position:relative}
-.pill:hover{transform:translateY(-1px)}
-.pill:disabled{opacity:.5;cursor:default}
+.stage .en{color:var(--mist);font-size:14.5px;margin-top:2px}
+.stage .shape{color:var(--dim);font-size:12px;font-family:var(--mono);margin-top:8px}
+.stage .hearbtn{margin-top:14px}
+.icon{width:46px;height:46px;border-radius:50%;background:var(--chip);border:1px solid var(--chip-line);display:inline-grid;place-items:center;color:var(--haze)}
+.icon svg,.pill svg,.ghost svg,.dock svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pill{height:50px;border-radius:999px;padding:0 22px;display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:15px;background:var(--play);color:var(--on-play);white-space:nowrap;position:relative;transition:opacity .3s}
+.pill:disabled{opacity:.4;cursor:default}
 .pill.live{background:var(--ink);color:#0B0F10}
 .pill.live::before{content:"";position:absolute;inset:-5px;border-radius:999px;border:1.5px solid var(--violet);animation:ring 1.2s ease-out infinite}
 @keyframes ring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
-.ghost{height:44px;border-radius:999px;padding:0 18px;border:1px solid var(--chip-line);color:var(--haze);font-size:14px;background:var(--chip);display:inline-flex;align-items:center;gap:8px}
-.hint{text-align:center;color:var(--dim);font-size:12.5px;margin-top:10px;font-family:var(--mono)}
+.pill.mint{background:var(--mint);color:#0B2A1A}
+.ghost{height:42px;border-radius:999px;padding:0 16px;border:1px solid var(--chip-line);color:var(--haze);font-size:14px;background:var(--chip);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.ghost[aria-pressed="true"]{background:var(--ink);color:#0B0F10;border-color:var(--ink)}
 
-.glass{border-radius:22px;padding:16px 18px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);min-width:0}
-.col{display:flex;flex-direction:column;gap:14px}
-.curve svg{width:100%;height:150px;display:block;overflow:visible}
-.legend{display:flex;gap:16px;margin-top:8px;color:var(--mist);font-size:12px;font-family:var(--mono);flex-wrap:wrap}
-.legend b{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px;border-radius:1px}
-.speech{min-height:92px;display:flex;gap:12px;align-items:flex-start}
-.speech .av{width:34px;height:34px;flex:none;border-radius:50%;background:var(--play);display:grid;place-items:center;color:var(--on-play);font-family:var(--han);font-size:13px;margin-top:2px}
-.speech .av.live{animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(196,181,255,.35)}50%{box-shadow:0 0 0 10px rgba(196,181,255,0)}}
-.speech p{margin:0;font-size:16px;line-height:1.5;font-weight:300;min-width:0}
-.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.readout .cell{border-radius:16px;padding:12px 12px 10px;background:var(--chip);border:1px solid var(--chip-line);min-width:0}
-.readout .v{font-weight:300;font-size:24px;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.readout .v small{font-size:12px;color:var(--mist);margin-left:3px;letter-spacing:0}
-.readout .v.ok{color:var(--mint)}
-.readout .v.no{color:var(--violet)}
-.readout .v .h{font-family:var(--han);font-weight:400}
+.glass{border-radius:22px;padding:16px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);min-width:0}
+.col{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.step .lbl.done{color:var(--mint)}
+.writewrap{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+#pad{border-radius:18px;background:var(--bg-2);border:1px solid var(--chip-line);touch-action:none;width:min(100%,280px);aspect-ratio:1;flex:none}
+.wctl{display:flex;flex-direction:column;gap:8px;flex:1;min-width:120px}
+.wctl .chars{display:flex;gap:6px;flex-wrap:wrap}
+.wctl .chars button{width:40px;height:40px;border-radius:12px;border:1px solid var(--chip-line);background:var(--chip);font-family:var(--han);font-size:20px;color:var(--haze)}
+.wctl .chars button[aria-pressed="true"]{border-color:var(--violet);color:var(--ink)}
+.wctl .chars button.done{border-color:rgba(125,227,166,.5)}
+.wctl p{margin:0;font-size:12.5px;color:var(--dim)}
+.sayrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#curveSvg{width:100%;height:96px;display:block;overflow:visible;margin-top:8px}
+.fb{margin:10px 0 0;font-size:15px;font-weight:300;color:var(--ink);min-height:22px}
+.fb.ok{color:var(--mint)}
+.verdict{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.hint{text-align:center;color:var(--dim);font-size:12.5px;font-family:var(--mono);margin-top:8px}
 
-.two{font-size:clamp(26px,6vw,40px);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:var(--mist);margin:6px 0 18px;text-wrap:balance}
-.two b{font-weight:500;color:var(--ink)}
-.rows{display:grid;grid-template-columns:1fr;gap:8px}
-@media (min-width:760px){.rows{grid-template-columns:1fr 1fr}}
-.row{display:flex;align-items:center;gap:14px;border-radius:18px;padding:12px 14px;background:var(--chip);border:1px solid var(--chip-line);min-width:0}
-.row .pat{font-variant-numeric:tabular-nums;font-weight:300;font-size:22px;letter-spacing:-.02em;min-width:58px}
-.row .pat small{color:var(--dim);font-size:14px;margin:0 2px}
-.row .glyph{width:40px;height:18px;flex:none}
-.row .glyph path{fill:none;stroke:var(--haze);stroke-width:1.6;stroke-linecap:round}
-.row .words{display:flex;gap:6px;flex-wrap:wrap;min-width:0;flex:1}
-.wchip{border-radius:999px;padding:5px 11px;font-size:13px;background:var(--glass);border:1px solid var(--glass-line);color:var(--haze);display:inline-flex;align-items:center;gap:7px}
-.wchip .h{font-family:var(--han);color:var(--ink);font-weight:400}
-.wchip.clean{border-color:rgba(125,227,166,.45)}
-.wchip.clean::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
-
-/* words */
-.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.field{height:44px;border-radius:999px;padding:0 16px;border:1px solid var(--chip-line);background:var(--chip);color:var(--ink);min-width:0;flex:1 1 180px}
-.field:focus{outline:1px solid var(--violet)}
-select.field{flex:0 1 auto;padding-right:32px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238A9497' stroke-width='1.5'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-.chip{border-radius:999px;padding:6px 12px;font-size:12.5px;background:var(--chip);border:1px solid var(--chip-line);color:var(--mist)}
-.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#0B0F10}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.catlabel{grid-column:1/-1;margin:18px 0 2px}
-.catlabel:first-child{margin-top:0}
-.w{border-radius:18px;padding:12px 12px 10px;background:var(--chip);border:1px solid var(--chip-line);min-width:0;position:relative}
-.w[data-s="2"]{border-color:rgba(125,227,166,.4)}
-.w[data-s="1"]{border-color:rgba(196,181,255,.45)}
-.w .han{font-family:var(--han);font-size:26px;line-height:1.2;display:block;font-weight:300}
-.w .py{font-size:13px;color:var(--haze);margin-top:1px;overflow-wrap:anywhere}
-.w .en{font-size:12px;color:var(--mist);margin-top:2px;overflow-wrap:anywhere}
-.w .acts{display:flex;gap:4px;margin-top:9px;flex-wrap:wrap}
-.w .acts button{border:1px solid var(--chip-line);background:transparent;border-radius:999px;font-size:11px;padding:4px 9px;color:var(--mist)}
-.w .acts button.on{background:var(--ink);border-color:var(--ink);color:#0B0F10}
-.w .acts button.go{color:var(--violet);border-color:rgba(196,181,255,.4)}
-
-/* learn */
-.learn{display:grid;grid-template-columns:1fr;gap:10px}
-@media (min-width:760px){.learn{grid-template-columns:1fr 1fr}}
-.learn .glass h3{margin:4px 0 6px;font-weight:400;font-size:17px;letter-spacing:-.01em}
-.learn .glass p{margin:0;color:var(--haze);font-size:14px;font-weight:300}
-.learn .glass .num{font-weight:300;font-size:34px;letter-spacing:-.03em;line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
-.learn .glass .num small{font-size:12px;color:var(--mist);margin-left:4px;letter-spacing:0}
-.learn ol{margin:6px 0 0;padding-left:18px;color:var(--haze);font-size:14px;font-weight:300}
-.learn li{margin:2px 0}
-.src{color:var(--dim);font-size:12px;margin-top:8px;font-family:var(--mono)}
-.src a{color:var(--mist)}
-.tones{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
-.tcard{border-radius:16px;padding:12px;background:var(--chip);border:1px solid var(--chip-line)}
-.tcard svg{display:block;width:70px;height:28px;margin:6px 0}
-.tcard svg path{fill:none;stroke:var(--violet);stroke-width:2;stroke-linecap:round}
-.tcard .ex{font-family:var(--han);font-size:20px}
-.tcard p{margin:4px 0 0;font-size:12.5px;color:var(--mist)}
+/* drill */
+.flash{border-radius:28px;background:var(--bg-2);border:1px solid var(--glass-line);padding:38px 20px;text-align:center;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden}
+.flash .big{font-family:var(--han);font-weight:300;font-size:clamp(52px,14vw,96px);line-height:1.1}
+.flash .big.long{font-size:clamp(30px,7vw,56px)}
+.flash .bigen{font-weight:300;font-size:clamp(24px,6vw,36px);max-width:20ch;text-wrap:balance}
+.flash .py{font-size:22px;font-weight:300;color:var(--haze)}
+.flash .en{color:var(--mist);font-size:16px}
+.flash .cnt{position:absolute;top:16px;right:18px}
+.btnrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+select.sel{height:42px;border-radius:999px;padding:0 36px 0 16px;border:1px solid var(--chip-line);background:var(--chip);color:var(--haze);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238A9497' stroke-width='1.5'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
 
 /* progress */
 .hero{display:flex;align-items:baseline;gap:8px;margin:4px 0 2px}
@@ -154,127 +116,135 @@ select.field{flex:0 1 auto;padding-right:32px;appearance:none;-webkit-appearance
 .track{position:relative;height:2px;background:rgba(233,237,238,.2);border-radius:1px;margin:22px 0 6px}
 .track i{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--violet);box-shadow:0 0 14px var(--violet);transform:translate(-50%,-50%);transition:left .8s var(--ease)}
 .ticks{display:flex;justify-content:space-between;color:var(--dim);font-family:var(--mono);font-size:11px}
-.bento{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-@media (min-width:760px){.bento{grid-template-columns:repeat(4,1fr)}}
-.bento .glass .v{font-weight:300;font-size:34px;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.bento{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.bento .glass .v{font-weight:300;font-size:32px;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
 .bento .glass .v small{font-size:12px;color:var(--mist);margin-left:4px;letter-spacing:0}
-.testlist{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+details{border-radius:22px;background:var(--glass);border:1px solid var(--glass-line);padding:0 16px;margin-top:12px}
+summary{cursor:pointer;padding:14px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--haze)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--mist);font-size:18px}
+details[open] summary::after{content:"–"}
+.tones{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:4px 0 12px}
+.tcard{border-radius:14px;padding:10px;background:var(--chip);border:1px solid var(--chip-line)}
+.tcard svg{display:block;width:60px;height:24px;margin:4px 0}
+.tcard svg path{fill:none;stroke:var(--violet);stroke-width:2;stroke-linecap:round}
+.tcard .ex{font-family:var(--han);font-size:18px}
+.tcard p{margin:3px 0 0;font-size:12px;color:var(--mist)}
+.rules{margin:0 0 14px;padding-left:18px;color:var(--haze);font-size:14px;font-weight:300}
+.rules li{margin:4px 0}
 
-.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:6;display:flex;gap:2px;padding:6px;border-radius:999px;background:var(--dock);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);max-width:calc(100vw - 24px)}
-.dock button{height:46px;min-width:46px;padding:0 13px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;color:var(--mist);font-size:14px;font-weight:500;transition:background .4s var(--ease),color .4s}
+.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:6;display:flex;gap:2px;padding:6px;border-radius:999px;background:var(--dock);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.dock button{height:46px;min-width:46px;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;color:var(--mist);font-size:14px;font-weight:500}
 .dock button span{display:none}
 .dock button[aria-selected="true"]{background:var(--ink);color:#0B0F10}
 .dock button[aria-selected="true"] span{display:inline}
-@media (max-width:360px){.dock button{min-width:42px;padding:0 10px}}
-
-.fade{animation:rise .6s var(--ease) both}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.dock .n{min-width:18px;height:18px;border-radius:9px;background:var(--violet);color:var(--on-play);font-size:11px;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
+.dock button[aria-selected="true"] .n{background:var(--on-play);color:var(--violet)}
+.fade{animation:rise .5s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="app grain">
 <header class="bar">
-  <div class="brand"><div class="mark">声</div><div><div style="font-weight:500;font-size:15px;line-height:1.1">Tone Coach</div><div class="lbl" id="subLbl">tone pairs · week one</div></div></div>
-  <div class="chipS" id="streakChip"><i></i><span id="streakTxt">0 clean in a row</span></div>
+  <div class="brand"><div class="mark">声</div><div><div style="font-weight:500;font-size:15px;line-height:1.1">Tone Coach</div><div class="lbl" id="subLbl">today · 0 of 20</div></div></div>
+  <div class="chipS"><i></i><span id="streakTxt">0 day streak</span></div>
 </header>
 
 <main>
-<section id="v-coach" class="coach">
-  <div class="col">
-    <div class="stage" id="stage">
-      <div class="blob"></div>
-      <div class="pattern lbl" id="patLbl"></div>
-      <div class="word" id="word" lang="zh-CN"></div>
-      <div class="py" id="py"></div>
-      <div class="en" id="en"></div>
-      <div class="shape" id="shape"></div>
-    </div>
-    <div class="actions">
-      <button class="icon" id="hear" aria-label="Hear it slowly" title="Hear it slowly"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
-      <button class="pill" id="rec"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span id="recTxt">Record</span></button>
-      <button class="icon" id="next" aria-label="Next word" title="Next word"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
-    </div>
-    <div class="hint" id="hint">Tap Hear, copy the shape, tap Record and say it. It stops by itself.</div>
+<section id="v-learn">
+  <div class="search">
+    <input class="field" type="search" id="q" placeholder="Jump to any word" aria-label="Search words" autocomplete="off">
+    <div class="hits" id="hits" hidden></div>
   </div>
-  <div class="col">
-    <div class="glass curve">
-      <div class="lbl">Pitch · yours against the target</div>
-      <svg id="curveSvg" viewBox="0 0 400 150" preserveAspectRatio="none" aria-label="Pitch curve"></svg>
-      <div class="legend"><span><b style="background:var(--haze)"></b>target</span><span><b style="background:var(--violet)"></b>you</span><span id="rangeLbl"></span></div>
+  <div class="learn">
+    <div class="col">
+      <div class="stage" id="stage">
+        <div class="blob"></div>
+        <div class="lbl" id="patLbl"></div>
+        <div class="word" id="word" lang="zh-CN"></div>
+        <div class="py" id="py"></div>
+        <div class="en" id="en"></div>
+        <div class="shape" id="shape"></div>
+        <button class="icon hearbtn" id="hear" aria-label="Hear it"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+      </div>
+      <div class="verdict" id="verdict">
+        <button class="ghost" id="notyet">Not yet</button>
+        <button class="pill mint" id="gotit" disabled><svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>Got it</button>
+      </div>
+      <div class="hint" id="hint">Write it and say it, then Got it unlocks.</div>
     </div>
-    <div class="glass speech"><div class="av" id="av">声</div><p id="say">Press Hear. I will say the word slowly, then at normal speed. Copy the shape of the pitch, not just the sounds. Then press Record.</p></div>
-    <div class="readout" id="readout">
-      <div class="cell"><div class="lbl">tones</div><div class="v" id="r1">–</div></div>
-      <div class="cell"><div class="lbl">heard as</div><div class="v" id="r2">–</div></div>
-      <div class="cell"><div class="lbl">range</div><div class="v" id="r3">–</div></div>
+    <div class="col">
+      <div class="glass">
+        <div class="step"><span class="lbl" id="writeLbl">Write it</span><span style="display:flex;gap:6px"><button class="ghost" id="wmodel" aria-pressed="true" style="height:34px;font-size:12.5px">Model</button><button class="ghost" id="wclear" style="height:34px;font-size:12.5px">Clear</button></span></div>
+        <div class="writewrap">
+          <canvas id="pad" width="300" height="300"></canvas>
+          <div class="wctl">
+            <div class="chars" id="chars"></div>
+            <p>Trace with the model on. Then turn it off and write from memory. Top to bottom, left to right, close the box last.</p>
+          </div>
+        </div>
+      </div>
+      <div class="glass curve">
+        <div class="step"><span class="lbl" id="sayLbl">Say it</span></div>
+        <div class="sayrow">
+          <button class="pill" id="rec"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span id="recTxt">Record</span></button>
+          <span class="lbl" id="rangeLbl"></span>
+        </div>
+        <svg id="curveSvg" viewBox="0 0 400 96" preserveAspectRatio="none" aria-label="Pitch curve"></svg>
+        <p class="fb" id="fb">Tap Record and say the word. It stops by itself.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="v-pairs" hidden>
-  <div class="lbl">Curriculum</div>
-  <div class="two">Twenty tone pairs. <b>Three words each.</b> Clean twice in a row and it turns mint.</div>
-  <div class="rows" id="rows"></div>
-</section>
-
-<section id="v-words" hidden>
-  <div class="lbl">Vocabulary</div>
-  <div class="two"><b id="wordCount">944</b> words. Say any of them. <b>Coach</b> sends it to the recorder.</div>
-  <div class="controls">
-    <input class="field" type="search" id="q" placeholder="Search hanzi, pinyin or English" aria-label="Search words">
-    <select class="field" id="filt" aria-label="Filter by status"><option value="all">All</option><option value="new">Untouched</option><option value="1">Shaky</option><option value="2">Solid</option></select>
+<section id="v-drill" hidden>
+  <div class="opts">
+    <select class="sel" id="dir" aria-label="Direction"><option value="h">Character first</option><option value="e">English first</option><option value="p">Pinyin first</option></select>
+    <button class="ghost" id="patToggle" aria-pressed="false">Sentences</button>
   </div>
-  <div class="chips" id="chips"></div>
-  <div class="cards" id="grid"></div>
-</section>
-
-<section id="v-learn" hidden>
-  <div class="lbl">Method</div>
-  <div class="two">Pronunciation first. <b>Words second.</b> What the research says works, in the order to do it.</div>
-  <div class="tones" id="tonecards"></div>
-  <div class="learn" id="learn"></div>
+  <div class="flash" id="flash"></div>
+  <div class="btnrow" id="drillbtns"></div>
+  <div class="hint" id="dhint">Space flips. 1 missed, 2 got it.</div>
 </section>
 
 <section id="v-progress" hidden>
-  <div class="lbl">Tone pairs clean</div>
-  <div class="hero"><div class="n" id="heroN">0</div><div class="u">of <span id="heroT">60</span></div></div>
+  <div class="lbl">Words learned</div>
+  <div class="hero"><div class="n" id="heroN">0</div><div class="u">of <span id="heroT">944</span></div></div>
   <div class="track"><i id="dot" style="left:0%"></i></div>
-  <div class="ticks"><span>0</span><span>15</span><span>30</span><span>45</span><span>60</span></div>
+  <div class="ticks"><span>0</span><span>250</span><span>500</span><span>750</span><span id="tickT">944</span></div>
   <div class="bento">
-    <div class="glass"><div class="lbl">attempts</div><div class="v" id="bAtt">0</div></div>
-    <div class="glass"><div class="lbl">first try clean</div><div class="v" id="bFirst">0<small>%</small></div></div>
-    <div class="glass"><div class="lbl">words solid</div><div class="v" id="bSolid">0<small>/ 944</small></div></div>
-    <div class="glass"><div class="lbl">weekly test</div><div class="v" id="bTest">–<small>/10</small></div></div>
+    <div class="glass"><div class="lbl">due today</div><div class="v" id="bDue">0</div></div>
+    <div class="glass"><div class="lbl">streak</div><div class="v" id="bStreak">0<small>days</small></div></div>
+    <div class="glass"><div class="lbl">per day</div><div class="v" id="bPer">20</div></div>
   </div>
-  <div class="glass" style="margin-top:16px">
-    <div class="lbl">Weekly test · same ten words every week</div>
-    <div class="testlist" id="testlist"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <button class="ghost" id="startTest">Run the ten</button>
-      <button class="ghost" id="reset">Reset everything</button>
-      <span class="lbl" id="testDate"></span>
-    </div>
-  </div>
-  <div class="glass" style="margin-top:10px">
-    <div class="lbl">Claude as the coach · optional</div>
-    <p style="margin:6px 0 10px;color:var(--haze);font-size:13.5px;font-weight:300">Without a key the coach uses built in rules. With an Anthropic API key it writes each correction itself. The key stays in this browser only.</p>
-    <div class="controls" style="margin:0"><input class="field" type="password" id="key" placeholder="sk-ant-..." autocomplete="off"><button class="ghost" id="saveKey">Save</button></div>
+  <details>
+    <summary>The five tones and six rules</summary>
+    <div class="tones" id="tonecards"></div>
+    <ol class="rules">
+      <li>Third tone is just low. It only dips and rises at the end of a phrase.</li>
+      <li>3 + 3 is said as 2 + 3. 你好 is ní hǎo.</li>
+      <li>Swing wider than feels natural. Natives use 1.5x the range of English.</li>
+      <li>Light tone is half the length of the syllable before it.</li>
+      <li>Record yourself. Your ear lies about your own voice.</li>
+      <li>Ask her to say it back, not to explain it.</li>
+    </ol>
+  </details>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px">
+    <button class="ghost" id="reset">Reset everything</button>
   </div>
 </section>
 </main>
 
 <nav class="dock" role="tablist">
-  <button role="tab" aria-selected="true" data-v="coach" aria-label="Coach"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span>Coach</span></button>
-  <button role="tab" aria-selected="false" data-v="pairs" aria-label="Pairs"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Pairs</span></button>
-  <button role="tab" aria-selected="false" data-v="words" aria-label="Words"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h13"/></svg><span>Words</span></button>
-  <button role="tab" aria-selected="false" data-v="learn" aria-label="Learn"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Learn</span></button>
+  <button role="tab" aria-selected="true" data-v="learn" aria-label="Learn"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span>Learn</span></button>
+  <button role="tab" aria-selected="false" data-v="drill" aria-label="Drill"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Drill</span><span class="n" id="dueN" hidden>0</span></button>
   <button role="tab" aria-selected="false" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 14 4-4 3 3 5-6"/></svg><span>Progress</span></button>
 </nav>
 </div>
 
 <script>
-/* ================= data ================= */
 var CATS=[
 ["greet","Greetings & courtesy",[["你好","nǐ hǎo","hello"],["您好","nín hǎo","hello (polite)"],["大家好","dà jiā hǎo","hello everyone"],["早上好","zǎo shang hǎo","good morning"],["晚上好","wǎn shang hǎo","good evening"],["晚安","wǎn ān","good night"],["再见","zài jiàn","goodbye"],["拜拜","bái bái","bye bye"],["回头见","huí tóu jiàn","see you later"],["明天见","míng tiān jiàn","see you tomorrow"],["谢谢","xiè xie","thank you"],["多谢","duō xiè","many thanks"],["不客气","bú kè qi","you're welcome"],["不用谢","bú yòng xiè","no need to thank me"],["对不起","duì bu qǐ","sorry"],["不好意思","bù hǎo yì si","excuse me / awkward"],["没关系","méi guān xi","it's fine"],["没事","méi shì","no problem"],["请","qǐng","please"],["请问","qǐng wèn","excuse me, may I ask"],["麻烦你","má fan nǐ","sorry to trouble you"],["辛苦了","xīn kǔ le","thanks for your effort"],["欢迎","huān yíng","welcome"],["好久不见","hǎo jiǔ bú jiàn","long time no see"],["最近怎么样","zuì jìn zěn me yàng","how have you been"],["你呢","nǐ ne","and you?"],["认识你很高兴","rèn shi nǐ hěn gāo xìng","nice to meet you"],["我叫","wǒ jiào","my name is"],["请多关照","qǐng duō guān zhào","please look after me"],["加油","jiā yóu","you got this"],["恭喜","gōng xǐ","congratulations"],["生日快乐","shēng rì kuài lè","happy birthday"],["新年快乐","xīn nián kuài lè","happy new year"],["干杯","gān bēi","cheers"],["保重","bǎo zhòng","take care"],["慢走","màn zǒu","take care (to someone leaving)"],["请坐","qǐng zuò","please sit"],["请进","qǐng jìn","please come in"],["没问题","méi wèn tí","no problem"],["当然","dāng rán","of course"],["真的吗","zhēn de ma","really?"],["太好了","tài hǎo le","that's great"]]],
 ["pron","People & pronouns",[["我","wǒ","I, me"],["你","nǐ","you"],["您","nín","you (polite)"],["他","tā","he, him"],["她","tā","she, her"],["它","tā","it"],["我们","wǒ men","we, us"],["你们","nǐ men","you (plural)"],["他们","tā men","they"],["大家","dà jiā","everyone"],["别人","bié rén","other people"],["自己","zì jǐ","oneself"],["人","rén","person"],["男人","nán rén","man"],["女人","nǚ rén","woman"],["男孩","nán hái","boy"],["女孩","nǚ hái","girl"],["孩子","hái zi","child"],["朋友","péng you","friend"],["好朋友","hǎo péng you","close friend"],["同学","tóng xué","classmate"],["同事","tóng shì","colleague"],["老师","lǎo shī","teacher"],["学生","xué sheng","student"],["医生","yī shēng","doctor"],["护士","hù shi","nurse"],["司机","sī jī","driver"],["老板","lǎo bǎn","boss"],["服务员","fú wù yuán","waiter"],["警察","jǐng chá","police"],["律师","lǜ shī","lawyer"],["工程师","gōng chéng shī","engineer"],["邻居","lín jū","neighbour"],["客人","kè rén","guest"],["陌生人","mò shēng rén","stranger"],["名字","míng zi","name"],["先生","xiān sheng","Mr., sir"],["小姐","xiǎo jiě","Miss"],["女士","nǚ shì","Ms., madam"],["中国人","zhōng guó rén","Chinese person"],["外国人","wài guó rén","foreigner"],["印度人","yìn dù rén","Indian person"],["美国人","měi guó rén","American"]]],
@@ -295,34 +265,64 @@ var CATS=[
 ["tech","Phone & internet",[["网","wǎng","net"],["网上","wǎng shàng","online"],["网络","wǎng luò","network"],["上网","shàng wǎng","to go online"],["微信","wēi xìn","WeChat"],["朋友圈","péng you quān","WeChat Moments"],["加微信","jiā wēi xìn","to add on WeChat"],["消息","xiāo xi","message"],["短信","duǎn xìn","text message"],["电话号码","diàn huà hào mǎ","phone number"],["视频","shì pín","video"],["照相","zhào xiàng","to take a photo"],["自拍","zì pāi","selfie"],["下载","xià zài","to download"],["上传","shàng chuán","to upload"],["软件","ruǎn jiàn","software"],["应用","yìng yòng","app"],["账号","zhàng hào","account"],["密码","mì mǎ","password"],["登录","dēng lù","to log in"],["搜索","sōu suǒ","to search"],["邮件","yóu jiàn","email"],["文件","wén jiàn","file"],["打字","dǎ zì","to type"],["键盘","jiàn pán","keyboard"],["屏幕","píng mù","screen"],["充电","chōng diàn","to charge"],["信号","xìn hào","signal"],["无线网","wú xiàn wǎng","wifi"],["人工智能","rén gōng zhì néng","artificial intelligence"]]],
 ["mw","Measure words",[["个","gè","general purpose"],["位","wèi","people, polite"],["只","zhī","animals"],["条","tiáo","long thin things"],["张","zhāng","flat things"],["本","běn","books"],["件","jiàn","clothes, matters"],["把","bǎ","things with handles"],["杯","bēi","cups of"],["瓶","píng","bottles of"],["双","shuāng","pairs"],["辆","liàng","vehicles"],["家","jiā","businesses"],["间","jiān","rooms"],["台","tái","machines"],["块","kuài","pieces, chunks"],["片","piàn","slices"],["顿","dùn","meals"],["次","cì","times, occasions"],["遍","biàn","times through"],["下","xià","brief actions"],["些","xiē","some"],["群","qún","groups"],["份","fèn","portions"],["支","zhī","pens, sticks"],["封","fēng","letters"]]]
 ];
-var PAIRS=[
-[[1,1],[["今天","jīn tiān","today"],["咖啡","kā fēi","coffee"],["医生","yī shēng","doctor"]]],
-[[1,2],[["中国","zhōng guó","China"],["欢迎","huān yíng","welcome"],["公园","gōng yuán","park"]]],
-[[1,3],[["开始","kāi shǐ","to begin"],["身体","shēn tǐ","body"],["机场","jī chǎng","airport"]]],
-[[1,4],[["工作","gōng zuò","work"],["高兴","gāo xìng","glad"],["希望","xī wàng","to hope"]]],
-[[1,0],[["妈妈","mā ma","mum"],["先生","xiān sheng","Mr."],["东西","dōng xi","thing"]]],
-[[2,1],[["明天","míng tiān","tomorrow"],["房间","fáng jiān","room"],["昨天","zuó tiān","yesterday"]]],
-[[2,2],[["学习","xué xí","to study"],["银行","yín háng","bank"],["同学","tóng xué","classmate"]]],
-[[2,3],[["没有","méi yǒu","don't have"],["牛奶","niú nǎi","milk"],["苹果","píng guǒ","apple"]]],
-[[2,4],[["学校","xué xiào","school"],["文化","wén huà","culture"],["决定","jué dìng","to decide"]]],
-[[2,0],[["朋友","péng you","friend"],["什么","shén me","what"],["便宜","pián yi","cheap"]]],
-[[3,1],[["老师","lǎo shī","teacher"],["北京","běi jīng","Beijing"],["好吃","hǎo chī","tasty"]]],
-[[3,2],[["美国","měi guó","USA"],["旅行","lǚ xíng","to travel"],["有名","yǒu míng","famous"]]],
-[[3,3],[["你好","nǐ hǎo","hello"],["水果","shuǐ guǒ","fruit"],["可以","kě yǐ","may"]]],
-[[3,4],[["考试","kǎo shì","exam"],["感谢","gǎn xiè","grateful"],["好看","hǎo kàn","good looking"]]],
-[[3,0],[["喜欢","xǐ huan","to like"],["我们","wǒ men","we"],["姐姐","jiě jie","older sister"]]],
-[[4,1],[["健康","jiàn kāng","healthy"],["上班","shàng bān","to go to work"],["唱歌","chàng gē","to sing"]]],
-[[4,2],[["问题","wèn tí","question"],["练习","liàn xí","to practise"],["地图","dì tú","map"]]],
-[[4,3],[["电影","diàn yǐng","film"],["上午","shàng wǔ","morning"],["跳舞","tiào wǔ","to dance"]]],
-[[4,4],[["再见","zài jiàn","goodbye"],["睡觉","shuì jiào","to sleep"],["现在","xiàn zài","now"]]],
-[[4,0],[["谢谢","xiè xie","thank you"],["漂亮","piào liang","pretty"],["告诉","gào su","to tell"]]]
+var PATTERNS=[
+["我是学生。","wǒ shì xué sheng.","I am a student."],
+["他不是老师。","tā bú shì lǎo shī.","He is not a teacher."],
+["你是哪国人？","nǐ shì nǎ guó rén?","Which country are you from?"],
+["我有两个姐姐。","wǒ yǒu liǎng ge jiě jie.","I have two older sisters."],
+["我没有时间。","wǒ méi yǒu shí jiān.","I don't have time."],
+["你有没有微信？","nǐ yǒu méi yǒu wēi xìn?","Do you have WeChat?"],
+["我在学校。","wǒ zài xué xiào.","I'm at school."],
+["你在哪儿？","nǐ zài nǎr?","Where are you?"],
+["我在学中文。","wǒ zài xué zhōng wén.","I'm learning Chinese."],
+["我想去中国。","wǒ xiǎng qù zhōng guó.","I want to go to China."],
+["我要一杯咖啡。","wǒ yào yì bēi kā fēi.","I'd like a coffee."],
+["我不想去。","wǒ bù xiǎng qù.","I don't want to go."],
+["你想吃什么？","nǐ xiǎng chī shén me?","What do you want to eat?"],
+["我喜欢吃辣的。","wǒ xǐ huan chī là de.","I like eating spicy food."],
+["我很喜欢你。","wǒ hěn xǐ huan nǐ.","I really like you."],
+["这个多少钱？","zhè ge duō shao qián?","How much is this?"],
+["太贵了。","tài guì le.","That's too expensive."],
+["便宜一点吧。","pián yi yì diǎn ba.","Make it a bit cheaper."],
+["我会说一点中文。","wǒ huì shuō yì diǎn zhōng wén.","I can speak a little Chinese."],
+["你会不会游泳？","nǐ huì bu huì yóu yǒng?","Can you swim?"],
+["我能帮你吗？","wǒ néng bāng nǐ ma?","Can I help you?"],
+["可以试试吗？","kě yǐ shì shi ma?","May I try it?"],
+["你应该多休息。","nǐ yīng gāi duō xiū xi.","You should rest more."],
+["我必须走了。","wǒ bì xū zǒu le.","I have to go."],
+["我吃过了。","wǒ chī guo le.","I've already eaten."],
+["我去过北京。","wǒ qù guo běi jīng.","I've been to Beijing."],
+["我还没吃饭。","wǒ hái méi chī fàn.","I haven't eaten yet."],
+["我刚到。","wǒ gāng dào.","I just arrived."],
+["等一下。","děng yí xià.","Hold on a second."],
+["我们一起去吧。","wǒ men yì qǐ qù ba.","Let's go together."],
+["你要不要来？","nǐ yào bu yào lái?","Do you want to come?"],
+["这个比那个好。","zhè ge bǐ nà ge hǎo.","This one is better than that one."],
+["他跑得很快。","tā pǎo de hěn kuài.","He runs very fast."],
+["我中文说得不好。","wǒ zhōng wén shuō de bù hǎo.","I don't speak Chinese well."],
+["因为下雨，所以我没去。","yīn wèi xià yǔ, suǒ yǐ wǒ méi qù.","Because it rained, I didn't go."],
+["如果你有空，告诉我。","rú guǒ nǐ yǒu kòng, gào su wǒ.","If you're free, let me know."],
+["虽然很难，但是很有意思。","suī rán hěn nán, dàn shì hěn yǒu yì si.","Although it's hard, it's interesting."],
+["我一边走一边听音乐。","wǒ yì biān zǒu yì biān tīng yīn yuè.","I listen to music while walking."],
+["你吃饭了吗？","nǐ chī fàn le ma?","Have you eaten?"],
+["怎么去地铁站？","zěn me qù dì tiě zhàn?","How do I get to the subway station?"],
+["请问，洗手间在哪里？","qǐng wèn, xǐ shǒu jiān zài nǎ lǐ?","Excuse me, where is the restroom?"],
+["这个用中文怎么说？","zhè ge yòng zhōng wén zěn me shuō?","How do you say this in Chinese?"],
+["请再说一遍。","qǐng zài shuō yí biàn.","Please say that again."],
+["你说慢一点，好吗？","nǐ shuō màn yì diǎn, hǎo ma?","Could you speak more slowly?"],
+["我听不懂。","wǒ tīng bu dǒng.","I can't understand it."],
+["我是印度人，在美国读书。","wǒ shì yìn dù rén, zài měi guó dú shū.","I'm Indian, studying in the US."],
+["我把书放在桌子上了。","wǒ bǎ shū fàng zài zhuō zi shang le.","I put the book on the table."],
+["我被雨淋了。","wǒ bèi yǔ lín le.","I got caught in the rain."],
+["明天见！","míng tiān jiàn!","See you tomorrow!"],
+["认识你真好。","rèn shi nǐ zhēn hǎo.","It's really good to know you."]
 ];
-var TEST=["你好","谢谢","明天","朋友","老师","水果","学校","再见","喜欢","没有"];
+var PAIRWORDS=["今天","咖啡","医生","中国","欢迎","公园","开始","身体","机场","工作","高兴","希望","妈妈","先生","东西","明天","房间","昨天","学习","银行","同学","没有","牛奶","苹果","学校","文化","决定","朋友","什么","便宜","老师","北京","好吃","美国","旅行","有名","你好","水果","可以","考试","感谢","好看","喜欢","我们","姐姐","健康","上班","唱歌","问题","练习","地图","电影","上午","跳舞","再见","睡觉","现在","谢谢","漂亮","告诉"];
+var PER_DAY=20;
 var TONE_NAME={1:"high and level",2:"rising",3:"low",4:"falling",0:"light and short"};
-var TONE_SHORT={1:"level",2:"rise",3:"low",4:"fall",0:"light"};
 var TMAP={1:"āēīōūǖ",2:"áéíóúǘ",3:"ǎěǐǒǔǚ",4:"àèìòùǜ"};
 function toneOf(s){for(var t in TMAP){for(var i=0;i<TMAP[t].length;i++)if(s.indexOf(TMAP[t][i])>-1)return +t}return 0}
-function tonesOf(py){return py.split(" ").filter(Boolean).map(toneOf)}
+function tonesOf(py){return py.replace(/[.,!?，。！？]/g,"").split(" ").filter(Boolean).map(toneOf)}
 function spoken(t){var o=t.slice();for(var i=0;i<o.length-1;i++){if(o[i]===3&&o[i+1]===3)o[i]=2}return o}
 function ideal(t,final){
   if(t===1)return [5,5,5,5,5,5,5,5];
@@ -410,33 +410,43 @@ function analyze(samples,sr,expected){
 }
 if(typeof module!=="undefined")module.exports={analyze:analyze,classify:classify,tonesOf:tonesOf};
 
-/* ================= app ================= */
 if(typeof document!=="undefined")(function(){
 var $=function(id){return document.getElementById(id)};
 var AC=window.AudioContext||window.webkitAudioContext;
-var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 
-/* words from the 944 list */
-var ALL=[];CATS.forEach(function(c){c[2].forEach(function(w){ALL.push({h:w[0],p:w[1],e:w[2],c:c[0],cn:c[1]})})});
-var PAIRWORDS=[];PAIRS.forEach(function(p){p[1].forEach(function(w){PAIRWORDS.push({h:w[0],p:w[1],e:w[2],pair:p[0]})})});
-$("wordCount").textContent=ALL.length;$("bSolid").innerHTML='0<small>/ '+ALL.length+'</small>';
+/* ---------- word order: tone pair words first, then the list ---------- */
+var ALL=[],seen={};
+CATS.forEach(function(c){c[2].forEach(function(w){if(!seen[w[0]]){seen[w[0]]=1;ALL.push({h:w[0],p:w[1],e:w[2]})}})});
+var byH={};ALL.forEach(function(w){byH[w.h]=w});
+var ORDER=[];PAIRWORDS.forEach(function(h){if(byH[h])ORDER.push(byH[h])});ALL.forEach(function(w){if(PAIRWORDS.indexOf(w.h)<0)ORDER.push(w)});
+var PATS=PATTERNS.map(function(p){return {h:p[0],p:p[1],e:p[2],sent:true}});
+$("heroT").textContent=ALL.length;$("tickT").textContent=ALL.length;
 
-/* state */
-var store={};try{store=JSON.parse(localStorage.getItem("tonecoach")||"{}")||{}}catch(e){}
-store.clean=store.clean||{};store.att=store.att||0;store.first=store.first||0;store.firstN=store.firstN||0;store.best=store.best||0;store.words=store.words||{};
-function save(){try{localStorage.setItem("tonecoach",JSON.stringify(store))}catch(e){}}
-var key="";try{key=localStorage.getItem("tonecoach_key")||""}catch(e){}
-$("key").value=key;
+/* ---------- store ---------- */
+var store={};try{store=JSON.parse(localStorage.getItem("tonecoach2")||"{}")||{}}catch(e){}
+store.cards=store.cards||{};store.days=store.days||{};store.today=store.today||null;
+function save(){try{localStorage.setItem("tonecoach2",JSON.stringify(store))}catch(e){}}
+function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+var INTERVALS=[1,3,7,14,30,60];
+function touch(){store.days[today()]=1;save()}
+function streak(){var n=0;for(var i=0;i<400;i++){var d=new Date();d.setDate(d.getDate()-i);var k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(store.days[k])n++;else if(i>0)break}return n}
 
-var mode="pairs",idx=0,custom=null,streak=0,wordStreak=0,attemptsHere=0,testing=null,busy=false;
-function cur(){
-  if(testing)return PAIRWORDS.filter(function(w){return w.h===testing.list[testing.i]})[0];
-  if(custom)return custom;
-  return PAIRWORDS[idx];
+/* today's queue */
+function buildToday(){
+  if(store.today&&store.today.date===today())return;
+  var list=[];for(var i=0;i<ORDER.length&&list.length<PER_DAY;i++){if(!store.cards[ORDER[i].h])list.push(ORDER[i].h)}
+  store.today={date:today(),list:list,done:[]};save();
 }
-function tonesFor(w){return tonesOf(w.p)}
+buildToday();
+var custom=null,cur=null;
+function pickNext(){
+  buildToday();
+  var left=store.today.list.filter(function(h){return store.today.done.indexOf(h)<0});
+  cur=left.length?byH[left[0]]:null;custom=null;
+}
 
-/* speech out */
+/* ---------- speech ---------- */
 var voices=[];function loadVoices(){try{voices=speechSynthesis.getVoices()||[]}catch(e){}}
 loadVoices();try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
 function pick(lang){
@@ -446,76 +456,104 @@ function pick(lang){
   for(var i=0;i<pref.length;i++){var hit=pool.filter(function(v){return v.name.indexOf(pref[i])>-1})[0];if(hit)return hit}
   return pool[0]||null;
 }
-function say(text,lang,rate){
-  return new Promise(function(res){
-    try{var u=new SpeechSynthesisUtterance(text);u.lang=lang==="zh"?"zh-CN":"en-US";u.rate=rate;var v=pick(lang);if(v)u.voice=v;u.onend=res;u.onerror=res;speechSynthesis.speak(u);setTimeout(res,12000)}catch(e){res()}
-  });
-}
-function sayWord(){var w=cur();try{speechSynthesis.cancel()}catch(e){}return say(w.h,"zh",0.55).then(function(){return say(w.h,"zh",0.85)})}
+function say(text,lang,rate){return new Promise(function(res){try{var u=new SpeechSynthesisUtterance(text);u.lang=lang==="zh"?"zh-CN":"en-US";u.rate=rate;var v=pick(lang);if(v)u.voice=v;u.onend=res;u.onerror=res;speechSynthesis.speak(u);setTimeout(res,12000)}catch(e){res()}})}
+function hear(w){try{speechSynthesis.cancel()}catch(e){}return say(w.h,"zh",0.55).then(function(){return say(w.h,"zh",0.85)})}
 
-/* render */
-function pySpans(w){
-  var sp=spoken(tonesFor(w)),parts=w.p.split(" ").filter(Boolean);
-  return parts.map(function(s,i){var fin=i===parts.length-1;return '<span>'+s+'<svg viewBox="0 0 26 16"><path d="'+glyphPath(sp[i],fin,26,14)+'" transform="translate(0,1)"/></svg></span>'}).join("");
-}
-function renderWord(){
-  var w=cur(),t=tonesFor(w),sp=spoken(t);
+/* ---------- learn card ---------- */
+var wrote=false,said=false,strokes=[],charIdx=0,charDone={};
+function pySpans(w){var sp=spoken(tonesOf(w.p)),parts=w.p.split(" ").filter(Boolean);return parts.map(function(s,i){return '<span>'+s+'<svg viewBox="0 0 22 15"><path d="'+glyphPath(sp[i],i===parts.length-1,22,13)+'" transform="translate(0,1)"/></svg></span>'}).join("")}
+function renderCard(auto){
+  var w=custom||cur;
+  var done=store.today.done.length;
+  $("subLbl").textContent="today · "+done+" of "+store.today.list.length;
+  if(!w){
+    $("patLbl").textContent="";$("word").textContent="完";$("word").classList.remove("long");$("py").textContent="";$("en").textContent="Today's twenty are done.";$("shape").textContent="Come back tomorrow, or search any word above.";
+    $("verdict").hidden=true;$("hint").textContent="";drawCurve(null);renderChars();return;
+  }
+  $("verdict").hidden=false;
+  var t=tonesOf(w.p),sp=spoken(t);
   $("stage").classList.remove("clean");
   $("word").textContent=w.h;$("word").classList.toggle("long",w.h.length>2);
   $("py").innerHTML=pySpans(w);$("en").textContent=w.e;
-  var sandhi=t.join()!==sp.join();
-  $("patLbl").textContent="[ "+t.join(" + ")+(sandhi?" · said as "+sp.join(" + "):"")+" ]";
+  $("patLbl").textContent="[ "+t.join(" + ")+(t.join()!==sp.join()?" · said as "+sp.join(" + "):"")+" ]";
   $("shape").textContent=sp.map(function(x){return TONE_NAME[x]}).join(", then ");
-  $("subLbl").textContent=testing?"weekly test · "+(testing.i+1)+" of 10":custom?"from your words":"tone pairs · week one";
-  drawCurve(null);
-  ["r1","r2","r3"].forEach(function(id){$(id).textContent="–";$(id).className="v"});$("rangeLbl").textContent="";
+  wrote=false;said=false;strokes=[];charIdx=0;charDone={};
+  $("writeLbl").textContent="Write it";$("writeLbl").className="lbl";
+  $("sayLbl").textContent="Say it";$("sayLbl").className="lbl";
+  $("wmodel").setAttribute("aria-pressed","true");
+  $("fb").textContent="Tap Record and say the word. It stops by itself.";$("fb").className="fb";$("rangeLbl").textContent="";
+  $("gotit").disabled=true;$("hint").textContent="Write it and say it, then Got it unlocks.";
+  drawCurve(null);renderChars();drawPad();
   $("stage").classList.remove("fade");void $("stage").offsetWidth;$("stage").classList.add("fade");
+  if(auto)setTimeout(function(){hear(w)},350);
 }
+function unlockCheck(){
+  if(wrote&&said){$("gotit").disabled=false;$("hint").textContent="Got it schedules it for tomorrow. Not yet keeps it in today's pile."}
+}
+
+/* writing pad */
+var pad=$("pad"),ctx=pad.getContext("2d"),drawing=false;
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function renderChars(){
+  var w=custom||cur;if(!w){$("chars").innerHTML="";return}
+  var out="";for(var i=0;i<w.h.length;i++)out+='<button aria-pressed="'+(i===charIdx?"true":"false")+'" class="'+(charDone[i]?"done":"")+'" data-i="'+i+'">'+w.h.charAt(i)+'</button>';
+  $("chars").innerHTML=out;
+}
+$("chars").addEventListener("click",function(e){var b=e.target.closest("button[data-i]");if(!b)return;charIdx=+b.dataset.i;strokes=[];renderChars();drawPad()});
+function drawPad(){
+  var w=custom||cur,S=pad.width;
+  ctx.clearRect(0,0,S,S);ctx.fillStyle=css("--bg-2");ctx.fillRect(0,0,S,S);
+  ctx.strokeStyle="rgba(196,181,255,.22)";ctx.lineWidth=1;ctx.setLineDash([4,6]);
+  ctx.beginPath();ctx.moveTo(S/2,12);ctx.lineTo(S/2,S-12);ctx.moveTo(12,S/2);ctx.lineTo(S-12,S/2);ctx.moveTo(12,12);ctx.lineTo(S-12,S-12);ctx.moveTo(S-12,12);ctx.lineTo(12,S-12);ctx.stroke();ctx.setLineDash([]);
+  if(w&&$("wmodel").getAttribute("aria-pressed")==="true"){
+    ctx.save();ctx.globalAlpha=.16;ctx.fillStyle=css("--ink");ctx.font='300 220px "Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(w.h.charAt(charIdx),S/2,S/2+8);ctx.restore();
+  }
+  ctx.strokeStyle=css("--violet");ctx.lineWidth=7;ctx.lineCap="round";ctx.lineJoin="round";
+  strokes.forEach(function(s){ctx.beginPath();s.forEach(function(pt,i){i?ctx.lineTo(pt[0],pt[1]):ctx.moveTo(pt[0],pt[1])});if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke()});
+}
+function pos(e){var r=pad.getBoundingClientRect(),sx=pad.width/r.width;return [(e.clientX-r.left)*sx,(e.clientY-r.top)*sx]}
+pad.addEventListener("pointerdown",function(e){if(!(custom||cur))return;drawing=true;pad.setPointerCapture(e.pointerId);strokes.push([pos(e)]);drawPad()});
+pad.addEventListener("pointermove",function(e){if(!drawing)return;strokes[strokes.length-1].push(pos(e));drawPad()});
+function endStroke(){if(!drawing)return;drawing=false;var w=custom||cur;if(!w)return;if(strokes.length>=2){charDone[charIdx]=true;renderChars()}
+  var all=true;for(var i=0;i<w.h.length;i++)if(!charDone[i])all=false;
+  if(all&&!wrote){wrote=true;$("writeLbl").textContent="Written";$("writeLbl").className="lbl done";unlockCheck()}}
+pad.addEventListener("pointerup",endStroke);pad.addEventListener("pointercancel",endStroke);
+$("wclear").onclick=function(){strokes=[];drawPad()};
+$("wmodel").onclick=function(){this.setAttribute("aria-pressed",this.getAttribute("aria-pressed")==="true"?"false":"true");drawPad()};
+
+/* curve */
 function drawCurve(res){
-  var w=cur(),sp=spoken(tonesFor(w)),n=sp.length,W=400,H=150,pad=14,gap=18,out="";
-  var segW=(W-20-gap*(n-1))/n;
-  function path(arr,x0,x1,cls){var d="";arr.forEach(function(v,i){var x=x0+(i/(arr.length-1))*(x1-x0),y=pad+(1-(v-0.5)/5)*(H-2*pad);y=Math.max(pad-6,Math.min(H-pad+6,y));d+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1)});return '<path d="'+d+'" '+cls+'/>'}
-  out+='<line x1="0" y1="'+(H-pad)+'" x2="'+W+'" y2="'+(H-pad)+'" stroke="rgba(233,237,238,.12)"/>';
+  var w=custom||cur,W=400,H=96,pad2=10,gap=16,out="";if(!w){$("curveSvg").innerHTML="";return}
+  var sp=spoken(tonesOf(w.p)),n=sp.length,segW=(W-20-gap*(n-1))/n;
+  function path(arr,x0,x1,cls){var d="";arr.forEach(function(v,i){var x=x0+(i/(arr.length-1))*(x1-x0),y=pad2+(1-(v-0.5)/5)*(H-2*pad2);y=Math.max(pad2-4,Math.min(H-pad2+4,y));d+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1)});return '<path d="'+d+'" '+cls+'/>'}
   for(var i=0;i<n;i++){
     var x0=10+i*(segW+gap),x1=x0+segW;
-    if(i)out+='<line x1="'+(x0-gap/2)+'" y1="'+pad+'" x2="'+(x0-gap/2)+'" y2="'+(H-pad)+'" stroke="rgba(233,237,238,.08)" stroke-dasharray="3 5"/>';
-    out+=path(ideal(sp[i],i===n-1),x0,x1,'fill="none" stroke="#B7C0C3" stroke-width="1.5" stroke-linecap="round" opacity=".8"');
-    if(res&&res.ok){
-      var col=res.clean?"#7DE3A6":"#C4B5FF",p=res.f[i].pts.map(function(st){return 3+st/2.5});
-      out+=path(p,x0,x1,'fill="none" stroke="'+col+'" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 0 8px '+col+'88)"');
-      if(i===n-1){var last=p[p.length-1],ly=pad+(1-(last-0.5)/5)*(H-2*pad);out+='<circle cx="'+x1+'" cy="'+Math.max(pad,Math.min(H-pad,ly)).toFixed(1)+'" r="4.5" fill="'+col+'" style="filter:drop-shadow(0 0 10px '+col+')"/>'}
-    }
+    out+=path(ideal(sp[i],i===n-1),x0,x1,'fill="none" stroke="#B7C0C3" stroke-width="1.4" stroke-linecap="round" opacity=".7"');
+    if(res&&res.ok){var col=res.clean?"#7DE3A6":"#C4B5FF",p=res.f[i].pts.map(function(st){return 3+st/2.5});out+=path(p,x0,x1,'fill="none" stroke="'+col+'" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 0 8px '+col+'88)"')}
   }
   $("curveSvg").innerHTML=out;
 }
-function setSay(txt,live){$("say").textContent=txt;$("av").classList.toggle("live",!!live)}
-function streakUI(){$("streakTxt").textContent=streak+" clean in a row";$("streakChip").classList.toggle("ok",streak>0)}
 
-/* ================= recorder ================= */
-var recCtx=null,recNode=null,stream=null,chunks=[],recording=false,voiceSeen=false,silence=0,recStart=0,noise=0.003,sr=null,heard="",srDone=true;
+/* recorder */
+var recCtx=null,recNode=null,stream=null,chunks=[],recording=false,voiceSeen=false,silence=0,recStart=0,noise=0.003,busy=false;
 function startRec(){
-  if(busy||recording)return;
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){setSay("This browser cannot open a microphone. Use Chrome or Safari.");return}
+  var w=custom||cur;if(!w||busy||recording)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$("fb").textContent="This browser cannot open a microphone. Use Chrome or Safari.";return}
   try{speechSynthesis.cancel()}catch(e){}
   navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:true}}).then(function(s){
     stream=s;recCtx=new AC();var src=recCtx.createMediaStreamSource(s);
     recNode=recCtx.createScriptProcessor(4096,1,1);chunks=[];voiceSeen=false;silence=0;recStart=Date.now();noise=0.003;
     var mute=recCtx.createGain();mute.gain.value=0;
     recNode.onaudioprocess=function(e){
-      if(!recording)return;
-      var d=e.inputBuffer.getChannelData(0);chunks.push(new Float32Array(d));
-      var rms=0;for(var i=0;i<d.length;i+=4)rms+=d[i]*d[i];rms=Math.sqrt(rms/(d.length/4));
-      var el=Date.now()-recStart;
-      if(el<250){noise=Math.max(noise,rms)}
-      if(rms>Math.max(0.012,noise*3.5)){voiceSeen=true;silence=0}else if(voiceSeen){silence+=d.length/recCtx.sampleRate*1000}
-      if((voiceSeen&&silence>650)||el>5000)stopRec();
+      if(!recording)return;var d=e.inputBuffer.getChannelData(0);chunks.push(new Float32Array(d));
+      var rms=0;for(var i=0;i<d.length;i+=4)rms+=d[i]*d[i];rms=Math.sqrt(rms/(d.length/4));var el=Date.now()-recStart;
+      if(el<250)noise=Math.max(noise,rms);
+      if(rms>Math.max(0.012,noise*3.5)){voiceSeen=true;silence=0}else if(voiceSeen)silence+=d.length/recCtx.sampleRate*1000;
+      if((voiceSeen&&silence>650)||el>6000)stopRec();
     };
     src.connect(recNode);recNode.connect(mute);mute.connect(recCtx.destination);
-    recording=true;$("rec").classList.add("live");$("recTxt").textContent="Listening";$("stage").classList.add("listening");setSay("Say it now.",true);
-    startSR();
-  }).catch(function(err){
-    setSay(err&&err.name==="NotAllowedError"?"Microphone blocked. Allow it in the address bar, then try again.":"Could not open the microphone.");
-  });
+    recording=true;$("rec").classList.add("live");$("recTxt").textContent="Listening";$("stage").classList.add("listening");$("fb").textContent="Say it now.";
+  }).catch(function(err){$("fb").textContent=err&&err.name==="NotAllowedError"?"Microphone blocked. Allow it in the address bar and try again.":"Could not open the microphone."});
 }
 function stopRec(){
   if(!recording)return;recording=false;
@@ -523,179 +561,130 @@ function stopRec(){
   $("rec").classList.remove("live");$("recTxt").textContent="Record";$("stage").classList.remove("listening");
   var total=0;chunks.forEach(function(c){total+=c.length});var x=new Float32Array(total),o=0;chunks.forEach(function(c){x.set(c,o);o+=c.length});
   var rate=recCtx.sampleRate;try{recCtx.close()}catch(e){}
-  busy=true;$("rec").disabled=true;setSay("Reading the shape...",true);
-  try{if(sr)sr.stop()}catch(e){}
-  var waited=0;(function wait(){if(srDone||waited>1500){finish(x,rate)}else{waited+=100;setTimeout(wait,100)}})();
-}
-function startSR(){
-  heard="";srDone=!SR;if(!SR)return;
-  try{
-    sr=new SR();sr.lang="zh-CN";sr.interimResults=false;sr.maxAlternatives=3;srDone=false;
-    sr.onresult=function(e){var alts=[];for(var i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript);heard=alts.join("|")};
-    sr.onerror=function(){};sr.onend=function(){srDone=true};sr.start();
-  }catch(e){srDone=true}
+  busy=true;$("rec").disabled=true;$("fb").textContent="Reading the shape...";
+  setTimeout(function(){finish(x,rate)},30);
 }
 function finish(x,rate){
-  var w=cur(),res=analyze(x,rate,tonesFor(w));
-  if(!res.ok){
-    drawCurve(null);
-    setSay(res.reason==="silent"?"I did not hear a voice. Get closer to the mic and say it louder.":"I heard "+res.heard+" syllable"+(res.heard===1?"":"s")+" but the word has "+tonesFor(w).length+". Say each one clearly with a tiny gap. Again.");
-    done();return;
-  }
-  show(res);
-}
-function show(res){
-  var w=cur(),n=res.want.length;attemptsHere++;store.att++;
-  var first=attemptsHere===1;if(first){store.firstN++;if(res.clean)store.first++}
+  var w=custom||cur,t=tonesOf(w.p),res=analyze(x,rate,t);
+  if(!res.ok){drawCurve(null);$("fb").className="fb";$("fb").textContent=res.reason==="silent"?"I did not hear a voice. Closer to the mic, louder.":"I heard "+res.heard+" syllable"+(res.heard===1?"":"s")+" but the word has "+t.length+". Say each one clearly.";busy=false;$("rec").disabled=false;return}
   drawCurve(res);
-  $("r1").innerHTML=res.got.map(function(g,i){return '<span class="'+(res.match[i]?"ok":"no")+'">'+(g==="long"?"long":TONE_SHORT[g])+'</span>'}).join('<span style="color:var(--dim)"> · </span>');$("r1").className="v";
-  var clean=heard.replace(/[。，！？、\s]/g,"").split("|")[0]||"";
-  var hit=heard&&heard.split("|").some(function(a){return a.replace(/[。，！？、\s]/g,"")===w.h});
-  $("r2").innerHTML=clean?'<span class="h">'+clean+'</span>':"–";$("r2").className="v "+(clean?(hit?"ok":"no"):"");
-  $("r3").innerHTML=res.range.toFixed(1)+"<small>st</small>";$("r3").className="v "+(res.range>=3.5?"ok":"no");
   $("rangeLbl").textContent=res.range<3.5?"too flat":res.range<8?"narrow":"good swing";
-  if(res.clean){streak++;wordStreak++;$("stage").classList.add("clean");if(testing&&first)testing.score++}else{streak=0;wordStreak=0}
-  if(streak>store.best)store.best=streak;
-  var finished=res.clean&&wordStreak>=2;
-  if(finished){if(custom){store.words[w.h]=2}else{store.clean[w.h]=true}}
-  save();streakUI();progressUI();
-  coach(res,clean,hit).then(function(txt){
-    setSay(txt,false);return say(txt,"en",0.95);
-  }).then(function(){return say(w.h,"zh",0.55)}).then(function(){done();if(finished)setTimeout(advance,500)});
+  var txt=feedback(res,w);$("fb").textContent=txt;$("fb").className="fb"+(res.clean?" ok":"");
+  if(res.clean){$("stage").classList.add("clean");said=true;$("sayLbl").textContent="Said";$("sayLbl").className="lbl done";unlockCheck()}
+  say(txt,"en",0.95).then(function(){return say(w.h,"zh",0.55)}).then(function(){busy=false;$("rec").disabled=false});
 }
-function done(){busy=false;$("rec").disabled=false;$("av").classList.remove("live")}
-
-/* ================= coaching ================= */
-function ruleFeedback(res,w,heardTxt,hit){
+function feedback(res,w){
   var sp=res.want,g=res.got,parts=w.p.split(" ").filter(Boolean);
-  if(res.range<2)return "Your voice barely moved. Mandarin needs a real swing, higher on the highs and lower on the lows. Exaggerate it. Again.";
-  if(res.clean){
-    if(heardTxt&&!hit)return "Tones are right. The sounds came out as "+heardTxt+" though. Shape the consonants more carefully. "+(wordStreak>=2?"Next one.":"Again.");
-    return wordStreak>=2?"Clean twice. That one is yours. Next one.":"Clean. Once more and it is yours. Again.";
-  }
+  if(res.range<2)return "Your voice barely moved. Swing higher on the highs and lower on the lows. Again.";
+  if(res.clean)return "Clean.";
   for(var i=0;i<sp.length;i++){
     if(res.match[i])continue;var want=sp[i],got=g[i],s=parts[i];
-    if(got==="long")return s+" should be light and short, about half the length. Yours ran long. Clip it. Again.";
-    if(want===1)return s+" should stay high and level like holding a note. Yours "+(got===4?"fell":got===2?"rose":"sat too low")+". Keep the pitch up and flat. Again.";
-    if(want===2)return s+" should climb from the middle to the top. Yours "+(got===1?"stayed flat":got===4?"fell":"stayed low")+". Start lower and push up at the end. Again.";
-    if(want===3)return s+" should sit low and stay there. Yours "+(got===2?"rose too early":got===4?"fell from high":"stayed up high")+". Drop your voice and keep it down. Again.";
-    if(want===4)return s+" should fall hard from the top. Yours "+(got===1?"stayed flat":got===2?"rose":"stayed low")+". Start high and drop it like a command. Again.";
-    if(want===0)return s+" is a light tap, short and quiet. Again.";
+    if(got==="long")return s+" should be light and short. Yours ran long. Clip it. Again.";
+    if(want===1)return s+" should stay high and level. Yours "+(got===4?"fell":got===2?"rose":"sat too low")+". Again.";
+    if(want===2)return s+" should climb to the top. Yours "+(got===1?"stayed flat":got===4?"fell":"stayed low")+". Push up at the end. Again.";
+    if(want===3)return s+" should sit low and stay there. Yours "+(got===2?"rose too early":got===4?"fell from high":"stayed high")+". Again.";
+    if(want===4)return s+" should fall hard from the top. Yours "+(got===1?"stayed flat":got===2?"rose":"stayed low")+". Again.";
+    if(want===0)return s+" is a light tap. Short and quiet. Again.";
   }
-  return "The tones are right but the range is narrow. Go higher on the highs and lower on the lows. Again.";
+  return "Tones right but the range is narrow. Exaggerate it. Again.";
 }
-function describe(res,w,heardTxt,hit){
-  var parts=w.p.split(" ").filter(Boolean);
-  return parts.map(function(s,i){var f=res.f[i];return s+": wanted "+TONE_NAME[res.want[i]]+", heard "+(res.got[i]==="long"?"too long":TONE_NAME[res.got[i]])+" (start "+f.start.toFixed(1)+" st, end "+f.end.toFixed(1)+" st, low point at "+Math.round(f.minPos*100)+"%, "+Math.round(f.dur*1000)+" ms)"}).join("; ")+"; pitch range "+res.range.toFixed(1)+" semitones (natives use 10 to 14)"+(heardTxt?"; speech recognizer heard \""+heardTxt+"\" which "+(hit?"matches":"does not match")+" the target":"")+".";
-}
-function coach(res,heardTxt,hit){
-  var w=cur(),rules=ruleFeedback(res,w,heardTxt,hit);
-  if(!key)return Promise.resolve(rules);
-  var prompt="You are Tone Coach, a Mandarin pronunciation tutor for an adult beginner from India who speaks Tamil, Kannada, Malayalam and Hindi. Voice: calm, warm, specific, optimistic. Short sentences. Few commas. No em dashes. No emoji. Never shame. Name what the pitch did and what it should do in physical terms (start high, fall hard, stay low). One fix per turn only. If clean, say so plainly and warmly. End with exactly 'Again.' if not finished, or 'Next one.' if the word is done. Maximum 32 words. Write pinyin with tone marks, no Chinese characters.\n\nWord: "+w.h+" ("+w.p+", "+w.e+"). Tones wanted: "+res.want.join("+")+".\nMeasured: "+describe(res,w,heardTxt,hit)+"\nClean: "+(res.clean?"yes":"no")+". Attempt "+attemptsHere+" on this word. "+(wordStreak>=2&&res.clean?"Second clean in a row, the word is done.":"")+"\nReply with the coaching line only.";
-  setSay("Thinking...",true);
-  return fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-haiku-5-5",max_tokens:120,messages:[{role:"user",content:prompt}]})})
-    .then(function(r){return r.json()}).then(function(j){var t=j&&j.content&&j.content[0]&&j.content[0].text;return t?t.trim():rules}).catch(function(){return rules});
-}
-
-/* ================= flow ================= */
-function advance(){
-  if(testing){testing.i++;if(testing.i>=testing.list.length){finishTest();return}attemptsHere=0;wordStreak=0;renderWord();return}
-  if(custom){custom=null}else{idx=(idx+1)%PAIRWORDS.length}
-  wordStreak=0;attemptsHere=0;renderWord();
-}
-function finishTest(){
-  store.test={score:testing.score,date:new Date().toISOString().slice(0,10)};save();
-  var sc=testing.score;testing=null;renderWord();progressUI();
-  setSay("Test done. "+sc+" of 10 clean on the first try. Same ten words next week.");
-}
-function goWord(w){testing=null;custom=w;wordStreak=0;attemptsHere=0;renderWord();showView("coach");window.scrollTo({top:0})}
-
-/* ================= pairs ================= */
-function renderRows(){
-  var out="";PAIRS.forEach(function(p){
-    var t=p[0],sp=spoken(t);
-    out+='<div class="row"><div class="pat">'+t[0]+'<small>+</small>'+t[1]+'</div><svg class="glyph" viewBox="0 0 40 18"><path d="'+glyphPath(sp[0],false,17,14)+'" transform="translate(0,2)"/><path d="'+glyphPath(sp[1],true,17,14)+'" transform="translate(23,2)"/></svg><div class="words">';
-    p[1].forEach(function(w){out+='<button class="wchip'+(store.clean[w[0]]?" clean":"")+'" data-h="'+w[0]+'"><span class="h">'+w[0]+'</span>'+w[1]+'</button>'});
-    out+='</div></div>';
-  });
-  $("rows").innerHTML=out;
-  $("testlist").innerHTML=TEST.map(function(h){var w=PAIRWORDS.filter(function(x){return x.h===h})[0];return '<span class="wchip'+(store.clean[h]?" clean":"")+'"><span class="h">'+h+'</span>'+w.p+'</span>'}).join("");
-}
-$("rows").addEventListener("click",function(e){
-  var b=e.target.closest(".wchip[data-h]");if(!b)return;
-  testing=null;custom=null;idx=PAIRWORDS.findIndex(function(w){return w.h===b.dataset.h});wordStreak=0;attemptsHere=0;renderWord();showView("coach");window.scrollTo({top:0});
-});
-
-/* ================= words ================= */
-var active={};
-CATS.forEach(function(c){var b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed","false");b.textContent=c[1]+" "+c[2].length;b.onclick=function(){active[c[0]]=!active[c[0]];b.setAttribute("aria-pressed",active[c[0]]?"true":"false");renderWords()};$("chips").appendChild(b)});
-function anyChip(){for(var k in active)if(active[k])return true;return false}
-function strip(p){return p.replace(/[āáǎà]/g,"a").replace(/[ēéěè]/g,"e").replace(/[īíǐì]/g,"i").replace(/[ōóǒò]/g,"o").replace(/[ūúǔù]/g,"u").replace(/[ǖǘǚǜ]/g,"v")}
-function renderWords(){
-  var q=($("q").value||"").trim().toLowerCase(),f=$("filt").value,out="",last="";
-  ALL.forEach(function(w){
-    if(anyChip()&&!active[w.c])return;
-    if(q&&(w.h+" "+w.p+" "+strip(w.p)+" "+w.e).toLowerCase().indexOf(q)<0)return;
-    var s=store.words[w.h]||0;
-    if(f==="new"&&s)return;if(f==="1"&&s!==1)return;if(f==="2"&&s!==2)return;
-    if(w.cn!==last){out+='<div class="catlabel lbl">'+w.cn+'</div>';last=w.cn}
-    out+='<div class="w" data-s="'+s+'" data-h="'+w.h+'"><span class="han">'+w.h+'</span><div class="py">'+w.p+'</div><div class="en">'+w.e+'</div><div class="acts"><button data-say="1">Say</button><button data-go="1" class="go">Coach</button><button data-mark="1" class="'+(s===1?"on":"")+'">Shaky</button><button data-mark="2" class="'+(s===2?"on":"")+'">Solid</button></div></div>';
-  });
-  $("grid").innerHTML=out||'<p style="color:var(--mist)">Nothing matches. Clear the search or the chips.</p>';
-}
-$("q").addEventListener("input",renderWords);$("filt").addEventListener("change",renderWords);
-$("grid").addEventListener("click",function(e){
-  var b=e.target.closest("button");if(!b)return;var card=b.closest(".w"),h=card.dataset.h,w=ALL.filter(function(x){return x.h===h})[0];
-  if(b.dataset.say){try{speechSynthesis.cancel()}catch(x){}say(w.h,"zh",0.7);return}
-  if(b.dataset.go){goWord(w);return}
-  if(b.dataset.mark){var v=+b.dataset.mark,s=store.words[h]===v?0:v;if(s)store.words[h]=s;else delete store.words[h];save();card.dataset.s=s;card.querySelectorAll("[data-mark]").forEach(function(x){x.className=(+x.dataset.mark===s)?"on":""});progressUI(false)}
-});
-
-/* ================= learn ================= */
-var TONES=[["First","mā 妈","Hold it high and flat like holding a note. Beginners let it drop.","M0,6 L70,6"],["Second","má 麻","Mid to high, like an English question. Push at the end.","M0,24 L70,4"],["Third","mǎ 马","Just low. It only dips and rises when the word ends.","M0,16 C20,28 45,28 70,22"],["Fourth","mà 骂","High to low, fast. Like a command.","M0,4 L70,26"],["Neutral","ma 吗","Short, light, quiet. Half the length of the one before it.","M28,16 L44,16"]];
-$("tonecards").innerHTML=TONES.map(function(t){return '<div class="tcard"><div class="lbl">'+t[0]+'</div><svg viewBox="0 0 70 30"><path d="'+t[3]+'"/></svg><div class="ex">'+t[1]+'</div><p>'+t[2]+'</p></div>'}).join("");
-var LEARN=[
-["21<small>% in 2 weeks</small>","Ear first, mouth same day","Eight short sessions raised tone identification 21% and it held for six months. But listening alone made speaking worse, and speaking alone made listening worse. Every session: hear it, say it, hear yourself."],
-["20<small>pairs</small>","Drill pairs, not single tones","Tones change next to each other. Single syllable practice is mostly wasted. The Pairs tab is the whole first week.",["Clean twice in a row before moving on","Third tone before anything is just low","3 + 3 is said as 2 + 3","一 and 不 flip to rising before a fourth tone"]],
-["1.5<small>x</small>","Use more of your voice","Natives swing about one and a half times wider than English speakers. Indian languages are flatter still. It will feel like overacting. It is not."],
-["60<small>% in noise</small>","Why people react","Flat pitch Mandarin drops to about 60% intelligibility in noise. A wrong tone is a different word, so listeners have to work to decode you. Fix tones and the friction disappears."],
-["20<small>min</small>","Shadowing, done right","Pick a 30 to 90 second clip with a clean transcript. Listen once. Read it. Shadow with the text four times. Shadow without it four times. Record the last pass and compare.",["Lag under one second or it is just repetition","Same clip all week, new clip weekly","Three or four sessions a week","Never skip the recording"]],
-["1<small>fix</small>","Recasts beat correction","A teacher saying the word back correctly helped more than explaining the mistake. Ask her to just say it back. Do not ask her to explain."],
-["10<small>words</small>","Test weekly, score separately","Keep a fixed list of ten words. Score listening and speaking separately every week. The Progress tab runs it."],
-["1.5<small>%</small>","Nobody is tone deaf","True tone deafness is about 1.5% of people, and even they learned tones in training. The first three passes are calibration, not failure."]
-];
-$("learn").innerHTML=LEARN.map(function(c){return '<div class="glass"><div class="num">'+c[0]+'</div><h3>'+c[1]+'</h3><p>'+c[2]+'</p>'+(c[3]?'<ol>'+c[3].map(function(l){return '<li>'+l+'</li>'}).join("")+'</ol>':'')+'</div>'}).join("")+'<div class="src" style="grid-column:1/-1">Sources: <a href="https://www.saymei.app/guides/how-to-learn-chinese-tones" target="_blank" rel="noopener">tone training studies summary</a> · <a href="https://migaku.com/blog/language-fun/shadowing-a-practitioners-guide-to-the-technique-in-2026" target="_blank" rel="noopener">shadowing protocol</a> · <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2018.01982/pdf" target="_blank" rel="noopener">tone production training study</a></div>';
-
-/* ================= progress ================= */
-function progressUI(rows){
-  var n=Object.keys(store.clean).length,T=PAIRWORDS.length,solid=0;for(var k in store.words)if(store.words[k]===2)solid++;
-  $("heroN").textContent=n;$("heroT").textContent=T;$("dot").style.left=(n/T*100)+"%";
-  $("bAtt").textContent=store.att;
-  $("bFirst").innerHTML=(store.firstN?Math.round(store.first/store.firstN*100):0)+"<small>%</small>";
-  $("bSolid").innerHTML=solid+"<small>/ "+ALL.length+"</small>";
-  $("bTest").innerHTML=(store.test?store.test.score:"–")+"<small>/10</small>";
-  $("testDate").textContent=store.test?"last run "+store.test.date:"not run yet";
-  if(rows!==false)renderRows();
-}
-
-/* ================= wiring ================= */
-$("hear").onclick=function(){sayWord()};
 $("rec").onclick=function(){if(recording)stopRec();else startRec()};
-$("next").onclick=function(){try{speechSynthesis.cancel()}catch(e){}if(recording)stopRec();advance()};
-$("startTest").onclick=function(){testing={list:TEST.slice(),i:0,score:0};custom=null;attemptsHere=0;wordStreak=0;renderWord();showView("coach");setSay("Ten words. One try each counts. Hear it, then Record.");window.scrollTo({top:0})};
-$("saveKey").onclick=function(){key=$("key").value.trim();try{localStorage.setItem("tonecoach_key",key)}catch(e){}this.textContent=key?"Saved":"Cleared";var self=this;setTimeout(function(){self.textContent="Save"},1500)};
+$("hear").onclick=function(){var w=custom||cur;if(w)hear(w)};
+
+/* verdict */
+$("gotit").onclick=function(){
+  var w=custom||cur;if(!w)return;
+  store.cards[w.h]={lvl:0,due:addDays(1),on:today()};
+  if(!custom&&store.today.done.indexOf(w.h)<0)store.today.done.push(w.h);
+  touch();save();progressUI();
+  pickNext();renderCard(true);
+};
+$("notyet").onclick=function(){
+  var w=custom||cur;if(!w)return;
+  if(!custom){var l=store.today.list;var i=l.indexOf(w.h);if(i>-1){l.splice(i,1);l.push(w.h)}save()}
+  touch();pickNext();renderCard(true);
+};
+
+/* search */
+function strip(p){return p.replace(/[āáǎà]/g,"a").replace(/[ēéěè]/g,"e").replace(/[īíǐì]/g,"i").replace(/[ōóǒò]/g,"o").replace(/[ūúǔù]/g,"u").replace(/[ǖǘǚǜ]/g,"v")}
+$("q").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();if(!q){$("hits").hidden=true;return}
+  var hits=ALL.filter(function(w){return (w.h+" "+w.p+" "+strip(w.p)+" "+w.e).toLowerCase().indexOf(q)>-1}).slice(0,8);
+  $("hits").innerHTML=hits.map(function(w){return '<button data-h="'+w.h+'"><span class="h">'+w.h+'</span><span class="p">'+w.p+'</span><span class="e">'+w.e+'</span></button>'}).join("")||'<button disabled><span class="e">No match</span></button>';
+  $("hits").hidden=false;
+});
+$("hits").addEventListener("click",function(e){var b=e.target.closest("button[data-h]");if(!b)return;custom=byH[b.dataset.h];$("q").value="";$("hits").hidden=true;renderCard(true)});
+document.addEventListener("click",function(e){if(!e.target.closest(".search"))$("hits").hidden=true});
+
+/* ---------- drill ---------- */
+var dcur=null,shown=false,dqueue=[];
+function dueList(){
+  var t=today(),out=[];
+  for(var h in store.cards){if(store.cards[h].due<=t){var w=byH[h]||PATS.filter(function(p){return p.h===h})[0];if(w)out.push(w)}}
+  return out;
+}
+function buildQueue(){
+  dqueue=dueList();
+  if($("patToggle").getAttribute("aria-pressed")==="true"){PATS.forEach(function(p){if(!store.cards[p.h]||store.cards[p.h].due<=today()){if(dqueue.indexOf(p)<0)dqueue.push(p)}})}
+  dqueue.sort(function(){return Math.random()-0.5});
+}
+function nextDrill(){
+  if(!dqueue.length)buildQueue();
+  dcur=dqueue.shift()||null;shown=false;renderDrill();
+}
+function renderDrill(){
+  var f=$("flash"),b=$("drillbtns");
+  if(!dcur){f.innerHTML='<div class="bigen">Nothing due.</div><div class="en">Learn twenty new words, or come back tomorrow.</div>';b.innerHTML="";return}
+  var d=$("dir").value,cnt='<span class="lbl cnt">'+(dqueue.length+1)+' left</span>';
+  if(!shown){
+    var front=d==="h"?'<div class="big'+(dcur.h.length>2?" long":"")+'">'+dcur.h+"</div>":d==="e"?'<div class="bigen">'+dcur.e+"</div>":'<div class="py" style="font-size:30px">'+dcur.p+"</div>";
+    f.innerHTML=cnt+front;
+    b.innerHTML='<button class="pill" id="reveal">Show</button>';
+    $("reveal").onclick=function(){shown=true;renderDrill();try{speechSynthesis.cancel()}catch(e){}say(dcur.h,"zh",0.7)};
+  }else{
+    f.innerHTML=cnt+'<div class="big'+(dcur.h.length>2?" long":"")+'">'+dcur.h+'</div><div class="py">'+dcur.p+'</div><div class="en">'+dcur.e+"</div>";
+    b.innerHTML='<button class="ghost" id="miss">Missed</button><button class="ghost" id="again2">Hear</button><button class="pill mint" id="got">Got it</button>';
+    $("miss").onclick=function(){grade(false)};$("got").onclick=function(){grade(true)};$("again2").onclick=function(){say(dcur.h,"zh",0.7)};
+  }
+}
+function grade(ok){
+  var c=store.cards[dcur.h]||{lvl:0,due:today(),on:today()};
+  if(ok){c.lvl=Math.min(c.lvl+1,INTERVALS.length-1);c.due=addDays(INTERVALS[c.lvl])}else{c.lvl=0;c.due=today();dqueue.push(dcur)}
+  store.cards[dcur.h]=c;touch();save();progressUI();nextDrill();
+}
+$("dir").addEventListener("change",function(){shown=false;renderDrill()});
+$("patToggle").onclick=function(){this.setAttribute("aria-pressed",this.getAttribute("aria-pressed")==="true"?"false":"true");dqueue=[];nextDrill()};
+document.addEventListener("keydown",function(e){
+  if(document.activeElement.tagName==="INPUT")return;
+  if(!$("v-drill").hidden){
+    if(e.code==="Space"){e.preventDefault();if(!shown&&dcur){$("reveal").click()}}
+    if(shown&&e.key==="1")$("miss").click();if(shown&&e.key==="2")$("got").click();
+  }else if(!$("v-learn").hidden&&e.code==="Space"){e.preventDefault();$("rec").click()}
+});
+
+/* ---------- progress ---------- */
+var TONES=[["First","mā 妈","High and flat. Hold the note.","M0,5 L60,5"],["Second","má 麻","Mid to high, like a question.","M0,20 L60,4"],["Third","mǎ 马","Just low.","M0,14 C18,24 40,24 60,19"],["Fourth","mà 骂","High to low, fast.","M0,4 L60,22"],["Neutral","ma 吗","Short and light.","M24,13 L38,13"]];
+$("tonecards").innerHTML=TONES.map(function(t){return '<div class="tcard"><div class="lbl">'+t[0]+'</div><svg viewBox="0 0 60 26"><path d="'+t[3]+'"/></svg><div class="ex">'+t[1]+'</div><p>'+t[2]+'</p></div>'}).join("");
+function progressUI(){
+  var n=0;for(var h in store.cards)if(byH[h])n++;
+  var due=dueList().length,s=streak();
+  $("heroN").textContent=n;$("dot").style.left=(n/ALL.length*100)+"%";
+  $("bDue").textContent=due;$("bStreak").innerHTML=s+"<small>days</small>";$("bPer").textContent=PER_DAY;
+  $("streakTxt").textContent=s+" day streak";
+  $("dueN").textContent=due;$("dueN").hidden=!due;
+}
 var armed=false;
 $("reset").onclick=function(){
   if(!armed){armed=true;this.textContent="Tap again to wipe";var self=this;setTimeout(function(){armed=false;self.textContent="Reset everything"},3000);return}
-  store={clean:{},att:0,first:0,firstN:0,best:0,words:{}};save();streak=0;streakUI();progressUI();renderWords();this.textContent="Reset everything";armed=false;
+  store={cards:{},days:{},today:null};save();buildToday();pickNext();renderCard(false);progressUI();this.textContent="Reset everything";armed=false;
 };
-var tabs=document.querySelectorAll(".dock button");
-function showView(v){tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")});["coach","pairs","words","learn","progress"].forEach(function(k){$("v-"+k).hidden=(k!==v)});if(v==="words"&&!$("grid").innerHTML)renderWords()}
-tabs.forEach(function(b){b.onclick=function(){showView(b.dataset.v)}});
-document.addEventListener("keydown",function(e){if(e.code==="Space"&&!$("v-coach").hidden&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("rec").click()}});
-if(!SR)$("hint").textContent="Tap Hear, copy the shape, tap Record and say it. (Sound check needs Chrome or Safari.)";
 
-renderWord();streakUI();progressUI();
+/* tabs */
+var tabs=document.querySelectorAll(".dock button");
+function showView(v){tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")});["learn","drill","progress"].forEach(function(k){$("v-"+k).hidden=(k!==v)});if(v==="drill"){dqueue=[];nextDrill()}if(v==="learn")drawPad()}
+tabs.forEach(function(b){b.onclick=function(){showView(b.dataset.v)}});
+
+pickNext();renderCard(false);progressUI();
 })();
 </script>
 </body>
