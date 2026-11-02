@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600&family=Onest:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-/* Layout: one column, max 1180, Twin Sci-Fi night base, violet signal, mint for calm success only */
+/* Layout: one column, max 1180, Twin Sci-Fi night base, violet signal, mint for calm success only, glass product cards over a soft violet field */
 :root{
   --bg:#050708;--bg2:#0B0F10;--stage:#14181A;
   --ink:#E9EDEE;--haze:#B7C0C3;--mist:#8A9497;--dim:#5D6669;
@@ -22,6 +22,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .mono{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
 section{padding-block:clamp(72px,10vw,150px)}
@@ -29,14 +30,14 @@ h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.02em;line-h
 h2{font-size:clamp(36px,5vw,72px)}
 .two{color:var(--mist);font-weight:400}.two b{color:var(--ink);font-weight:600}
 .grain{position:relative}
-.grain::after{content:"";position:absolute;inset:0;opacity:.08;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.grain::after{content:"";position:absolute;inset:0;opacity:.09;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 
 /* nav */
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;padding-block:14px;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 60%,rgba(5,7,8,0) 100%)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .navrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .logo{width:40px;height:40px;border-radius:14px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:14px}
-.pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:14px;color:var(--haze);transition:all .4s var(--ease)}
+.pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:14px;color:var(--haze);transition:all .4s var(--ease);white-space:nowrap}
 .pill:hover{color:var(--ink);border-color:rgba(233,237,238,.3)}
 .pill.solid{background:var(--play);color:var(--on-play);border-color:transparent;font-weight:500}
 .pill.outline{border-color:rgba(233,237,238,.35);color:var(--ink)}
@@ -53,39 +54,73 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .cred{margin-top:18px;color:var(--mist);font-size:15px}
 .ctas{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
 .pill.big{height:52px;padding:0 24px;font-size:15px}
-.brainbox{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;margin-inline:auto;border-radius:32px;overflow:hidden;background:radial-gradient(60% 60% at 50% 45%,rgba(196,181,255,.14),transparent 70%),var(--bg2)}
-.brainbox canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
-.brainbox .fade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,var(--bg2) 0,transparent 18%,transparent 70%,var(--bg2) 100%)}
-.metric{position:absolute;left:18px;bottom:18px;padding:14px 16px;border-radius:20px;background:rgba(5,7,8,.55);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.metric .num{font-family:var(--body);font-weight:300;font-size:56px;letter-spacing:-2px;line-height:1}
-.metric .num small{font-size:14px;letter-spacing:0;color:var(--mist);margin-left:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-size:11px;background:rgba(196,181,255,.12);color:var(--violet);border:1px solid rgba(196,181,255,.25);font-family:var(--mono);letter-spacing:.06em}
+
+/* hero stage: glass product cards over a soft violet field */
+.stage{position:relative;aspect-ratio:1/1.04;max-width:560px;width:100%;margin-inline:auto;border-radius:32px;overflow:hidden;background:var(--bg2)}
+.stage .field{position:absolute;inset:0;background:radial-gradient(55% 45% at 58% 42%,rgba(196,181,255,.8),rgba(76,63,168,.5) 42%,transparent 74%),radial-gradient(40% 30% at 30% 80%,rgba(125,227,166,.12),transparent 70%);filter:blur(26px)}
+.stage .sil{position:absolute;left:50%;top:62%;width:62%;height:70%;transform:translate(-50%,-30%);border-radius:50% 50% 40% 40%;background:radial-gradient(60% 60% at 50% 35%,rgba(5,7,8,.9),rgba(5,7,8,.55) 60%,transparent 100%);filter:blur(18px)}
+.stage .sil::before{content:"";position:absolute;left:50%;top:-22%;width:44%;height:44%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(5,7,8,.95),rgba(5,7,8,.6) 60%,transparent 100%)}
+.stage .fade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,15,16,.6) 0,transparent 20%,transparent 75%,var(--bg2) 100%)}
+.gc{position:absolute;border-radius:22px;padding:16px 18px;background:rgba(14,16,18,.55);border:1px solid rgba(233,237,238,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 60px rgba(0,0,0,.35);will-change:transform;transition:transform .6s var(--ease)}
+.gc.main{left:8%;top:14%;width:62%;transform:rotate(-3deg)}
+.gc.draft{right:6%;bottom:14%;width:58%;transform:rotate(2.5deg)}
+.gc.tiny{left:10%;bottom:9%;padding:10px 14px;transform:rotate(-1deg)}
+.gc .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.gc .num{font-weight:300;font-size:60px;letter-spacing:-2.5px;line-height:1;margin:10px 0 4px}
+.gc .num small{font-size:13px;letter-spacing:0;color:var(--mist);margin-left:6px}
+.bars{display:flex;gap:4px;align-items:flex-end;height:28px;margin-top:10px}
+.bars i{display:block;width:2px;background:rgba(233,237,238,.55);border-radius:1px}
+.bars i.on{background:#E9EDEE}
+.bars i.v{background:var(--violet);box-shadow:0 0 8px rgba(196,181,255,.8)}
+.gc .label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+.gc p{font-size:13px;line-height:1.45;color:var(--haze);margin-top:8px}
+.gc .approve{display:flex;gap:6px;margin-top:10px}
+.gc .pill{height:30px;padding:0 12px;font-size:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-size:11px;background:rgba(196,181,255,.12);color:var(--violet);border:1px solid rgba(196,181,255,.25);font-family:var(--mono);letter-spacing:.06em;white-space:nowrap}
 .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .chip.mint{background:rgba(125,227,166,.12);color:var(--mint);border-color:rgba(125,227,166,.25)}
 .chip.ember{background:rgba(232,146,110,.12);color:var(--ember);border-color:rgba(232,146,110,.25)}
 .chip.grey{background:var(--chip);color:var(--haze);border-color:var(--chip-line)}
-.hint{position:absolute;top:16px;right:18px}
+.ghost{position:absolute;left:-2%;bottom:-6%;font-family:var(--display);font-weight:600;font-size:clamp(90px,22vw,170px);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(233,237,238,.1);pointer-events:none;white-space:nowrap}
 
 /* worked */
 .worked{padding-block:0 clamp(60px,8vw,120px)}
 .logos{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .logos .pill{height:46px;color:var(--mist);font-family:var(--mono);font-size:12px;letter-spacing:.08em}
 
+/* moment */
+.moment{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+@media(max-width:900px){.moment{grid-template-columns:1fr}}
+.moment p{color:var(--haze);font-size:clamp(17px,1.6vw,20px);max-width:44ch;margin-top:18px}
+.moment p+p{margin-top:12px}
+.gap{border-radius:28px;background:var(--bg2);border:1px solid var(--glass-line);padding:26px;position:relative;overflow:hidden}
+.gap .track{position:relative;height:2px;background:rgba(233,237,238,.14);margin:34px 0 14px}
+.gap .track i{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%)}
+.gap .track .a{left:0;background:var(--violet);box-shadow:0 0 12px rgba(196,181,255,.9)}
+.gap .track .b{right:0;transform:translate(50%,-50%);background:transparent;border:1px solid var(--mist)}
+.gap .track .mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:4px 10px;border-radius:999px;background:var(--stage);border:1px solid var(--glass-line);font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--mist);white-space:nowrap}
+.gap .ends{display:flex;justify-content:space-between;gap:12px}
+.gap .ends div{font-size:15px}.gap .ends small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-top:4px}
+.gap .ends div:last-child{text-align:right}
+.gap .line{margin-top:26px;padding-top:18px;border-top:1px solid var(--glass-line);color:var(--haze);font-size:15px}
+
 /* showcase */
 .head{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+.head p{color:var(--haze);max-width:52ch;margin-top:14px;font-size:clamp(16px,1.5vw,19px)}
 .cards{display:grid;gap:14px}
 .card{border-radius:32px;background:var(--bg2);border:1px solid var(--glass-line);padding:clamp(22px,3vw,36px);position:relative;overflow:hidden}
 .card.wide{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
 @media(max-width:860px){.card.wide{grid-template-columns:1fr}}
 .tag{position:absolute;top:18px;right:18px}
-.card h3{font-size:clamp(26px,3vw,40px);margin:10px 0 10px}
+.card h3{font-size:clamp(26px,3vw,40px);margin:10px 0 10px;padding-right:0}
+@media(min-width:861px){.card h3{padding-right:0}}
+.card>div>.mono{padding-right:150px}
 .card p{color:var(--haze);max-width:46ch}
 .pbl{display:grid;gap:8px;margin-top:18px;font-size:14px;color:var(--mist)}
 .pbl span b{color:var(--ink);font-weight:500;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-right:10px}
 .nums{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px}
 .nums div{font-weight:300;font-size:28px;letter-spacing:-1px}.nums div small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-top:2px}
 .links{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-/* demo panel */
 .demo{border-radius:24px;background:var(--stage);border:1px solid var(--glass-line);padding:18px;position:relative;overflow:hidden}
 .demo .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
 .demo label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);display:block;margin:14px 0 6px}
@@ -94,16 +129,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .state .big{font-weight:300;font-size:44px;letter-spacing:-2px;line-height:1}
 .state .big small{font-size:13px;letter-spacing:0;color:var(--mist);margin-left:6px}
 .msg{margin-top:14px;padding:14px;border-radius:16px;background:var(--glass);border:1px solid var(--glass-line);font-size:14px;line-height:1.5;color:var(--haze);min-height:88px}
-.msg .from{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:6px;display:flex;justify-content:space-between}
-.approve{display:flex;gap:8px;margin-top:10px}
+.msg .from{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.approve{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .pill.sm{height:34px;padding:0 14px;font-size:13px}
-/* gauge */
 .gauge{display:grid;place-items:center;padding:10px 0}
 .gauge svg{width:min(100%,360px);height:auto;display:block}
 .flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:8px}
 .flow .pill{height:34px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:0 14px}
 .flow .arr{color:var(--dim)}
-/* copilot */
 .plan{display:grid;gap:8px;margin-top:10px}
 .plan .line{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-line);font-size:14px;color:var(--haze)}
 .plan .line i{width:8px;height:8px;border-radius:50%;background:var(--violet);margin-top:7px;flex:none}
@@ -131,7 +164,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .step svg{width:100%;height:64px;display:block}
 
 /* timeline */
-.tl{display:grid;gap:10px}
+.tl{display:grid;gap:0}
 .trow{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--glass-line)}
 .trow:last-child{border-bottom:1px solid var(--glass-line)}
 @media(max-width:640px){.trow{grid-template-columns:1fr;gap:6px}}
@@ -141,7 +174,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .trow .what{color:var(--haze);font-size:15px;max-width:70ch}
 
 /* footer */
-.foot{padding-block:clamp(80px,12vw,180px) 60px;text-align:left}
+.foot{padding-block:clamp(80px,12vw,180px) 60px}
 .foot h2{font-size:clamp(48px,8vw,120px);display:flex;align-items:center;gap:.2em;flex-wrap:wrap}
 .oval{display:inline-block;width:1.3em;height:.78em;border-radius:999px;background:radial-gradient(60% 70% at 50% 40%,#2A2440,#0E0D16);border:1px solid var(--glass-line);position:relative;overflow:hidden;vertical-align:middle}
 .oval::after{content:"";position:absolute;left:50%;top:38%;width:38%;height:38%;border-radius:50%;background:radial-gradient(circle,#C4B5FF,#6B5CC9 70%,transparent);transform:translateX(-50%);filter:blur(4px);opacity:.9}
@@ -153,16 +186,17 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .rv{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .rv{opacity:0;transform:translateY(28px)}
 .js .rv.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.gc{transition:none}}
 :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:999px}
 </style></head><body>
 
 <nav class="wrap"><div class="navrow">
   <a class="logo" href="#top" aria-label="Home">DS</a>
   <div class="navlinks">
+    <a class="pill" href="#moment">The moment</a>
     <a class="pill" href="#work">Work</a>
     <a class="pill" href="#how">How I deploy</a>
-    <a class="pill" href="#exp">Experience</a>
+    <a class="pill" href="#exp">Road here</a>
   </div>
   <div class="spacer"></div>
   <a class="pill outline" href="#talk">Let's talk</a>
@@ -176,19 +210,27 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <p class="sub two">Biotech engineer turned <b>AI deployment person.</b> I find the real problem, ship the first draft, and stay until it works.</p>
       <p class="cred">MS Management, Johns Hopkins Carey · Baltimore · Graduating May 2027</p>
       <div class="ctas">
-        <a class="pill solid big" href="#work">See Retention Radar</a>
+        <a class="pill solid big" href="#work">See what I built</a>
         <a class="pill big" href="#talk">Email me</a>
       </div>
     </div>
-    <div class="brainbox grain" id="brainbox">
-      <canvas id="brain" aria-label="Particle brain, decorative"></canvas>
-      <div class="fade"></div>
-      <div class="hint mono">drag to rotate</div>
-      <div class="metric">
-        <div class="mono">brain age model · r²</div>
-        <div class="num" data-count="0.87" data-dec="2">0.87<small>on 118 subjects</small></div>
-        <span class="chip">Ridge · LOOCV</span>
+    <div class="stage grain" id="stage">
+      <div class="field"></div>
+      <div class="sil" aria-hidden="true"></div>
+      <div class="ghost" aria-hidden="true">RADAR</div>
+      <div class="gc main" data-depth="0.6">
+        <div class="row"><span class="label">Member 0417 · 30 days</span><span class="chip ember">Needs care</span></div>
+        <div class="num">0.68<small>churn risk</small></div>
+        <div class="label">portal logins · last 12 weeks</div>
+        <div class="bars"><i style="height:22px"></i><i style="height:26px"></i><i style="height:18px"></i><i style="height:24px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:8px"></i><i style="height:6px"></i><i style="height:5px"></i><i class="v" style="height:4px"></i></div>
       </div>
+      <div class="gc draft" data-depth="1">
+        <div class="row"><span class="label">draft check-in</span><span class="chip grey" style="height:20px;font-size:10px">coach approves</span></div>
+        <p>Hey Maya, it's been 34 days since we talked and I noticed you haven't been in the portal much. No pressure. Can I grab 10 minutes this week?</p>
+        <div class="approve"><span class="pill solid">Approve</span><span class="pill">Edit</span></div>
+      </div>
+      <div class="gc tiny" data-depth="0.3"><span class="label">5 signals · 38 tests · FastAPI</span></div>
+      <div class="fade"></div>
     </div>
   </div>
 </section>
@@ -200,14 +242,31 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </div>
 </section>
 
+<section class="wrap" id="moment">
+  <div class="moment">
+    <div class="rv">
+      <div class="mono">The moment</div>
+      <h2 class="two" style="margin-top:14px">The model worked. <b>Then nothing happened.</b></h2>
+      <p>At Christian Medical College I rebuilt an MRI pipeline that predicts Alzheimer's years before the first symptom. It worked.</p>
+      <p>Then it sat there. The research lived in one building and the clinic in another. Nobody who could act on it would ever see it.</p>
+      <p>That gap is the thing I've been working on since. Not better models. Getting the model into the hands of the person who has to decide.</p>
+    </div>
+    <div class="gap rv">
+      <div class="mono">The gap I work in</div>
+      <div class="track"><i class="a"></i><span class="mid">years</span><i class="b"></i></div>
+      <div class="ends"><div>First signal<small>years early · the lab</small></div><div>Treatment<small>too late · today's system</small></div></div>
+      <div class="line">Every project below closes a piece of this gap.</div>
+    </div>
+  </div>
+</section>
+
 <section class="wrap" id="work">
   <div class="head rv">
-    <h2 class="two">Built, <b>then deployed.</b></h2>
-    <div class="mono">Problem · What I built · What changed</div>
+    <div><h2 class="two">So I stopped chasing better models <b>and started chasing deployment.</b></h2><p>Three things I built. Each one starts with a problem a real clinic has, and ends with a person who can act.</p></div>
+    <div class="mono">Problem · Built · Changed</div>
   </div>
   <div class="cards">
 
-    <!-- Retention Radar -->
     <article class="card wide rv">
       <div>
         <span class="chip mint tag">Shipped · Oct 2026</span>
@@ -223,7 +282,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/retention-radar" target="_blank" rel="noopener">Repo →</a></div>
       </div>
       <div class="demo" id="rr">
-        <div class="row"><span class="mono">live demo · synthetic data</span><span class="chip grey" id="rr-id">Member 0417</span></div>
+        <div class="row"><span class="mono">live demo · synthetic data</span><span class="chip grey">Member 0417</span></div>
         <label for="rr-logins">Portal logins, last 30 days</label>
         <input type="range" id="rr-logins" min="0" max="20" value="9">
         <label for="rr-nps">Last NPS</label>
@@ -239,13 +298,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       </div>
     </article>
 
-    <!-- Brain age -->
     <article class="card wide rv">
       <div class="gauge">
         <svg viewBox="0 0 360 220" role="img" aria-label="Gauge showing r squared 0.87">
           <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#C4B5FF" stop-opacity=".2"/><stop offset="1" stop-color="#C4B5FF"/></linearGradient></defs>
           <path d="M40 190 A140 140 0 0 1 320 190" fill="none" stroke="rgba(233,237,238,.12)" stroke-width="2"/>
-          <path id="arc" d="M40 190 A140 140 0 0 1 320 190" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-dasharray="440" stroke-dashoffset="57"/>
+          <path d="M40 190 A140 140 0 0 1 320 190" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-dasharray="440" stroke-dashoffset="57"/>
           <g id="ticks" stroke="rgba(233,237,238,.25)"></g>
           <circle id="needle" cx="297" cy="100" r="6" fill="#C4B5FF" style="filter:drop-shadow(0 0 10px rgba(196,181,255,.8))"/>
           <text x="180" y="150" text-anchor="middle" fill="#E9EDEE" font-family="Onest,system-ui" font-weight="300" font-size="64" letter-spacing="-2">0.87</text>
@@ -269,7 +327,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       </div>
     </article>
 
-    <!-- Protocol Copilot -->
     <article class="card wide rv">
       <div>
         <span class="chip ember tag">In progress</span>
@@ -300,7 +357,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </section>
 
 <section class="wrap">
-  <div class="head rv"><h2 class="two">Numbers <b>I can defend.</b></h2></div>
+  <div class="head rv"><div><h2 class="two">Numbers <b>I can defend.</b></h2><p>Every one of these is on my CV and in a repo. Ask me how any of them was measured.</p></div></div>
   <div class="bento rv">
     <div class="tile glow"><div class="v" data-count="0.87" data-dec="2">0.87<small>r²</small></div><div class="l">Brain age model on 118 subjects</div></div>
     <div class="tile"><div class="v" data-count="20">20<small>%</small></div><div class="l">Lead conversion lift after finding 5 drop-off drivers</div></div>
@@ -312,11 +369,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </section>
 
 <section class="wrap" id="how">
-  <div class="head rv"><h2 class="two">How I <b>deploy.</b></h2><div class="mono">Same three moves every time</div></div>
+  <div class="head rv"><div><h2 class="two">How I <b>deploy.</b></h2></div><div class="mono">Same three moves every time</div></div>
   <div class="steps rv">
     <div class="step">
       <svg viewBox="0 0 300 64"><circle cx="30" cy="32" r="6" fill="#C4B5FF"/><path d="M36 32 H270" stroke="rgba(233,237,238,.2)" stroke-width="2"/><path d="M36 32 Q150 2 270 32" fill="none" stroke="rgba(196,181,255,.6)" stroke-width="1.5"/></svg>
-      <div class="n">01</div><h3>Find the real problem.</h3><p>Sit with the people doing the work. Pull the data they already have. Write the question down before anything is built.</p>
+      <div class="n">01</div><h3>Find the real problem.</h3><p>Sit with the people doing the work. Pull the data they already have. Write the question down before anything gets built.</p>
     </div>
     <div class="step">
       <svg viewBox="0 0 300 64"><g fill="rgba(233,237,238,.55)"><rect x="20" y="36" width="3" height="16"/><rect x="40" y="28" width="3" height="24"/><rect x="60" y="40" width="3" height="12"/><rect x="80" y="22" width="3" height="30"/><rect x="100" y="30" width="3" height="22"/><rect x="120" y="14" width="3" height="38"/><rect x="140" y="26" width="3" height="26"/><rect x="160" y="34" width="3" height="18"/><rect x="180" y="18" width="3" height="34"/><rect x="200" y="30" width="3" height="22"/><rect x="220" y="12" width="3" height="40"/><rect x="240" y="24" width="3" height="28"/></g><rect x="260" y="8" width="3" height="44" fill="#E9EDEE"/></svg>
@@ -324,19 +381,19 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
     <div class="step">
       <svg viewBox="0 0 300 64"><path d="M20 32 H280" stroke="rgba(233,237,238,.2)" stroke-width="2"/><g stroke="rgba(233,237,238,.3)"><path d="M60 26v12M100 26v12M140 26v12M180 26v12M220 26v12M260 26v12"/></g><circle cx="200" cy="32" r="6" fill="#7DE3A6" style="filter:drop-shadow(0 0 8px rgba(125,227,166,.8))"/></svg>
-      <div class="n">03</div><h3>Measure. Stay until it works.</h3><p>Pre and post, with the number the team actually cares about. Train the people. Fix what they hate.</p>
+      <div class="n">03</div><h3>Measure. Stay until it works.</h3><p>Before and after, with the number the team actually cares about. Train the people. Fix what they hate.</p>
     </div>
   </div>
 </section>
 
 <section class="wrap" id="exp">
-  <div class="head rv"><h2 class="two">From the lab <b>to deployment.</b></h2></div>
+  <div class="head rv"><div><h2 class="two">The road <b>here.</b></h2><p>Every stop taught me one thing about getting data to the person who has to act.</p></div></div>
   <div class="tl rv">
     <div class="trow"><div class="when">Sep 2026 · now</div><div><div class="org">Johns Hopkins Carey Business School</div><div class="role">Pro bono consultant · WELI · Venture strategy at the Pava Center</div><div class="what">Sized what 70+ hospitals would pay to fund 250 physicians. Built the cost model and the advisory board structure. Mapped 99,073 US public schools for a K-12 AI literacy venture.</div></div></div>
     <div class="trow"><div class="when">Jan to Jul 2026</div><div><div class="org">Biopeak</div><div class="role">Strategy and Operations Intern · longevity clinic, Bengaluru</div><div class="what">Built the brain age model. Found 5 drop-off drivers across 800+ client interactions and gave the founders a win-back plan. Lead conversion up 20%.</div></div></div>
     <div class="trow"><div class="when">Jul to Dec 2025</div><div><div class="org">Biocon Biologics</div><div class="role">Data Analytics Intern</div><div class="what">One Power BI view across R&amp;D, Manufacturing, Quality and Validation. Found where production cycles stalled and proposed a new development cycle.</div></div></div>
     <div class="trow"><div class="when">Oct 2024 to May 2025</div><div><div class="org">BaldMann · Xibotix</div><div class="role">Founding team · Research intern</div><div class="what">Trained EEG models to read emotion for a mental health headband. Worked on BCI signal processing for a 3D printed neuro rehab device.</div></div></div>
-    <div class="trow"><div class="when">May to Jun 2024</div><div><div class="org">Christian Medical College Vellore</div><div class="role">Clinical Research Intern · Neurological Sciences</div><div class="what">Phase Locking Value tool and an EEG pipeline in Python. Automated MRI preprocessing in MATLAB. Replicated a study predicting Alzheimer's from MRI years before onset.</div></div></div>
+    <div class="trow"><div class="when">May to Jun 2024</div><div><div class="org">Christian Medical College Vellore</div><div class="role">Clinical Research Intern · Neurological Sciences</div><div class="what">The moment above. Phase Locking Value tool and an EEG pipeline in Python. Automated MRI preprocessing in MATLAB. Replicated a study predicting Alzheimer's from MRI years before onset.</div></div></div>
     <div class="trow"><div class="when">2022 to 2026</div><div><div class="org">Vellore Institute of Technology</div><div class="role">B.Tech Biotechnology · Neurobiology Lab</div><div class="what">Second author on a 2025 review in Neuropsychiatric Disease and Treatment.</div></div></div>
   </div>
 </section>
@@ -349,26 +406,28 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <div class="copy"><span>Dhiyanesh Srinivasan · Baltimore, MD · 2026</span><span>Demo data is synthetic. No patient data on this page.</span></div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 document.documentElement.classList.add('js');
 var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* reveal */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
 
-/* count up */
-var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target,end=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||'0'),small=el.querySelector('small'),t0=null;cio.unobserve(el);
+var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target,end=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||'0'),t0=null;cio.unobserve(el);
  if(reduce)return;function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/900);p=1-Math.pow(1-p,3);var v=(end*p).toFixed(dec);el.firstChild.nodeValue=(dec?v:Number(v).toLocaleString());if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})},{threshold:.5});
 document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el)});
 
-/* gauge ticks */
+/* hero parallax on the glass cards */
+var stage=document.getElementById('stage'),cards=stage.querySelectorAll('.gc');
+if(!reduce){var base={main:'rotate(-3deg)',draft:'rotate(2.5deg)',tiny:'rotate(-1deg)'};
+ stage.addEventListener('pointermove',function(e){var r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-0.5,y=(e.clientY-r.top)/r.height-0.5;
+  cards.forEach(function(c){var d=parseFloat(c.dataset.depth||'0.5'),k=c.classList.contains('main')?'main':c.classList.contains('draft')?'draft':'tiny';c.style.transform='translate('+(x*18*d)+'px,'+(y*14*d)+'px) '+base[k]})});
+ stage.addEventListener('pointerleave',function(){cards.forEach(function(c){c.style.transform=''})})}
+
 var tk=document.getElementById('ticks');if(tk){var s='';for(var i=0;i<=20;i++){var a=Math.PI+(i/20)*Math.PI,r1=140,r2=i%5?134:128,cx=180,cy=190;s+='<line x1="'+(cx+r1*Math.cos(a)).toFixed(1)+'" y1="'+(cy+r1*Math.sin(a)).toFixed(1)+'" x2="'+(cx+r2*Math.cos(a)).toFixed(1)+'" y2="'+(cy+r2*Math.sin(a)).toFixed(1)+'" stroke-width="1"/>'}tk.innerHTML=s;
  var a2=Math.PI+0.87*Math.PI,n=document.getElementById('needle');n.setAttribute('cx',(180+140*Math.cos(a2)).toFixed(1));n.setAttribute('cy',(190+140*Math.sin(a2)).toFixed(1))}
 
-/* Retention Radar demo */
 var L=document.getElementById('rr-logins'),N=document.getElementById('rr-nps'),D=document.getElementById('rr-days');
 var names=['Maya','Jordan','Priya','Luc','Rachel'];
 function rr(){var l=+L.value,n=+N.value,d=+D.value;
@@ -388,56 +447,14 @@ function rr(){var l=+L.value,n=+N.value,d=+D.value;
 document.getElementById('rr-ok').addEventListener('click',function(){this.textContent='Approved · sent to coach queue';this.classList.remove('solid')});
 document.getElementById('rr-edit').addEventListener('click',function(){var el=document.getElementById('rr-text');el.contentEditable=el.isContentEditable?'false':'true';el.focus()});
 
-/* Protocol Copilot mock */
 var pcs=document.getElementById('pc-state'),pcp=document.getElementById('pc-plan');
 document.getElementById('pc-ok').addEventListener('click',function(){pcs.textContent='Approved by clinician';pcs.className='chip mint';pcp.classList.add('ok')});
 document.getElementById('pc-reset').addEventListener('click',function(){pcs.textContent='Awaiting clinician';pcs.className='chip';pcp.classList.remove('ok')});
 
-/* copy email */
 document.getElementById('copy').addEventListener('click',function(){var b=this,t=document.getElementById('email').textContent;
  function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){b.textContent='Copied'},sel)}else sel();
  setTimeout(function(){b.textContent='Copy'},1600)});
-
-/* particle brain */
-try{
- if(!window.THREE)throw 0;
- var box=document.getElementById('brainbox'),cv=document.getElementById('brain');
- var R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});R.setPixelRatio(Math.min(2,devicePixelRatio||1));
- var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(32,1,0.1,100);C.position.set(0,0.2,6.2);
- var N=reduce?9000:16000,pos=new Float32Array(N*3),col=new Float32Array(N*3);
- function noise(x,y,z){return Math.sin(x*6.1+Math.cos(z*4.2))*Math.cos(y*7.3+Math.sin(x*3.1))*0.5+Math.sin(x*11+y*9+z*13)*0.25}
- var i=0;
- function put(x,y,z,r,g,b){pos[i*3]=x;pos[i*3+1]=y;pos[i*3+2]=z;col[i*3]=r;col[i*3+1]=g;col[i*3+2]=b;i++}
- while(i<N*0.86){var u=Math.random()*Math.PI*2,v=Math.acos(2*Math.random()-1);
-  var sx=Math.sin(v)*Math.cos(u),sy=Math.cos(v),sz=Math.sin(v)*Math.sin(u);
-  var side=sx<0?-1:1;var x=sx*1.35+side*0.1,y=sy*1.05+0.05,z=sz*1.6;
-  if(Math.abs(sx)<0.06&&Math.random()<0.8)continue;
-  var n=noise(x,y,z);var k=1+0.06*n;x*=k;y*=k;z*=k;
-  y+= -0.25*Math.max(0,z*0.3)*(1-Math.abs(sx));
-  var front=z>0.9,temporal=y<-0.35&&Math.abs(x)>0.7;
-  var w=0.75+0.25*Math.random();
-  if(front&&Math.random()<0.6)put(x,y,z,0.77,0.71,1);else if(temporal&&Math.random()<0.5)put(x,y,z,0.49,0.89,0.65);else put(x,y,z,w*0.92,w*0.95,w*0.96)}
- while(i<N*0.97){var u2=Math.random()*Math.PI*2,v2=Math.acos(2*Math.random()-1);put(Math.sin(v2)*Math.cos(u2)*0.62,-0.85+Math.cos(v2)*0.42,-1.05+Math.sin(v2)*Math.sin(u2)*0.5,0.8,0.84,0.86)}
- while(i<N){var t=Math.random(),a=Math.random()*Math.PI*2,rr2=0.17*Math.sqrt(Math.random());put(Math.cos(a)*rr2,-0.9-t*1.2,-0.55+Math.sin(a)*rr2-t*0.25,0.7,0.74,0.78)}
- var G=new THREE.BufferGeometry();G.setAttribute('position',new THREE.BufferAttribute(pos,3));G.setAttribute('color',new THREE.BufferAttribute(col,3));
- var M=new THREE.PointsMaterial({size:0.022,vertexColors:true,transparent:true,opacity:0.85,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true});
- var P=new THREE.Points(G,M);S.add(P);
- var ring=new THREE.Group();[[2.4,0.55,0.35],[2.1,0.7,-0.5]].forEach(function(q){var pts=[];for(var k=0;k<=160;k++){var a=k/160*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*q[0],Math.sin(a)*q[1],0))}var lg=new THREE.BufferGeometry().setFromPoints(pts);var ln=new THREE.Line(lg,new THREE.LineBasicMaterial({color:0xC4B5FF,transparent:true,opacity:0.22}));ln.rotation.x=q[2];ln.rotation.z=0.2;ring.add(ln);
-  var ng=new THREE.BufferGeometry();ng.setAttribute('position',new THREE.Float32BufferAttribute([q[0],0,0,-q[0]*0.6,q[1]*0.8,0],3));var nd=new THREE.Points(ng,new THREE.PointsMaterial({color:0xC4B5FF,size:0.09,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false}));nd.rotation.x=q[2];nd.rotation.z=0.2;ring.add(nd)});
- S.add(ring);
- var drag=false,px=0,py=0,ry=0.6,rx=0.1,vy=0,tx=0,ty=0;
- function size(){var w=box.clientWidth,h=box.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.updateProjectionMatrix()}size();addEventListener('resize',size);
- cv.addEventListener('pointerdown',function(e){drag=true;px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId)});
- cv.addEventListener('pointermove',function(e){if(drag){vy=(e.clientX-px)*0.006;ry+=vy;rx+=(e.clientY-py)*0.004;px=e.clientX;py=e.clientY}else{var r=box.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-0.5)*0.35;ty=((e.clientY-r.top)/r.height-0.5)*0.25}});
- cv.addEventListener('pointerup',function(){drag=false});cv.addEventListener('pointercancel',function(){drag=false});
- var last=0;function loop(t){requestAnimationFrame(loop);if(reduce&&!drag){if(last)return}last=t;
-  if(!drag){ry+=0.0016+vy;vy*=0.95}rx=Math.max(-0.8,Math.min(0.8,rx));
-  P.rotation.y=ry+tx;P.rotation.x=rx+ty;ring.rotation.y=-ry*0.3;ring.rotation.x=0.4+ty*0.5;
-  R.render(S,C)}
- requestAnimationFrame(loop);
- cv.style.filter='drop-shadow(0 0 14px rgba(196,181,255,.35))';
-}catch(e){var bb=document.getElementById('brain');if(bb)bb.style.display='none'}
 })();
 </script>
 
