@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dhiyanesh Srinivasan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Dhiyanesh Srinivasan. I take messy health data and make someone act on it. AI deployment for healthcare and longevity.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600&family=Onest:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* Layout: one column, max 1180, Twin Sci-Fi night base, violet signal, mint for calm success only */
+:root{
+  --bg:#050708;--bg2:#0B0F10;--stage:#14181A;
+  --ink:#E9EDEE;--haze:#B7C0C3;--mist:#8A9497;--dim:#5D6669;
+  --violet:#C4B5FF;--mint:#7DE3A6;--ember:#E8926E;
+  --glass:rgba(233,237,238,.06);--glass-line:rgba(233,237,238,.14);
+  --chip:rgba(233,237,238,.05);--chip-line:rgba(233,237,238,.12);
+  --play:linear-gradient(90deg,#E9E4FF,#C9BCFF);--on-play:#1A1530;
+  --display:'Urbanist',system-ui,sans-serif;--body:'Onest',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+section{padding-block:clamp(72px,10vw,150px)}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(36px,5vw,72px)}
+.two{color:var(--mist);font-weight:400}.two b{color:var(--ink);font-weight:600}
+.grain{position:relative}
+.grain::after{content:"";position:absolute;inset:0;opacity:.08;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;padding-block:14px;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 60%,rgba(5,7,8,0) 100%)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.navrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{width:40px;height:40px;border-radius:14px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:14px;color:var(--haze);transition:all .4s var(--ease)}
+.pill:hover{color:var(--ink);border-color:rgba(233,237,238,.3)}
+.pill.solid{background:var(--play);color:var(--on-play);border-color:transparent;font-weight:500}
+.pill.outline{border-color:rgba(233,237,238,.35);color:var(--ink)}
+.spacer{flex:1}
+.navlinks{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:640px){.navlinks{display:none}}
+
+/* hero */
+.hero{padding-block:clamp(40px,6vw,90px) clamp(60px,8vw,120px)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(40px,5.6vw,80px);margin:18px 0 22px}
+.hero .sub{font-size:clamp(19px,2vw,26px);line-height:1.3;max-width:28ch}
+.cred{margin-top:18px;color:var(--mist);font-size:15px}
+.ctas{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+.pill.big{height:52px;padding:0 24px;font-size:15px}
+.brainbox{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;margin-inline:auto;border-radius:32px;overflow:hidden;background:radial-gradient(60% 60% at 50% 45%,rgba(196,181,255,.14),transparent 70%),var(--bg2)}
+.brainbox canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+.brainbox .fade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,var(--bg2) 0,transparent 18%,transparent 70%,var(--bg2) 100%)}
+.metric{position:absolute;left:18px;bottom:18px;padding:14px 16px;border-radius:20px;background:rgba(5,7,8,.55);border:1px solid var(--glass-line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.metric .num{font-family:var(--body);font-weight:300;font-size:56px;letter-spacing:-2px;line-height:1}
+.metric .num small{font-size:14px;letter-spacing:0;color:var(--mist);margin-left:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-size:11px;background:rgba(196,181,255,.12);color:var(--violet);border:1px solid rgba(196,181,255,.25);font-family:var(--mono);letter-spacing:.06em}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.mint{background:rgba(125,227,166,.12);color:var(--mint);border-color:rgba(125,227,166,.25)}
+.chip.ember{background:rgba(232,146,110,.12);color:var(--ember);border-color:rgba(232,146,110,.25)}
+.chip.grey{background:var(--chip);color:var(--haze);border-color:var(--chip-line)}
+.hint{position:absolute;top:16px;right:18px}
+
+/* worked */
+.worked{padding-block:0 clamp(60px,8vw,120px)}
+.logos{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.logos .pill{height:46px;color:var(--mist);font-family:var(--mono);font-size:12px;letter-spacing:.08em}
+
+/* showcase */
+.head{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+.cards{display:grid;gap:14px}
+.card{border-radius:32px;background:var(--bg2);border:1px solid var(--glass-line);padding:clamp(22px,3vw,36px);position:relative;overflow:hidden}
+.card.wide{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+@media(max-width:860px){.card.wide{grid-template-columns:1fr}}
+.tag{position:absolute;top:18px;right:18px}
+.card h3{font-size:clamp(26px,3vw,40px);margin:10px 0 10px}
+.card p{color:var(--haze);max-width:46ch}
+.pbl{display:grid;gap:8px;margin-top:18px;font-size:14px;color:var(--mist)}
+.pbl span b{color:var(--ink);font-weight:500;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-right:10px}
+.nums{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px}
+.nums div{font-weight:300;font-size:28px;letter-spacing:-1px}.nums div small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-top:2px}
+.links{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+/* demo panel */
+.demo{border-radius:24px;background:var(--stage);border:1px solid var(--glass-line);padding:18px;position:relative;overflow:hidden}
+.demo .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.demo label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);display:block;margin:14px 0 6px}
+.demo input[type=range]{width:100%;accent-color:var(--violet);height:2px}
+.state{display:flex;align-items:center;gap:14px;margin-top:16px}
+.state .big{font-weight:300;font-size:44px;letter-spacing:-2px;line-height:1}
+.state .big small{font-size:13px;letter-spacing:0;color:var(--mist);margin-left:6px}
+.msg{margin-top:14px;padding:14px;border-radius:16px;background:var(--glass);border:1px solid var(--glass-line);font-size:14px;line-height:1.5;color:var(--haze);min-height:88px}
+.msg .from{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:6px;display:flex;justify-content:space-between}
+.approve{display:flex;gap:8px;margin-top:10px}
+.pill.sm{height:34px;padding:0 14px;font-size:13px}
+/* gauge */
+.gauge{display:grid;place-items:center;padding:10px 0}
+.gauge svg{width:min(100%,360px);height:auto;display:block}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.flow .pill{height:34px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:0 14px}
+.flow .arr{color:var(--dim)}
+/* copilot */
+.plan{display:grid;gap:8px;margin-top:10px}
+.plan .line{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-line);font-size:14px;color:var(--haze)}
+.plan .line i{width:8px;height:8px;border-radius:50%;background:var(--violet);margin-top:7px;flex:none}
+.plan.ok .line i{background:var(--mint)}
+.inputs{display:flex;gap:8px;flex-wrap:wrap}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.bento{grid-template-columns:repeat(2,1fr)}}
+.tile{border-radius:28px;background:var(--bg2);border:1px solid var(--glass-line);padding:26px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.tile .v{font-weight:300;font-size:clamp(44px,5vw,64px);letter-spacing:-2px;line-height:1}
+.tile .v small{font-size:14px;letter-spacing:0;color:var(--mist);margin-left:6px}
+.tile .l{font-size:14px;color:var(--haze);margin-top:12px}
+.tile.glow{background:#0E0D16}
+.tile.glow::before{content:"";position:absolute;width:70%;height:70%;left:55%;top:50%;border-radius:50%;background:radial-gradient(circle,#8E7CFF 0%,#4C3FA8 45%,transparent 72%);filter:blur(30px);opacity:.75}
+.tile.glow>*{position:relative}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{border-radius:28px;background:var(--bg2);border:1px solid var(--glass-line);padding:26px;min-height:220px;display:flex;flex-direction:column;gap:16px}
+.step .n{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--mist)}
+.step h3{font-size:26px}
+.step p{color:var(--haze);font-size:15px}
+.step svg{width:100%;height:64px;display:block}
+
+/* timeline */
+.tl{display:grid;gap:10px}
+.trow{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--glass-line)}
+.trow:last-child{border-bottom:1px solid var(--glass-line)}
+@media(max-width:640px){.trow{grid-template-columns:1fr;gap:6px}}
+.trow .when{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);padding-top:4px}
+.trow .org{font-family:var(--display);font-weight:600;font-size:20px}
+.trow .role{color:var(--mist);font-size:14px;margin:2px 0 6px}
+.trow .what{color:var(--haze);font-size:15px;max-width:70ch}
+
+/* footer */
+.foot{padding-block:clamp(80px,12vw,180px) 60px;text-align:left}
+.foot h2{font-size:clamp(48px,8vw,120px);display:flex;align-items:center;gap:.2em;flex-wrap:wrap}
+.oval{display:inline-block;width:1.3em;height:.78em;border-radius:999px;background:radial-gradient(60% 70% at 50% 40%,#2A2440,#0E0D16);border:1px solid var(--glass-line);position:relative;overflow:hidden;vertical-align:middle}
+.oval::after{content:"";position:absolute;left:50%;top:38%;width:38%;height:38%;border-radius:50%;background:radial-gradient(circle,#C4B5FF,#6B5CC9 70%,transparent);transform:translateX(-50%);filter:blur(4px);opacity:.9}
+.email{font-size:clamp(18px,2.4vw,28px);font-weight:500;margin-top:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.foot .links{margin-top:28px}
+.copy{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin-top:60px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* motion */
+.rv{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .rv{opacity:0;transform:translateY(28px)}
+.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
+:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:999px}
+</style></head><body>
+
+<nav class="wrap"><div class="navrow">
+  <a class="logo" href="#top" aria-label="Home">DS</a>
+  <div class="navlinks">
+    <a class="pill" href="#work">Work</a>
+    <a class="pill" href="#how">How I deploy</a>
+    <a class="pill" href="#exp">Experience</a>
+  </div>
+  <div class="spacer"></div>
+  <a class="pill outline" href="#talk">Let's talk</a>
+</div></nav>
+
+<section class="hero wrap" id="top">
+  <div class="hero-grid">
+    <div>
+      <div class="mono">[ AI deployment · Healthcare · Longevity ]</div>
+      <h1>I take messy health data and make someone act on it.</h1>
+      <p class="sub two">Biotech engineer turned <b>AI deployment person.</b> I find the real problem, ship the first draft, and stay until it works.</p>
+      <p class="cred">MS Management, Johns Hopkins Carey · Baltimore · Graduating May 2027</p>
+      <div class="ctas">
+        <a class="pill solid big" href="#work">See Retention Radar</a>
+        <a class="pill big" href="#talk">Email me</a>
+      </div>
+    </div>
+    <div class="brainbox grain" id="brainbox">
+      <canvas id="brain" aria-label="Particle brain, decorative"></canvas>
+      <div class="fade"></div>
+      <div class="hint mono">drag to rotate</div>
+      <div class="metric">
+        <div class="mono">brain age model · r²</div>
+        <div class="num" data-count="0.87" data-dec="2">0.87<small>on 118 subjects</small></div>
+        <span class="chip">Ridge · LOOCV</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="worked wrap">
+  <div class="mono" style="margin-bottom:14px">Where I've worked</div>
+  <div class="logos">
+    <span class="pill">Johns Hopkins Carey</span><span class="pill">Biopeak</span><span class="pill">Biocon Biologics</span><span class="pill">CMC Vellore</span><span class="pill">VIT</span>
+  </div>
+</section>
+
+<section class="wrap" id="work">
+  <div class="head rv">
+    <h2 class="two">Built, <b>then deployed.</b></h2>
+    <div class="mono">Problem · What I built · What changed</div>
+  </div>
+  <div class="cards">
+
+    <!-- Retention Radar -->
+    <article class="card wide rv">
+      <div>
+        <span class="chip mint tag">Shipped · Oct 2026</span>
+        <div class="mono">01 · Retention Radar</div>
+        <h3>Members drift for weeks before they cancel. Coaches find out at the renewal.</h3>
+        <p>An explainable risk engine that scores every member, then drafts the check-in. The coach approves before anything is sent.</p>
+        <div class="pbl">
+          <span><b>Problem</b>Longevity clinics lose members quietly. No one sees it in time.</span>
+          <span><b>Built</b>FastAPI service, live dashboard, Claude drafts, 38 tests.</span>
+          <span><b>Changed</b>Renewals at risk get a price tag and a next action.</span>
+        </div>
+        <div class="nums"><div>5<small>signals scored</small></div><div>38<small>tests</small></div><div>1,000<small>synthetic members</small></div></div>
+        <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/retention-radar" target="_blank" rel="noopener">Repo →</a></div>
+      </div>
+      <div class="demo" id="rr">
+        <div class="row"><span class="mono">live demo · synthetic data</span><span class="chip grey" id="rr-id">Member 0417</span></div>
+        <label for="rr-logins">Portal logins, last 30 days</label>
+        <input type="range" id="rr-logins" min="0" max="20" value="9">
+        <label for="rr-nps">Last NPS</label>
+        <input type="range" id="rr-nps" min="0" max="10" value="8">
+        <label for="rr-days">Days since last coach touch</label>
+        <input type="range" id="rr-days" min="0" max="60" value="12">
+        <div class="state">
+          <div class="big" id="rr-score">0.21<small>risk</small></div>
+          <span class="chip mint" id="rr-state">Steady</span>
+        </div>
+        <div class="msg"><div class="from"><span>draft check-in</span><span id="rr-reason">logins ok · nps ok</span></div><div id="rr-text">Hey Maya, saw you've been in the portal a few times this month. Your sleep trend is holding. Want to book the next review before it slips?</div></div>
+        <div class="approve"><button class="pill sm solid" id="rr-ok" type="button">Approve</button><button class="pill sm" id="rr-edit" type="button">Edit</button></div>
+      </div>
+    </article>
+
+    <!-- Brain age -->
+    <article class="card wide rv">
+      <div class="gauge">
+        <svg viewBox="0 0 360 220" role="img" aria-label="Gauge showing r squared 0.87">
+          <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#C4B5FF" stop-opacity=".2"/><stop offset="1" stop-color="#C4B5FF"/></linearGradient></defs>
+          <path d="M40 190 A140 140 0 0 1 320 190" fill="none" stroke="rgba(233,237,238,.12)" stroke-width="2"/>
+          <path id="arc" d="M40 190 A140 140 0 0 1 320 190" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-dasharray="440" stroke-dashoffset="57"/>
+          <g id="ticks" stroke="rgba(233,237,238,.25)"></g>
+          <circle id="needle" cx="297" cy="100" r="6" fill="#C4B5FF" style="filter:drop-shadow(0 0 10px rgba(196,181,255,.8))"/>
+          <text x="180" y="150" text-anchor="middle" fill="#E9EDEE" font-family="Onest,system-ui" font-weight="300" font-size="64" letter-spacing="-2">0.87</text>
+          <text x="180" y="180" text-anchor="middle" fill="#8A9497" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2">R² · 118 SUBJECTS · LOOCV</text>
+          <text x="40" y="212" fill="#5D6669" font-family="IBM Plex Mono,monospace" font-size="11">0</text>
+          <text x="312" y="212" fill="#5D6669" font-family="IBM Plex Mono,monospace" font-size="11">1</text>
+        </svg>
+        <div class="flow"><span class="pill">MRI</span><span class="arr">→</span><span class="pill">brain age</span><span class="arr">→</span><span class="pill">HbA1c · hsCRP · BP</span></div>
+      </div>
+      <div>
+        <span class="chip tag">Capstone · 2026</span>
+        <div class="mono">02 · Brain Age Pipeline</div>
+        <h3>How old does a brain look on MRI, and does metabolic health show up in it?</h3>
+        <p>Preprocessing, segmentation, Ridge regression with leave one out cross validation. Brain age delta compared against HbA1c, hsCRP and blood pressure.</p>
+        <div class="pbl">
+          <span><b>Problem</b>A longevity clinic had scans and bloods in two different drawers.</span>
+          <span><b>Built</b>One pipeline from raw MRI to a brain age number per person.</span>
+          <span><b>Changed</b>Imaging and metabolic risk on the same page for the first time.</span>
+        </div>
+        <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/brain-age-pipeline" target="_blank" rel="noopener">Repo →</a></div>
+      </div>
+    </article>
+
+    <!-- Protocol Copilot -->
+    <article class="card wide rv">
+      <div>
+        <span class="chip ember tag">In progress</span>
+        <div class="mono">03 · Protocol Copilot</div>
+        <h3>Labs and wearable data in. A draft care plan out. The clinician decides.</h3>
+        <p>The AI writes the first draft from the numbers. A clinician edits and approves. Nothing reaches a member without a human signature.</p>
+        <div class="pbl">
+          <span><b>Problem</b>Interpreting results at scale is where clinics run out of clinician hours.</span>
+          <span><b>Built</b>LLM drafting with the approval step built into the flow.</span>
+          <span><b>Changed</b>First draft in seconds. The decision stays human.</span>
+        </div>
+        <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/protocol-copilot" target="_blank" rel="noopener">Repo →</a></div>
+      </div>
+      <div class="demo" id="pc">
+        <div class="row"><span class="mono">mock · example values</span><span class="chip grey">Member 0882</span></div>
+        <div class="inputs" style="margin-top:8px"><span class="chip grey">ApoB 82</span><span class="chip grey">HbA1c 5.4</span><span class="chip grey">hsCRP 0.9</span><span class="chip grey">Sleep 6h 12m</span><span class="chip grey">Steps 6,400</span></div>
+        <label>Draft plan</label>
+        <div class="plan" id="pc-plan">
+          <div class="line"><i></i><span>Walk 15 minutes after lunch on weekdays.</span></div>
+          <div class="line"><i></i><span>Lights down by 10:30. Target 7 hours in bed for 3 weeks.</span></div>
+          <div class="line"><i></i><span>Repeat ApoB and hsCRP in 90 days.</span></div>
+        </div>
+        <div class="state" style="margin-top:14px"><span class="chip" id="pc-state">Awaiting clinician</span></div>
+        <div class="approve"><button class="pill sm solid" id="pc-ok" type="button">Approve as clinician</button><button class="pill sm" id="pc-reset" type="button">Reset</button></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head rv"><h2 class="two">Numbers <b>I can defend.</b></h2></div>
+  <div class="bento rv">
+    <div class="tile glow"><div class="v" data-count="0.87" data-dec="2">0.87<small>r²</small></div><div class="l">Brain age model on 118 subjects</div></div>
+    <div class="tile"><div class="v" data-count="20">20<small>%</small></div><div class="l">Lead conversion lift after finding 5 drop-off drivers</div></div>
+    <div class="tile"><div class="v" data-count="40">40<small>%</small></div><div class="l">Less effort on MRI preprocessing after automating it</div></div>
+    <div class="tile"><div class="v" data-count="38">38<small>tests</small></div><div class="l">Behind Retention Radar before it shipped</div></div>
+    <div class="tile"><div class="v" data-count="800">800<small>+</small></div><div class="l">Client interactions read to find why leads left</div></div>
+    <div class="tile"><div class="v" data-count="7">7<small>hrs</small></div><div class="l">To ship an AI dance coach at IvyHacks, Wharton</div></div>
+  </div>
+</section>
+
+<section class="wrap" id="how">
+  <div class="head rv"><h2 class="two">How I <b>deploy.</b></h2><div class="mono">Same three moves every time</div></div>
+  <div class="steps rv">
+    <div class="step">
+      <svg viewBox="0 0 300 64"><circle cx="30" cy="32" r="6" fill="#C4B5FF"/><path d="M36 32 H270" stroke="rgba(233,237,238,.2)" stroke-width="2"/><path d="M36 32 Q150 2 270 32" fill="none" stroke="rgba(196,181,255,.6)" stroke-width="1.5"/></svg>
+      <div class="n">01</div><h3>Find the real problem.</h3><p>Sit with the people doing the work. Pull the data they already have. Write the question down before anything is built.</p>
+    </div>
+    <div class="step">
+      <svg viewBox="0 0 300 64"><g fill="rgba(233,237,238,.55)"><rect x="20" y="36" width="3" height="16"/><rect x="40" y="28" width="3" height="24"/><rect x="60" y="40" width="3" height="12"/><rect x="80" y="22" width="3" height="30"/><rect x="100" y="30" width="3" height="22"/><rect x="120" y="14" width="3" height="38"/><rect x="140" y="26" width="3" height="26"/><rect x="160" y="34" width="3" height="18"/><rect x="180" y="18" width="3" height="34"/><rect x="200" y="30" width="3" height="22"/><rect x="220" y="12" width="3" height="40"/><rect x="240" y="24" width="3" height="28"/></g><rect x="260" y="8" width="3" height="44" fill="#E9EDEE"/></svg>
+      <div class="n">02</div><h3>Ship the first draft.</h3><p>A working thing in days. Dashboard, agent, model. Good enough to argue with.</p>
+    </div>
+    <div class="step">
+      <svg viewBox="0 0 300 64"><path d="M20 32 H280" stroke="rgba(233,237,238,.2)" stroke-width="2"/><g stroke="rgba(233,237,238,.3)"><path d="M60 26v12M100 26v12M140 26v12M180 26v12M220 26v12M260 26v12"/></g><circle cx="200" cy="32" r="6" fill="#7DE3A6" style="filter:drop-shadow(0 0 8px rgba(125,227,166,.8))"/></svg>
+      <div class="n">03</div><h3>Measure. Stay until it works.</h3><p>Pre and post, with the number the team actually cares about. Train the people. Fix what they hate.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="exp">
+  <div class="head rv"><h2 class="two">From the lab <b>to deployment.</b></h2></div>
+  <div class="tl rv">
+    <div class="trow"><div class="when">Sep 2026 · now</div><div><div class="org">Johns Hopkins Carey Business School</div><div class="role">Pro bono consultant · WELI · Venture strategy at the Pava Center</div><div class="what">Sized what 70+ hospitals would pay to fund 250 physicians. Built the cost model and the advisory board structure. Mapped 99,073 US public schools for a K-12 AI literacy venture.</div></div></div>
+    <div class="trow"><div class="when">Jan to Jul 2026</div><div><div class="org">Biopeak</div><div class="role">Strategy and Operations Intern · longevity clinic, Bengaluru</div><div class="what">Built the brain age model. Found 5 drop-off drivers across 800+ client interactions and gave the founders a win-back plan. Lead conversion up 20%.</div></div></div>
+    <div class="trow"><div class="when">Jul to Dec 2025</div><div><div class="org">Biocon Biologics</div><div class="role">Data Analytics Intern</div><div class="what">One Power BI view across R&amp;D, Manufacturing, Quality and Validation. Found where production cycles stalled and proposed a new development cycle.</div></div></div>
+    <div class="trow"><div class="when">Oct 2024 to May 2025</div><div><div class="org">BaldMann · Xibotix</div><div class="role">Founding team · Research intern</div><div class="what">Trained EEG models to read emotion for a mental health headband. Worked on BCI signal processing for a 3D printed neuro rehab device.</div></div></div>
+    <div class="trow"><div class="when">May to Jun 2024</div><div><div class="org">Christian Medical College Vellore</div><div class="role">Clinical Research Intern · Neurological Sciences</div><div class="what">Phase Locking Value tool and an EEG pipeline in Python. Automated MRI preprocessing in MATLAB. Replicated a study predicting Alzheimer's from MRI years before onset.</div></div></div>
+    <div class="trow"><div class="when">2022 to 2026</div><div><div class="org">Vellore Institute of Technology</div><div class="role">B.Tech Biotechnology · Neurobiology Lab</div><div class="what">Second author on a 2025 review in Neuropsychiatric Disease and Treatment.</div></div></div>
+  </div>
+</section>
+
+<section class="foot wrap" id="talk">
+  <div class="mono">If you deploy AI where care happens</div>
+  <h2 class="rv">Let's <span class="oval" aria-hidden="true"></span> talk →</h2>
+  <div class="email"><span id="email">dsriniv8@jh.edu</span><button class="pill sm" id="copy" type="button">Copy</button></div>
+  <div class="links"><a class="pill" href="https://www.linkedin.com/in/dhiyanesh-srinivasan" target="_blank" rel="noopener">LinkedIn</a><a class="pill" href="https://github.com/DrDanXD" target="_blank" rel="noopener">GitHub</a></div>
+  <div class="copy"><span>Dhiyanesh Srinivasan · Baltimore, MD · 2026</span><span>Demo data is synthetic. No patient data on this page.</span></div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+document.documentElement.classList.add('js');
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* reveal */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+
+/* count up */
+var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target,end=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||'0'),small=el.querySelector('small'),t0=null;cio.unobserve(el);
+ if(reduce)return;function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/900);p=1-Math.pow(1-p,3);var v=(end*p).toFixed(dec);el.firstChild.nodeValue=(dec?v:Number(v).toLocaleString());if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el)});
+
+/* gauge ticks */
+var tk=document.getElementById('ticks');if(tk){var s='';for(var i=0;i<=20;i++){var a=Math.PI+(i/20)*Math.PI,r1=140,r2=i%5?134:128,cx=180,cy=190;s+='<line x1="'+(cx+r1*Math.cos(a)).toFixed(1)+'" y1="'+(cy+r1*Math.sin(a)).toFixed(1)+'" x2="'+(cx+r2*Math.cos(a)).toFixed(1)+'" y2="'+(cy+r2*Math.sin(a)).toFixed(1)+'" stroke-width="1"/>'}tk.innerHTML=s;
+ var a2=Math.PI+0.87*Math.PI,n=document.getElementById('needle');n.setAttribute('cx',(180+140*Math.cos(a2)).toFixed(1));n.setAttribute('cy',(190+140*Math.sin(a2)).toFixed(1))}
+
+/* Retention Radar demo */
+var L=document.getElementById('rr-logins'),N=document.getElementById('rr-nps'),D=document.getElementById('rr-days');
+var names=['Maya','Jordan','Priya','Luc','Rachel'];
+function rr(){var l=+L.value,n=+N.value,d=+D.value;
+ var risk=0.55*(1-Math.min(l,12)/12)+0.3*(1-n/10)+0.35*Math.min(d,45)/45;risk=Math.max(0.03,Math.min(0.97,risk));
+ var st=risk<0.3?'Thriving':risk<0.55?'Steady':'Needs care';
+ var chip=document.getElementById('rr-state');chip.textContent=st;chip.className='chip '+(st==='Thriving'?'mint':st==='Steady'?'':'ember');
+ document.getElementById('rr-score').firstChild.nodeValue=risk.toFixed(2);
+ var why=[];why.push(l<4?'logins low':'logins ok');why.push(n<7?'nps dropped':'nps ok');if(d>30)why.push(d+'d silent');
+ document.getElementById('rr-reason').textContent=why.join(' · ');
+ var nm=names[(l+n+d)%names.length],t;
+ if(st==='Thriving')t='Hey '+nm+', you’ve been in the portal a lot this month and the numbers are moving the right way. Nothing to fix. Want to lock the next review in while it’s easy?';
+ else if(st==='Steady')t='Hey '+nm+', saw you’ve been in a few times this month. Your sleep trend is holding. Want to book the next review before it slips?';
+ else t='Hey '+nm+', it’s been '+d+' days since we talked and I noticed you haven’t been in the portal much. No pressure. Can I grab 10 minutes this week to see what’s getting in the way?';
+ document.getElementById('rr-text').textContent=t;
+ var ok=document.getElementById('rr-ok');ok.textContent='Approve';ok.classList.add('solid')}
+[L,N,D].forEach(function(x){x.addEventListener('input',rr)});rr();
+document.getElementById('rr-ok').addEventListener('click',function(){this.textContent='Approved · sent to coach queue';this.classList.remove('solid')});
+document.getElementById('rr-edit').addEventListener('click',function(){var el=document.getElementById('rr-text');el.contentEditable=el.isContentEditable?'false':'true';el.focus()});
+
+/* Protocol Copilot mock */
+var pcs=document.getElementById('pc-state'),pcp=document.getElementById('pc-plan');
+document.getElementById('pc-ok').addEventListener('click',function(){pcs.textContent='Approved by clinician';pcs.className='chip mint';pcp.classList.add('ok')});
+document.getElementById('pc-reset').addEventListener('click',function(){pcs.textContent='Awaiting clinician';pcs.className='chip';pcp.classList.remove('ok')});
+
+/* copy email */
+document.getElementById('copy').addEventListener('click',function(){var b=this,t=document.getElementById('email').textContent;
+ function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){b.textContent='Copied'},sel)}else sel();
+ setTimeout(function(){b.textContent='Copy'},1600)});
+
+/* particle brain */
+try{
+ if(!window.THREE)throw 0;
+ var box=document.getElementById('brainbox'),cv=document.getElementById('brain');
+ var R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});R.setPixelRatio(Math.min(2,devicePixelRatio||1));
+ var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(32,1,0.1,100);C.position.set(0,0.2,6.2);
+ var N=reduce?9000:16000,pos=new Float32Array(N*3),col=new Float32Array(N*3);
+ function noise(x,y,z){return Math.sin(x*6.1+Math.cos(z*4.2))*Math.cos(y*7.3+Math.sin(x*3.1))*0.5+Math.sin(x*11+y*9+z*13)*0.25}
+ var i=0;
+ function put(x,y,z,r,g,b){pos[i*3]=x;pos[i*3+1]=y;pos[i*3+2]=z;col[i*3]=r;col[i*3+1]=g;col[i*3+2]=b;i++}
+ while(i<N*0.86){var u=Math.random()*Math.PI*2,v=Math.acos(2*Math.random()-1);
+  var sx=Math.sin(v)*Math.cos(u),sy=Math.cos(v),sz=Math.sin(v)*Math.sin(u);
+  var side=sx<0?-1:1;var x=sx*1.35+side*0.1,y=sy*1.05+0.05,z=sz*1.6;
+  if(Math.abs(sx)<0.06&&Math.random()<0.8)continue;
+  var n=noise(x,y,z);var k=1+0.06*n;x*=k;y*=k;z*=k;
+  y+= -0.25*Math.max(0,z*0.3)*(1-Math.abs(sx));
+  var front=z>0.9,temporal=y<-0.35&&Math.abs(x)>0.7;
+  var w=0.75+0.25*Math.random();
+  if(front&&Math.random()<0.6)put(x,y,z,0.77,0.71,1);else if(temporal&&Math.random()<0.5)put(x,y,z,0.49,0.89,0.65);else put(x,y,z,w*0.92,w*0.95,w*0.96)}
+ while(i<N*0.97){var u2=Math.random()*Math.PI*2,v2=Math.acos(2*Math.random()-1);put(Math.sin(v2)*Math.cos(u2)*0.62,-0.85+Math.cos(v2)*0.42,-1.05+Math.sin(v2)*Math.sin(u2)*0.5,0.8,0.84,0.86)}
+ while(i<N){var t=Math.random(),a=Math.random()*Math.PI*2,rr2=0.17*Math.sqrt(Math.random());put(Math.cos(a)*rr2,-0.9-t*1.2,-0.55+Math.sin(a)*rr2-t*0.25,0.7,0.74,0.78)}
+ var G=new THREE.BufferGeometry();G.setAttribute('position',new THREE.BufferAttribute(pos,3));G.setAttribute('color',new THREE.BufferAttribute(col,3));
+ var M=new THREE.PointsMaterial({size:0.022,vertexColors:true,transparent:true,opacity:0.85,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true});
+ var P=new THREE.Points(G,M);S.add(P);
+ var ring=new THREE.Group();[[2.4,0.55,0.35],[2.1,0.7,-0.5]].forEach(function(q){var pts=[];for(var k=0;k<=160;k++){var a=k/160*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*q[0],Math.sin(a)*q[1],0))}var lg=new THREE.BufferGeometry().setFromPoints(pts);var ln=new THREE.Line(lg,new THREE.LineBasicMaterial({color:0xC4B5FF,transparent:true,opacity:0.22}));ln.rotation.x=q[2];ln.rotation.z=0.2;ring.add(ln);
+  var ng=new THREE.BufferGeometry();ng.setAttribute('position',new THREE.Float32BufferAttribute([q[0],0,0,-q[0]*0.6,q[1]*0.8,0],3));var nd=new THREE.Points(ng,new THREE.PointsMaterial({color:0xC4B5FF,size:0.09,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false}));nd.rotation.x=q[2];nd.rotation.z=0.2;ring.add(nd)});
+ S.add(ring);
+ var drag=false,px=0,py=0,ry=0.6,rx=0.1,vy=0,tx=0,ty=0;
+ function size(){var w=box.clientWidth,h=box.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.updateProjectionMatrix()}size();addEventListener('resize',size);
+ cv.addEventListener('pointerdown',function(e){drag=true;px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId)});
+ cv.addEventListener('pointermove',function(e){if(drag){vy=(e.clientX-px)*0.006;ry+=vy;rx+=(e.clientY-py)*0.004;px=e.clientX;py=e.clientY}else{var r=box.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-0.5)*0.35;ty=((e.clientY-r.top)/r.height-0.5)*0.25}});
+ cv.addEventListener('pointerup',function(){drag=false});cv.addEventListener('pointercancel',function(){drag=false});
+ var last=0;function loop(t){requestAnimationFrame(loop);if(reduce&&!drag){if(last)return}last=t;
+  if(!drag){ry+=0.0016+vy;vy*=0.95}rx=Math.max(-0.8,Math.min(0.8,rx));
+  P.rotation.y=ry+tx;P.rotation.x=rx+ty;ring.rotation.y=-ry*0.3;ring.rotation.x=0.4+ty*0.5;
+  R.render(S,C)}
+ requestAnimationFrame(loop);
+ cv.style.filter='drop-shadow(0 0 14px rgba(196,181,255,.35))';
+}catch(e){var bb=document.getElementById('brain');if(bb)bb.style.display='none'}
+})();
+</script>
+
+</body></html>
