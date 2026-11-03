@@ -88,12 +88,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* moment */
 .moment{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
 @media(max-width:900px){.moment{grid-template-columns:1fr}}
-.moment p{color:var(--haze);font-size:clamp(17px,1.6vw,20px);max-width:44ch;margin-top:18px}
+.moment p{color:var(--haze);font-size:clamp(19px,2vw,26px);max-width:30ch;margin-top:14px;line-height:1.3}
 .moment p+p{margin-top:12px}
 .gap{border-radius:28px;background:var(--bg2);border:1px solid var(--glass-line);padding:26px;position:relative;overflow:hidden}
 .gap .track{position:relative;height:2px;background:rgba(233,237,238,.14);margin:34px 0 14px}
 .gap .track i{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%)}
-.gap .track .a{left:0;background:var(--violet);box-shadow:0 0 12px rgba(196,181,255,.9)}
+.gap .track .a{left:0;background:var(--violet);box-shadow:0 0 12px rgba(196,181,255,.9);transition:left 2.4s var(--ease)}
+.gap.go .track .a{left:100%}
 .gap .track .b{right:0;transform:translate(50%,-50%);background:transparent;border:1px solid var(--mist)}
 .gap .track .mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:4px 10px;border-radius:999px;background:var(--stage);border:1px solid var(--glass-line);font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--mist);white-space:nowrap}
 .gap .ends{display:flex;justify-content:space-between;gap:12px}
@@ -212,7 +213,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div>
       <div class="mono">[ AI deployment · Healthcare · Longevity ]</div>
       <h1>I take messy health data and make someone act on it.</h1>
-      <p class="sub two">Biotech engineer turned <b>AI deployment person.</b> I find the real problem, ship the first draft, and stay until it works.</p>
+      <p class="sub two">Biotech engineer turned <b>AI deployment person.</b></p>
       <p class="cred">MS Management, Johns Hopkins Carey · Baltimore · Graduating May 2027</p>
       <div class="ctas">
         <a class="pill solid big" href="#work">See what I built</a>
@@ -257,22 +258,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="rv">
       <div class="mono">The moment</div>
       <h2 class="two" style="margin-top:14px">The model worked. <b>Then nothing happened.</b></h2>
-      <p>At Christian Medical College I rebuilt an MRI pipeline that predicts Alzheimer's years before the first symptom. It worked.</p>
-      <p>Then it sat there. The research lived in one building and the clinic in another. Nobody who could act on it would ever see it.</p>
-      <p>That gap is the thing I've been working on since. Not better models. Getting the model into the hands of the person who has to decide.</p>
+      <p>CMC Vellore. An MRI model that sees Alzheimer's years early.</p>
+      <p>It sat in a drawer. The clinic never saw it.</p>
+      <p>I've been closing that gap since.</p>
     </div>
     <div class="gap rv">
       <div class="mono">The gap I work in</div>
       <div class="track"><i class="a"></i><span class="mid">years</span><i class="b"></i></div>
       <div class="ends"><div>First signal<small>years early · the lab</small></div><div>Treatment<small>too late · today's system</small></div></div>
-      <div class="line">Every project below closes a piece of this gap.</div>
+      <div class="line">Three builds. Each one closes a piece of this.</div>
     </div>
   </div>
 </section>
 
 <section class="wrap" id="work">
   <div class="head rv">
-    <div><h2 class="two">So I stopped chasing better models <b>and started chasing deployment.</b></h2><p>Three things I built. Each one starts with a problem a real clinic has, and ends with a person who can act.</p></div>
+    <div><h2 class="two">Less model. <b>More deployment.</b></h2></div>
     <div class="mono">Problem · Built · Changed</div>
   </div>
   <div class="cards">
@@ -281,12 +282,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div>
         <span class="chip mint tag">Shipped · Oct 2026</span>
         <div class="mono">01 · Retention Radar</div>
-        <h3>Members drift for weeks before they cancel. Coaches find out at the renewal.</h3>
-        <p>An explainable risk engine that scores every member, then drafts the check-in. The coach approves before anything is sent.</p>
+        <h3>Catch the member before they cancel.</h3>
         <div class="pbl">
-          <span><b>Problem</b>Longevity clinics lose members quietly. No one sees it in time.</span>
-          <span><b>Built</b>FastAPI service, live dashboard, Claude drafts, 38 tests.</span>
-          <span><b>Changed</b>Renewals at risk get a price tag and a next action.</span>
+          <span><b>Problem</b>Members drift quietly.</span>
+          <span><b>Built</b>Risk score plus a drafted check-in.</span>
+          <span><b>Changed</b>Coach acts weeks earlier.</span>
         </div>
         <div class="nums"><div>5<small>signals scored</small></div><div>38<small>tests</small></div><div>1,000<small>synthetic members</small></div></div>
         <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/retention-radar" target="_blank" rel="noopener">Repo →</a></div>
@@ -326,12 +326,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div>
         <span class="chip tag">Capstone · 2026</span>
         <div class="mono">02 · Brain Age Pipeline</div>
-        <h3>How old does a brain look on MRI, and does metabolic health show up in it?</h3>
-        <p>Preprocessing, segmentation, Ridge regression with leave one out cross validation. Brain age delta compared against HbA1c, hsCRP and blood pressure.</p>
+        <h3>How old does a brain look on MRI?</h3>
         <div class="pbl">
-          <span><b>Problem</b>A longevity clinic had scans and bloods in two different drawers.</span>
-          <span><b>Built</b>One pipeline from raw MRI to a brain age number per person.</span>
-          <span><b>Changed</b>Imaging and metabolic risk on the same page for the first time.</span>
+          <span><b>Problem</b>Scans and bloods in two drawers.</span>
+          <span><b>Built</b>Raw MRI to one brain age number.</span>
+          <span><b>Changed</b>Imaging and metabolic risk on one page.</span>
         </div>
         <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/brain-age-pipeline" target="_blank" rel="noopener">Repo →</a></div>
       </div>
@@ -341,12 +340,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div>
         <span class="chip ember tag">In progress</span>
         <div class="mono">03 · Protocol Copilot</div>
-        <h3>Labs and wearable data in. A draft care plan out. The clinician decides.</h3>
-        <p>The AI writes the first draft from the numbers. A clinician edits and approves. Nothing reaches a member without a human signature.</p>
+        <h3>Labs in. Draft plan out. Clinician decides.</h3>
         <div class="pbl">
-          <span><b>Problem</b>Interpreting results at scale is where clinics run out of clinician hours.</span>
-          <span><b>Built</b>LLM drafting with the approval step built into the flow.</span>
-          <span><b>Changed</b>First draft in seconds. The decision stays human.</span>
+          <span><b>Problem</b>Clinician hours run out.</span>
+          <span><b>Built</b>LLM draft, human approve.</span>
+          <span><b>Changed</b>First draft in seconds.</span>
         </div>
         <div class="links"><a class="pill sm outline" href="https://github.com/DrDanXD/protocol-copilot" target="_blank" rel="noopener">Repo →</a></div>
       </div>
@@ -367,7 +365,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </section>
 
 <section class="wrap">
-  <div class="head rv"><div><h2 class="two">Numbers <b>I can defend.</b></h2><p>Every one of these is on my CV and in a repo. Ask me how any of them was measured.</p></div></div>
+  <div class="head rv"><div><h2 class="two">Numbers <b>I can defend.</b></h2></div></div>
   <div class="bento rv">
     <div class="tile glow"><div class="v" data-count="0.87" data-dec="2">0.87<small>r²</small></div><div class="l">Brain age model on 118 subjects</div><div class="how">leave one out cross validation</div></div>
     <div class="tile"><div class="v" data-count="20">20<small>%</small></div><div class="l">Lead conversion lift after finding 5 drop-off drivers</div><div class="how">before vs after, same lead source</div></div>
@@ -383,21 +381,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <div class="steps rv">
     <div class="step">
       <svg viewBox="0 0 300 64"><circle cx="30" cy="32" r="6" fill="#C4B5FF"/><path d="M36 32 H270" stroke="rgba(233,237,238,.2)" stroke-width="2"/><path d="M36 32 Q150 2 270 32" fill="none" stroke="rgba(196,181,255,.6)" stroke-width="1.5"/></svg>
-      <div class="n">01</div><h3>Find the real problem.</h3><p>Sit with the people doing the work. Pull the data they already have. Write the question down before anything gets built.</p>
+      <div class="n">01</div><h3>Find the real problem.</h3><p>Sit with the people. Pull their data.</p>
     </div>
     <div class="step">
       <svg viewBox="0 0 300 64"><g fill="rgba(233,237,238,.55)"><rect x="20" y="36" width="3" height="16"/><rect x="40" y="28" width="3" height="24"/><rect x="60" y="40" width="3" height="12"/><rect x="80" y="22" width="3" height="30"/><rect x="100" y="30" width="3" height="22"/><rect x="120" y="14" width="3" height="38"/><rect x="140" y="26" width="3" height="26"/><rect x="160" y="34" width="3" height="18"/><rect x="180" y="18" width="3" height="34"/><rect x="200" y="30" width="3" height="22"/><rect x="220" y="12" width="3" height="40"/><rect x="240" y="24" width="3" height="28"/></g><rect x="260" y="8" width="3" height="44" fill="#E9EDEE"/></svg>
-      <div class="n">02</div><h3>Ship the first draft.</h3><p>A working thing in days. Dashboard, agent, model. Good enough to argue with.</p>
+      <div class="n">02</div><h3>Ship the first draft.</h3><p>Working thing in days.</p>
     </div>
     <div class="step">
       <svg viewBox="0 0 300 64"><path d="M20 32 H280" stroke="rgba(233,237,238,.2)" stroke-width="2"/><g stroke="rgba(233,237,238,.3)"><path d="M60 26v12M100 26v12M140 26v12M180 26v12M220 26v12M260 26v12"/></g><circle cx="200" cy="32" r="6" fill="#7DE3A6" style="filter:drop-shadow(0 0 8px rgba(125,227,166,.8))"/></svg>
-      <div class="n">03</div><h3>Measure. Stay until it works.</h3><p>Before and after, with the number the team actually cares about. Train the people. Fix what they hate.</p>
+      <div class="n">03</div><h3>Measure. Stay until it works.</h3><p>Before and after. Fix what they hate.</p>
     </div>
   </div>
 </section>
 
 <section class="wrap" id="exp">
-  <div class="head rv"><div><h2 class="two">The road <b>here.</b></h2><p>Every stop taught me one thing about getting data to the person who has to act.</p></div><div class="mono">Tap a row</div></div>
+  <div class="head rv"><div><h2 class="two">The road <b>here.</b></h2></div><div class="mono">Tap a row</div></div>
   <div class="tl rv">
     <div class="trow"><div class="when">Sep 2026 · now</div><div><div class="org">Johns Hopkins Carey Business School</div><div class="role">Pro bono consultant · WELI · Venture strategy at the Pava Center</div><div class="what">Sized what 70+ hospitals would pay to fund 250 physicians. Built the cost model and the advisory board structure. Mapped 99,073 US public schools for a K-12 AI literacy venture.</div></div></div>
     <div class="trow"><div class="when">Jan to Jul 2026</div><div><div class="org">Biopeak</div><div class="role">Strategy and Operations Intern · longevity clinic, Bengaluru</div><div class="what">Built the brain age model. Found 5 drop-off drivers across 800+ client interactions and gave the founders a win-back plan. Lead conversion up 20%.</div></div></div>
@@ -409,7 +407,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </section>
 
 <section class="foot wrap" id="talk">
-  <div class="mono">If you deploy AI where care happens</div>
+  <div class="mono">AI where care happens</div>
   <h2 class="rv">Let's <span class="oval" aria-hidden="true"></span> talk →</h2>
   <div class="email"><span id="email">dsriniv8@jh.edu</span><button class="pill sm" id="copy" type="button">Copy</button></div>
   <div class="links"><a class="pill" href="https://www.linkedin.com/in/dhiyanesh-srinivasan" target="_blank" rel="noopener">LinkedIn</a><a class="pill" href="https://github.com/DrDanXD" target="_blank" rel="noopener">GitHub</a></div>
@@ -515,7 +513,7 @@ var ro=new ResizeObserver(function(){sizeBrain();sizeTrace();if(reduce)draw(1200
 sizeBrain();if(reduce)draw(1200);else requestAnimationFrame(loop);
 
 /* timeline rows open on tap, first one open */
-var rows=document.querySelectorAll('.trow');rows.forEach(function(r,i){if(i===0)r.classList.add('open');r.addEventListener('click',function(){r.classList.toggle('open')})});
+var rows=document.querySelectorAll('.trow');rows.forEach(function(r,i){r.addEventListener('click',function(){r.classList.toggle('open')})});
 
 /* nav highlights the section in view */
 var secs=['moment','work','how','exp'].map(function(id){return document.getElementById(id)});
@@ -524,6 +522,9 @@ new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting
 
 /* gauge needle sweeps in on first view */
 var gaugeEl=document.querySelector('.gauge');if(gaugeEl&&!reduce){new IntersectionObserver(function(es,o){if(!es[0].isIntersecting)return;o.disconnect();var n=document.getElementById('needle2'),arc=document.getElementById('arc2'),t0=null;function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1200);p=1-Math.pow(1-p,3);var v=0.87*p,a=Math.PI+v*Math.PI;n.setAttribute('cx',(180+140*Math.cos(a)).toFixed(1));n.setAttribute('cy',(190+140*Math.sin(a)).toFixed(1));arc.setAttribute('stroke-dashoffset',(440-440*v).toFixed(1));if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)},{threshold:.5}).observe(gaugeEl)}
+
+/* gap dot travels when seen */
+var gapEl=document.querySelector('.gap');if(gapEl){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){setTimeout(function(){gapEl.classList.add('go')},400);o.disconnect()}},{threshold:.6}).observe(gapEl)}
 
 /* card tilt on hover */
 if(!reduce){document.querySelectorAll('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-0.5,y=(e.clientY-r.top)/r.height-0.5;c.style.transform='perspective(1400px) rotateX('+(-y*2.2)+'deg) rotateY('+(x*2.6)+'deg)'});c.addEventListener('pointerleave',function(){c.style.transform=''})})}
